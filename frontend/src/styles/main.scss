@@ -1,0 +1,12 @@
+// Globals seulement
+@import './globals/variables';
+// @import './globals/mixins';
+@import './globals/reset';
+// @import './globals/utilities';
+
+// Styles globaux de l'app
+body {
+  font-family: 'Arial', sans-serif;
+  color: $text-color;
+  background-color: $bg-color;
+}
