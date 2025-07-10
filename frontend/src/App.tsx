@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 function App() {
   return (
     <div className="App">
-      <Header title="Mon Portfolio" />
+      <Header />
       <main>
         <h1>Bienvenue sur mon portfolio</h1>
       </main>

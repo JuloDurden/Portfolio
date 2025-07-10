@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Navigate, BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import './styles/main.scss'
 
 // Importation des pages
 import Home from './pages/Home/Home';
@@ -17,7 +18,7 @@ import Footer from './components/Footer/Footer';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Router>
-      <Header title='Julien Clavel'/>
+      <Header />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />

@@ -1,0 +1,167 @@
+.home {
+  min-height: 100vh;
+  padding-top: 100px; // Pour compenser le header fixe
+
+  &__hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+
+  &__title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  &__name {
+    color: #025A4E;
+  }
+
+  &__subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+
+  &__section {
+    padding: 80px 0;
+
+    &--alt {
+      background: #f8f9fa;
+    }
+
+    &--cta {
+      background: #025A4E;
+      color: white;
+      text-align: center;
+    }
+  }
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  &__section-title {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: #333;
+  }
+
+  &__section--cta &__section-title {
+    color: white;
+  }
+
+  &__cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &--primary {
+      background: #025A4E;
+      color: white;
+      
+      &:hover {
+        background: #014239;
+      }
+    }
+
+    &--secondary {
+      background: transparent;
+      color: #025A4E;
+      border: 2px solid #025A4E;
+      
+      &:hover {
+        background: #025A4E;
+        color: white;
+      }
+    }
+  }
+
+  &__section--cta &__btn--secondary {
+    color: white;
+    border-color: white;
+    
+    &:hover {
+      background: white;
+      color: #025A4E;
+    }
+  }
+
+  &__about-grid,
+  &__projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  &__project-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &__project-image {
+    height: 200px;
+    background: #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  &__skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__skill,
+  &__tag {
+    background: #025A4E;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+
+  &__timeline {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &__timeline-item {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding-left: 2rem;
+    border-left: 3px solid #025A4E;
+  }
+
+  &__timeline-date {
+    font-weight: bold;
+    color: #025A4E;
+    min-width: 150px;
+  }
+
+  &__company {
+    color: #666;
+    font-style: italic;
+  }
+}

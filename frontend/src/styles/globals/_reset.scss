@@ -20,6 +20,12 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  
+  // Application de la police Inter
+  font-family: $font-primary;
+  font-weight: $font-weight-regular;
+  font-size: $font-size-base;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 img, picture, video, canvas, svg {
@@ -38,8 +44,13 @@ p, h1, h2, h3, h4, h5, h6 {
 p {
   text-wrap: pretty;
 }
+
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
+  // Application des poids de police pour les titres
+  font-family: $font-primary;
+  font-weight: $font-weight-semi-bold;
+  line-height: 1.2;
 }
 
 #root, #__next {

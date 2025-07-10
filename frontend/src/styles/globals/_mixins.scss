@@ -1,0 +1,43 @@
+// Mixins pour les poids de police Inter
+@mixin font-thin {
+  font-weight: $font-weight-thin;
+}
+
+@mixin font-light {
+  font-weight: $font-weight-light;
+}
+
+@mixin font-regular {
+  font-weight: $font-weight-regular;
+}
+
+@mixin font-medium {
+  font-weight: $font-weight-medium;
+}
+
+@mixin font-semi-bold {
+  font-weight: $font-weight-semi-bold;
+}
+
+@mixin font-bold {
+  font-weight: $font-weight-bold;
+}
+
+// Mixin pour les tailles de titre
+@mixin heading-1 {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  line-height: 1.1;
+}
+
+@mixin heading-2 {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-semi-bold;
+  line-height: 1.2;
+}
+
+@mixin heading-3 {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semi-bold;
+  line-height: 1.3;
+}
