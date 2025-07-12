@@ -1,9 +1,13 @@
 // Couleurs
-$primary-color: #3498db;
-$secondary-color: #2c3e50;
-$accent-color: #e74c3c;
+$primary-color: #006D77;
+$secondary-color: #83C5BE;
+$accent-color: #E29578;
 $text-color: #333;
-$bg-color: #f8f9fa;
+$bg-color: #EDF6F9;
+$layer1-colors: (#30cfd0, #571400, #00b894, #0096c7); // turquoise, bleu ciel, vert doux, bleu profond
+$layer2-colors: (#a0d5cb, #ffe2b5, #d4b8ff, #a7f5a0); // turquoise, jaune pâle, violet, orange doux
+$layer3-colors: (#a0e0d0, #f4d6a3, #e2a8ff, #c0e8e0); // vert d’eau, orange clair, lavande, aqua
+
 
 // Breakpoints
 $mobile: 768px;

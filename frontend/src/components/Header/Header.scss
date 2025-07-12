@@ -8,18 +8,17 @@
   transform: translateX(-50%);
   padding: 0 16px 0 0;
   z-index: 1000;
-  transition: all 0.3s ease;
+  border-radius: 50px;
+  transition: all 0.6s ease;
   font-family: $font-primary;
   color: $primary-color;
   font-weight: $font-weight-semi-bold;
   
   &--scrolled {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(10px);
-    border-radius: 50px;
+    
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    // padding: 0 16px 0 0;
-    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   &__nav {
@@ -71,16 +70,19 @@
     }
 
     &--home {
-      padding: 8px;
+      padding: 4px;
       border-radius: 50%;
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.15);
+      }
       
       &.header__nav-item--active {
         background: transparent;
-        padding: 4px;
-      }
-      
-      &:hover {
-        background: rgba(254, 254, 254, 0.7);
+        
+        &:hover {
+          background: rgba(0, 0, 0, 0.15);
+        }
       }
     }
   }
@@ -91,12 +93,12 @@
     justify-content: center;
     padding: 8px;
     border-radius: 50%;
-    color: #666;
+    color: $text-color;
     text-decoration: none;
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(254, 254, 254, 0.7);
+      background: rgba(0, 0, 0, 0.15);
       color: $text-color;
     }
   }
@@ -109,12 +111,10 @@
     height: 32px;
     flex-shrink: 0;
 
-    // Margin supplémentaire quand l'item est actif
     .header__nav-item--active & {
       margin: 0 10px;
     }
     
-    // Pas de margin pour l'accueil (pas de texte)
     .header__nav-item--home.header__nav-item--active & {
       margin: 0 10px 0 0;
     }
@@ -124,10 +124,10 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    margin-right: 18px;
     object-fit: cover;
-    border: 2px solid #fff;
+    border: 2px solid rgba(254, 254, 254, 0.7);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
   }
 
   &__label {
@@ -135,6 +135,11 @@
     animation: fadeIn 0.3s ease;
     font-weight: $font-weight-medium;
     font-size: $font-size-xs;
+  }
+  
+  // Bordure verte pour la photo de profil active
+  &__nav-item--home.header__nav-item--active .header__profile-photo {
+    border: 4px solid $primary-color;
   }
 
   @keyframes fadeIn {
@@ -169,26 +174,34 @@
       font-size: $font-size-xs;
 
       &--home {
-        padding: 6px;
-        
-        &.header__nav-item--active {
-          padding: 2px;
-        }
+        padding: 2px;
       }
+    }
+
+    &__icon {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
     }
     
     &__social-link {
-      padding: 6px;
+      padding: 4px;
+
+      svg,
+      .icon {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        min-height: 24px;
+      }
     }
 
     &__profile-photo {
       width: 48px;
       height: 48px;
+      min-width: 48px;
+      max-width: 48px;
     }
   }
-}
-
-// Bordure verte pour la photo de profil sur la page d'accueil
-.header__nav-item--home.header__nav-item--active .header__profile-photo {
-  border: 4px solid #025A4E;
 }

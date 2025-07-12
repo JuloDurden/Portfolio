@@ -3,7 +3,7 @@
 
 .footer {
   background-color: $secondary-color;
-  color: white;
+  color: $text-color;
   padding: $spacing-lg 0;
   margin-top: auto;
 
@@ -15,11 +15,18 @@
 
   &__content {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: $spacing-md;
     margin-bottom: $spacing-md;
+
+    p {
+      margin: 0;
+      font-family: $font-primary;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-regular;
+    }
 
     @media (max-width: $mobile) {
       flex-direction: column;
@@ -27,48 +34,17 @@
     }
   }
 
-  &__left {
-    p {
-      margin: 0;
-      font-family: $font-primary;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-regular;
-    }
-  }
-
-  &__social {
-    display: flex;
-    gap: $spacing-md;
-
-    @media (max-width: $mobile) {
-      justify-content: center;
-    }
-  }
-
-  &__social-link {
-    color: white;
-    text-decoration: none;
-    font-family: $font-primary;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: $primary-color;
-    }
-  }
-
   &__bottom {
     text-align: center;
     padding-top: $spacing-md;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    // border-top: 1px solid rgba(255, 255, 255, 0.2);
 
     p {
       margin: 0;
       font-family: $font-primary;
       font-size: $font-size-xs;
       font-weight: $font-weight-light;
-      opacity: 0.8;
+      // opacity: 0.8;
     }
   }
 }

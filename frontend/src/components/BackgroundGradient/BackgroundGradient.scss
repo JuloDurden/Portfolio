@@ -1,0 +1,98 @@
+@import "../../styles/globals/variables";
+
+.background-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 65vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+
+  // Masque de fondu vers le fond ($bg-color)
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 35vh;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), $bg-color);
+    pointer-events: none;
+  }
+}
+
+.background-layer {
+  position: absolute;
+  inset: -50%;
+  background-size: 600% 600%;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  pointer-events: none;
+}
+
+// Couche 1 – la plus visible
+.layer1 {
+  background: linear-gradient(-45deg,
+    nth($layer1-colors, 1),
+    nth($layer1-colors, 2),
+    nth($layer1-colors, 3),
+    nth($layer1-colors, 4)
+  );
+  background-size: 80% 100%;
+  animation: anim1 10s ease-in-out infinite, hueShift 20s ease-in-out infinite;
+  opacity: 0.9;
+  // filter: blur(20px);
+}
+
+// Couche 2 – intermédiaire
+.layer2 {
+  background: linear-gradient(60deg,
+    nth($layer2-colors, 1),
+    nth($layer2-colors, 2),
+    nth($layer2-colors, 3),
+    nth($layer2-colors, 4)
+  );
+  background-size: 500% 500%;
+  animation: anim2 40s ease-in-out infinite;
+  opacity: 0.8;
+  filter: blur(40px);
+}
+
+// Couche 3 – la plus discrète
+.layer3 {
+  background: linear-gradient(120deg,
+    nth($layer3-colors, 1),
+    nth($layer3-colors, 2),
+    nth($layer3-colors, 3),
+    nth($layer3-colors, 4)
+  );
+  background-size: 400% 400%;
+  animation: anim3 90s ease-in-out infinite;
+  opacity: 0.6;
+  filter: blur(60px);
+}
+
+// Animations
+@keyframes anim1 {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes anim2 {
+  0%   { background-position: 100% 0%; }
+  50%  { background-position: 0% 100%; }
+  100% { background-position: 100% 0%; }
+}
+
+@keyframes anim3 {
+  0%   { background-position: 50% 0%; }
+  50%  { background-position: 50% 100%; }
+  100% { background-position: 50% 0%; }
+}
+
+@keyframes hueShift {
+  0%   { filter: blur(20px) hue-rotate(0deg); }
+  50%  { filter: blur(20px) hue-rotate(180deg); }
+  100% { filter: blur(20px) hue-rotate(360deg); }
+}

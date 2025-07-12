@@ -1,35 +1,13 @@
 .home {
   min-height: 100vh;
-  padding-top: 100px; // Pour compenser le header fixe
-
-  &__hero {
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  }
-
-  &__title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: #333;
-  }
-
-  &__name {
-    color: #025A4E;
-  }
-
-  &__subtitle {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 2rem;
-    max-width: 600px;
-  }
-
+  
   &__section {
     padding: 80px 0;
+
+    // ✅ Première section (Hero) : pas de padding
+    &:first-child {
+      padding: 0;
+    }
 
     &--alt {
       background: #f8f9fa;
@@ -163,5 +141,36 @@
   &__company {
     color: #666;
     font-style: italic;
+  }
+
+  // ✅ Responsive pour éliminer les espaces
+  @media (max-width: 768px) {
+    &__section {
+      padding: 60px 0;
+    }
+
+    &__container {
+      padding: 0 15px;
+    }
+
+    &__section-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    &__about-grid,
+    &__projects-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    &__timeline-item {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    &__timeline-date {
+      min-width: auto;
+    }
   }
 }

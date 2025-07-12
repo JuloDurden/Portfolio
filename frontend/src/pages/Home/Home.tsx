@@ -1,28 +1,12 @@
 import React from 'react';
 import './Home.scss';
 
+import Hero from '../../components/Hero/Hero';
+
 function Home() {
   return (
-    <div className="home">
-      {/* Hero Section */}
-      <section className="home__hero">
-        <div className="home__hero-content">
-          <h1 className="home__title">
-            Bonjour, moi c'est <span className="home__name">Julien Clavel</span>
-          </h1>
-          <p className="home__subtitle">
-            Développeur Full Stack passionné par la création d'expériences web modernes
-          </p>
-          <div className="home__cta">
-            <button className="home__btn home__btn--primary">
-              Voir mes projets
-            </button>
-            <button className="home__btn home__btn--secondary">
-              Me contacter
-            </button>
-          </div>
-        </div>
-      </section>
+    <main className="home">
+      <Hero />
 
       {/* About Preview */}
       <section className="home__section">
@@ -156,7 +140,7 @@ function Home() {
 
       {/* Footer spacer */}
       <div style={{ height: '200px' }}></div>
-    </div>
+    </main>
   );
 }
 

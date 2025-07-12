@@ -14,10 +14,12 @@ import Project from './pages/Project/Project';
 // Importation des components
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import BackgroundGradient from './components/BackgroundGradient/BackgroundGradient';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Router>
+      <BackgroundGradient />
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
