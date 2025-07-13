@@ -1,5 +1,5 @@
 import './Hero.scss';
-import HeroImage from './img/Me.png';
+import HeroImage from './img/Me.webp';
 
 function Hero() {
     return (

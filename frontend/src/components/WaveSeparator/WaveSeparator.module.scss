@@ -1,0 +1,45 @@
+@import "../../styles/globals/variables";
+
+.waveWrapper {
+  position: relative;
+  height: 200px; // voire 250px si nécessaire
+  overflow: hidden;
+  background-color: $bg-color;
+  z-index: 1;
+}
+
+
+.layer {
+  position: absolute;
+  width: 400%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-repeat: repeat-x;
+  background-size: contain;
+  background-position-y: bottom;
+  will-change: background-position-x;
+  pointer-events: none;
+}
+
+.layer1 {
+  background-image: url("./waves/wave1.svg");
+  z-index: 3;
+  opacity: 1;
+  top: 200px; // plus bas (devant)
+}
+
+.layer2 {
+  background-image: url("./waves/wave2.svg");
+  z-index: 2;
+  opacity: 0.5;
+  top: 50px; // au milieu
+}
+
+.layer3 {
+  background-image: url("./waves/wave3.svg");
+  z-index: 1;
+  opacity: 0.3;
+  top: 0; // plus haut (derrière)
+}
+

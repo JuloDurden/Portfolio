@@ -2,6 +2,7 @@ import React from 'react';
 import './Home.scss';
 
 import Hero from '../../components/Hero/Hero';
+import WaveSeparator from '../../components/WaveSeparator/WaveSeparator';
 
 function Home() {
   return (
@@ -10,7 +11,8 @@ function Home() {
 
       {/* About Preview */}
       <section className="home__section">
-        <div className="home__container">
+        <div className="home__container--about">
+          <WaveSeparator />
           <h2 className="home__section-title">À propos</h2>
           <div className="home__about-grid">
             <div className="home__about-text">

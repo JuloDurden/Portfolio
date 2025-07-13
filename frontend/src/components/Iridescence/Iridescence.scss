@@ -1,0 +1,10 @@
+.iridescence-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  filter: blur(10px);
+  z-index: 0; // Important pour être sous le ::after (qui est au-dessus dans le DOM)
+  pointer-events: none;
+}

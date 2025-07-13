@@ -1,3 +1,5 @@
+@import "../../styles/globals/variables";
+
 .home {
   min-height: 100vh;
   
@@ -24,6 +26,10 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+
+    &--about {
+      background-color: $secondary-color;
+    }
   }
 
   &__section-title {
