@@ -1,4 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { useProjects } from '../../hooks/useProjects';
+import ProjectCard from '../../components/ProjectCard/ProjectCard';
+
 import './Home.scss';
 
 import Hero from '../../components/Hero/Hero';
@@ -13,6 +17,10 @@ import SASSIcon from './img/sass.svg';
 import JavaScriptIcon from './img/javascript.svg';
 
 function Home() {
+  // Ajout du hook UseProjects
+  const { getRecentProjects, loading } = useProjects();
+  const recentProjects = getRecentProjects(3);
+
   // Configuration des compétences avec icônes
   const skills = [
     { name: 'React', icon: ReactIcon },
@@ -65,38 +73,27 @@ function Home() {
       <section className="home__section home__section--alt">
         <div className="home__container">
           <h2 className="home__section-title">Projets récents</h2>
-          <div className="home__projects-grid">
-            <div className="home__project-card">
-              <div className="home__project-image"></div>
-              <h3>Projet E-commerce</h3>
-              <p>Une plateforme e-commerce complète avec React et Node.js</p>
-              <div className="home__project-tags">
-                <span className="home__tag">React</span>
-                <span className="home__tag">Node.js</span>
-                <span className="home__tag">MongoDB</span>
+          
+          {loading ? (
+            <div className="home__loading">Chargement des projets...</div>
+          ) : (
+            <>
+              <div className="home__projects-grid">
+                {recentProjects.map(project => (
+                  <ProjectCard 
+                    key={project.id} 
+                    project={project} 
+                    className="home__project-card"
+                  />
+                ))}
               </div>
-            </div>
-            <div className="home__project-card">
-              <div className="home__project-image"></div>
-              <h3>Application Mobile</h3>
-              <p>Une application mobile développée avec React Native</p>
-              <div className="home__project-tags">
-                <span className="home__tag">React Native</span>
-                <span className="home__tag">TypeScript</span>
-                <span className="home__tag">Firebase</span>
+              <div className="home__projects-cta">
+                <Link to="/projects" className="btn btn--primary">
+                  Voir tous les projets
+                </Link>
               </div>
-            </div>
-            <div className="home__project-card">
-              <div className="home__project-image"></div>
-              <h3>Dashboard Analytics</h3>
-              <p>Un tableau de bord pour visualiser des données complexes</p>
-              <div className="home__project-tags">
-                <span className="home__tag">Vue.js</span>
-                <span className="home__tag">D3.js</span>
-                <span className="home__tag">Python</span>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </section>
 

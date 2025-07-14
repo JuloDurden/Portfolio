@@ -3,11 +3,11 @@
 		"id": "001booki",
 		"title": "Booki",
         "subtitle": "Créer la page d'accueil d'une agence de voyage avec HTML & CSS",
-		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"cover": "https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/01%20-%20booki/cover.webp",
 		"description": "Pour ce projet, j’ai réalisé l’intégration responsive de la page d’accueil du site Booki, à partir de maquettes Figma pour desktop, tablette et mobile. L’objectif : créer une interface claire et fonctionnelle, adaptée à tous les écrans, en utilisant uniquement HTML5 et CSS3. J’ai codé l’ensemble de la structure et du style à la main, sans générateur automatique, afin de respecter au plus près le design tout en optimisant l’accessibilité et la performance. La mise en page repose sur Flexbox et des media queries, pour une expérience utilisateur fluide quel que soit le support.",
         "pictures": [
-			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
-			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg"
+			"https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/01%20-%20booki/1.webp",
+			"https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/01%20-%20booki/2.webp"
 		],
         "competences": [
             "Intégration d’une maquette responsive",
@@ -34,12 +34,12 @@
 		"id": "002sophiebluel",
 		"title": "Sophie Bluel",
         "subtitle": "Créer une page web dynamique avec JavaScript",
-		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"cover": "https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/02%20-%20sophie%20bluel/cover.webp",
 		"description": "Dans ce projet, j’ai développé la partie front-end d’un site vitrine pour Sophie Bluel, architecte d’intérieur, en rendant la page web interactive et dynamique à l’aide de JavaScript pur. À partir d’un HTML statique et des maquettes Figma, j’ai intégré une galerie filtrable des réalisations, mis en place une page de connexion sécurisée pour l’administratrice, et développé une interface d’administration avec une modale pour l’ajout de nouveaux projets (images, catégories…). L’ensemble des données est géré via une API que j’ai interconnectée en JavaScript, en utilisant fetch et la gestion des requêtes asynchrones.Ce projet m’a permis de travailler pour la première fois avec un back-end simulé, et de mettre en place une gestion fine des événements DOM, des interactions utilisateur, et de la manipulation dynamique du contenu.",
         "pictures": [
-			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
-			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg",
-			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-3.jpg"
+			"https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/02%20-%20sophie%20bluel/1.webp",
+			"https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/02%20-%20sophie%20bluel/2.webp",
+			"https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/02%20-%20sophie%20bluel/3.webp"
 		],
         "competences": [
             "Manipulation du DOM avec JavaScript",

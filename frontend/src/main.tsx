@@ -8,7 +8,7 @@ import Home from './pages/Home/Home';
 import About from './pages/About/About';
 import Error from './pages/Error/Error';
 import Projects from './pages/Projects/Projects';
-import Project from './pages/Project/Project';
+import ProjectDetail from './pages/ProjectDetail/ProjectDetail';
 
 
 // Importation des components
@@ -25,7 +25,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/projects' element={<Projects />} />
-        <Route path='/projects/:id' element={<Project />} />
+        <Route path='/projects/:id' element={<ProjectDetail />} />
         <Route path='/404' element={<Error />} />
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
