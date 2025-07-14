@@ -1,0 +1,244 @@
+[
+	{
+		"id": "001booki",
+		"title": "Booki",
+        "subtitle": "Créer la page d'accueil d'une agence de voyage avec HTML & CSS",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Pour ce projet, j’ai réalisé l’intégration responsive de la page d’accueil du site Booki, à partir de maquettes Figma pour desktop, tablette et mobile. L’objectif : créer une interface claire et fonctionnelle, adaptée à tous les écrans, en utilisant uniquement HTML5 et CSS3. J’ai codé l’ensemble de la structure et du style à la main, sans générateur automatique, afin de respecter au plus près le design tout en optimisant l’accessibilité et la performance. La mise en page repose sur Flexbox et des media queries, pour une expérience utilisateur fluide quel que soit le support.",
+        "pictures": [
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg"
+		],
+        "competences": [
+            "Intégration d’une maquette responsive",
+            "Maîtrise de Flexbox et des media queries",
+            "Structuration sémantique en HTML",
+            "Stylisation avancée en CSS"
+        ],
+		"informations": {
+			"client": "OpenClassrooms",
+            "date": "Février 2025"
+		},
+        "links": {
+			"website": "https://booki-starter-code-xi.vercel.app/",
+            "github": "https://github.com/JuloDurden/booki-starter-code"
+		},
+		"technologies": [
+			"HTML",
+			"CSS",
+            "Figma",
+            "GitHub"
+		]
+	},
+	{
+		"id": "002sophiebluel",
+		"title": "Sophie Bluel",
+        "subtitle": "Créer une page web dynamique avec JavaScript",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Dans ce projet, j’ai développé la partie front-end d’un site vitrine pour Sophie Bluel, architecte d’intérieur, en rendant la page web interactive et dynamique à l’aide de JavaScript pur. À partir d’un HTML statique et des maquettes Figma, j’ai intégré une galerie filtrable des réalisations, mis en place une page de connexion sécurisée pour l’administratrice, et développé une interface d’administration avec une modale pour l’ajout de nouveaux projets (images, catégories…). L’ensemble des données est géré via une API que j’ai interconnectée en JavaScript, en utilisant fetch et la gestion des requêtes asynchrones.Ce projet m’a permis de travailler pour la première fois avec un back-end simulé, et de mettre en place une gestion fine des événements DOM, des interactions utilisateur, et de la manipulation dynamique du contenu.",
+        "pictures": [
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-3.jpg"
+		],
+        "competences": [
+            "Manipulation du DOM avec JavaScript",
+            "Gestion des événements et intéractions utilisateur",
+            "Communication avec une API (GET, POST, DELETE)",
+            "Création d'une authentification basique (login/token",
+            "Conception d'une interface modale dynamique",
+            "Rendu conditionnel et mise à jour du contenu sans rechargement"
+        ],
+		"informations": {
+			"client": "OpenClassrooms",
+            "date": "Mars 2025"
+		},
+        "links": {
+			"website": "",
+            "github": "https://github.com/JuloDurden/Portfolio-architecte-sophie-bluel"
+		},
+		"technologies": [
+			"HTML",
+			"CSS",
+            "JavaScript",
+            "Figma",
+            "GitHub",
+            "API REST"
+		]
+	},
+    {
+		"id": "003ninacarducci",
+		"title": "Nina Carducci",
+        "subtitle": "Débugguer et optimiser un site de photographe",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+        "description": "Dans ce projet, j’ai travaillé comme développeur freelance pour améliorer les performances, l’accessibilité et le référencement du site vitrine de Nina Carducci, photographe professionnelle. À l’aide d’outils d’audit tels que Lighthouse, Wave et WebPageTest, j’ai identifié les freins techniques impactant la vitesse de chargement, le référencement naturel (SEO) et l’accessibilité. J’ai ensuite mis en œuvre une série d’optimisations concrètes : réduction et compression des ressources (images, scripts, CSS), réécriture de balises HTML sémantiques, amélioration des attributs ARIA et textes alternatifs, réorganisation du DOM pour une meilleure lisibilité par les moteurs de recherche. Enfin, j’ai rédigé un rapport comparatif avant/après, incluant captures d’audit, scores obtenus, explications techniques et bénéfices utilisateurs.",
+        "pictures": [
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-3.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-4.jpg"
+		],
+        "competences": [
+            "Audit de performance et d'accessibilité (Lighthouse, Wave)",
+            "Optimisation SEO on-page (balises, structure, attributs)",
+            "Compression et optimisation des médias",
+            "Amélioration du temps de chargement (lazy loading, poids des fichiers)",
+            "Accessibilité (ARIA, contraste, navigation clavier",
+            "Rédaction d'un rapport technique illustré"
+        ],
+		"informations": {
+			"client": "OpenClassrooms",
+            "date": "Avril 2025"
+		},
+        "links": {
+			"website": "https://nina-carducci-dev-omega.vercel.app/",
+            "github": "https://github.com/JuloDurden/Nina-Carducci-Dev-"
+		},
+		"technologies": [
+			"HTML",
+			"CSS",
+            "JavaScript",
+            "Lighthouse",
+            "Wave"
+		]
+	},
+    {
+		"id": "004kasa",
+		"title": "Kasa",
+        "subtitle": "Créer une application web de location immobilière avec React",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Pour ce projet, j’ai développé le front-end complet d’une application de location immobilière nommée Kasa, en utilisant React et React Router. L’objectif était de proposer une expérience utilisateur fluide et moderne, à partir de maquettes Figma et de données simulées stockées dans un fichier JSON. J’ai structuré l’interface autour de composants réutilisables, mis en place une navigation dynamique avec React Router, et intégré des animations CSS pour enrichir l’interactivité. J’ai utilisé SASS pour gérer les styles de façon modulaire et évolutive. Le projet a été initialisé avec Vite, ce qui m’a permis de bénéficier d’un environnement de développement rapide et optimisé.",
+        "pictures": [
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-3.jpg"
+		],
+        "competences": [
+            "Création d'une SPA avec React (Single Page Application",
+            "Routage dynamique avec React Router",
+            "Manipulation de données JSON et rendu conditionnel",
+            "Architecture par composants",
+            "Stylisation avec SASS et animations CSS",
+            "Gestion des erreurs et des routes 404"
+        ],
+		"informations": {
+			"client": "OpenClassrooms",
+            "date": "Mai 2025"
+		},
+        "links": {
+			"website": "https://kasa-brown-phi.vercel.app/",
+            "github": "https://github.com/JuloDurden/Kasa"
+		},
+		"technologies": [
+			"React",
+			"React Router",
+            "Vite",
+            "SASS",
+            "JavaScript",
+            "JSON",
+            "Figma",
+            "Node.js"
+		]
+	},
+    {
+		"id": "005vieuxgrimoire",
+		"title": "Mon Vieux Grimoire",
+        "subtitle": "Développer le backend d'un site de notation de livres",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Dans ce projet, j’ai développé le back-end complet d’un site de notation de livres, Mon Vieux Grimoire, en mettant en place une API REST sécurisée avec Node.js, Express et MongoDB. Mon rôle a consisté à concevoir l’architecture serveur selon le modèle MVC, créer les modèles de données avec Mongoose, implémenter les opérations CRUD pour gérer les livres et les notations, mettre en place un système d’authentification sécurisé avec hashage des mots de passe, gérer le téléversement et l’optimisation des images et calculer dynamiquement les notes moyennes des livres.",
+        "pictures": [
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg"
+		],
+        "competences": [
+            "Développement d'API REST avec Node.js et Express",
+            "Modélisation de données avec Mongoose et MongoDB",
+            "Authentification sécurisée (bcrypt, JWT)",
+            "Opérations CRUD et logique métier",
+            "Gestion des fichiers (images, compression, stockage)",
+            "Architecture MVC",
+            "Sécurisation des routes et validation des données",
+            "Optimisation des performances et Green Code"
+        ],
+		"informations": {
+			"client": "OpenClassrooms",
+            "date": "Juin 2025"
+		},
+        "links": {
+			"website": "",
+            "github": "https://github.com/JuloDurden/Mon-Vieux-Grimoire"
+		},
+		"technologies": [
+			"Node.js",
+			"Express",
+            "MongoDB",
+            "Mongoose",
+            "JavaScript",
+            "Multer",
+            "Bcrypt",
+            "JSON Web Token"
+		]
+	},
+    {
+		"id": "006menumaker",
+		"title": "Menu Maker by Qwenta",
+        "subtitle": "Planifier le développement du site d'un client",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "Pour ce projet, j’ai endossé le rôle de chef de projet technique en planifiant le développement d’un site web professionnel pour un client, sans coder directement. L’objectif était d’assurer une préparation claire, structurée et efficace du futur développement. À partir des maquettes Figma, des spécifications fonctionnelles et des User Stories, j’ai réalisé une veille technologique pour recommander les outils et technologies les plus adaptés au projet, rédigé les spécifications techniques détaillées, décomposé les besoins en tâches techniques claires, structuré le projet dans Notion, en créant un tableau Kanban pour assurer un suivi rigoureux, préparé une présentation de la solution technique, en tenant compte des contraintes, des priorités et de la scalabilité. Ce projet m’a permis de développer des compétences transversales en gestion de projet web, essentielles pour collaborer efficacement dans des équipes agiles ou encadrer le développement d’une application web.",
+        "pictures": [
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-3.jpg"
+		],
+        "competences": [
+            "Rédaction de spécifications techniques à partir de besoins fonctionnels",
+            "Décomposition fonctionnelle et planification du développement",
+            "Mise en place d'un système de gestion de projet (Kanban)",
+            "Présentation de solutions techniques",
+            "Veille technologique (frameworks, langages, bonnes pratiques front/back)"
+        ],
+		"informations": {
+			"client": "OpenClassrooms",
+            "date": "Juillet 2025"
+		},
+        "links": {
+			"website": "",
+            "github": "https://github.com/JuloDurden/Menu-Maker-by-Qwenta"
+		},
+		"technologies": [
+			"Kanban",
+			"Figma",
+            "Méthode Agile",
+            "Veille technologique structurée"
+		]
+	},
+    {
+		"id": "007devtoolbox",
+		"title": "DevToolBox",
+        "subtitle": "Recenser les technologies web les plus utilisées et faciliter l'accès à leur documentation",
+		"cover": "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-20-1.jpg",
+		"description": "DevToolBox est un projet personnel de veille technologique que j’ai conçu pour recenser, de façon claire et accessible, les principaux langages, frameworks et outils utilisés par les développeurs web. J’ai développé une page responsive en HTML et CSS, mettant en avant une interface simple et moderne, avec un système de cartes cliquables menant directement vers les sites officiels des technologies présentées. L’ensemble de la page propose un thème clair/sombre activable sans JavaScript, et s’appuie sur des animations CSS douces pour enrichir l’expérience utilisateur. Ce projet m’a permis de renforcer mes compétences en intégration responsive, en design accessible, et en animation front-end, tout en créant un support de veille technique utile et agréable à utiliser.",
+        "pictures": [
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-1.jpg",
+			"https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/accommodation-14-2.jpg"
+		],
+        "competences": [
+            "Intégration responsive en HTML/CSS",
+            "Création d'une interface en thème clair/sombre",
+            "Utilisation d'animations CSS (transitions, effets visuels)",
+            "Structuration logique des contenus pour une meilleure lisibilité"
+        ],
+		"informations": {
+			"client": "Projet personnel",
+            "date": "Juillet 2025"
+		},
+        "links": {
+			"website": "https://julodurden.github.io/DevToolBox/",
+            "github": "https://github.com/JuloDurden/DevToolBox"
+		},
+		"technologies": [
+			"HTML5",
+			"CSS3"
+		]
+	}
+]

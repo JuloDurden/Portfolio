@@ -4,7 +4,7 @@
   min-height: 100vh;
   
   &__section {
-    padding: 80px 0;
+    padding: 50px 0;
 
     // ✅ Première section (Hero) : pas de padding
     &:first-child {
@@ -29,7 +29,14 @@
 
     &--about {
       background-color: $secondary-color;
+      padding: 80px;
     }
+  }
+
+  &__about-text {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 
   &__section-title {
@@ -110,21 +117,26 @@
     margin-bottom: 1rem;
   }
 
+  &__skills-title {
+    margin-bottom: 1.5rem;
+  }
+
+  // ✅ Nouvelle section skills avec icônes
   &__skills-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 1.5rem;
   }
 
   &__skill,
   &__tag {
-    background: #025A4E;
+    background: #FFFFFF;
     color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 8px;
+    border-radius: 50%;
     font-size: 0.9rem;
   }
-
+  
   &__timeline {
     max-width: 800px;
     margin: 0 auto;

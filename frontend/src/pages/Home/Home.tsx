@@ -2,9 +2,28 @@ import React from 'react';
 import './Home.scss';
 
 import Hero from '../../components/Hero/Hero';
-import WaveSeparator from '../../components/WaveSeparator/WaveSeparator';
+
+// Import des icônes SVG
+import ReactIcon from './img/react.svg';
+import MongoDBIcon from './img/mongodb.svg';
+import NodeJSIcon from './img/nodejs.svg';
+import ExpressIcon from './img/express.svg';
+import HTML5Icon from './img/html5.svg';
+import SASSIcon from './img/sass.svg';
+import JavaScriptIcon from './img/javascript.svg';
 
 function Home() {
+  // Configuration des compétences avec icônes
+  const skills = [
+    { name: 'React', icon: ReactIcon },
+    { name: 'MongoDB', icon: MongoDBIcon },
+    { name: 'Node.js', icon: NodeJSIcon },
+    { name: 'Express', icon: ExpressIcon },
+    { name: 'HTML5', icon: HTML5Icon },
+    { name: 'SASS', icon: SASSIcon },
+    { name: 'JavaScript', icon: JavaScriptIcon },
+  ];
+
   return (
     <main className="home">
       <Hero />
@@ -12,13 +31,11 @@ function Home() {
       {/* About Preview */}
       <section className="home__section">
         <div className="home__container--about">
-          <WaveSeparator />
           <h2 className="home__section-title">À propos</h2>
           <div className="home__about-grid">
             <div className="home__about-text">
               <p>
-                Développeur passionné avec plusieurs années d'expérience dans le développement web. 
-                J'aime créer des solutions élégantes et performantes pour résoudre des problèmes complexes.
+                L’informatique, je suis tombé dedans quand j’étais petit. Aujourd’hui, je transforme cette passion en métier, avec un objectif simple : résoudre des problèmes grâce à du code propre, structuré et utile.
               </p>
               <p>
                 Mon expertise couvre le développement frontend et backend, avec une attention particulière 
@@ -26,14 +43,18 @@ function Home() {
               </p>
             </div>
             <div className="home__skills">
-              <h3>Compétences principales</h3>
+              <h3 className='home__skills-title'>Mes compétences principales</h3>
               <div className="home__skills-grid">
-                <div className="home__skill">React</div>
-                <div className="home__skill">TypeScript</div>
-                <div className="home__skill">Node.js</div>
-                <div className="home__skill">Python</div>
-                <div className="home__skill">PostgreSQL</div>
-                <div className="home__skill">MongoDB</div>
+                {skills.map((skill, index) => (
+                  <div key={index} className="home__skill">
+                    <img 
+                      src={skill.icon} 
+                      alt={skill.name} 
+                      className="home__skill-icon"
+                    />
+                    {/* <span className="home__skill-name">{skill.name}</span> */}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
