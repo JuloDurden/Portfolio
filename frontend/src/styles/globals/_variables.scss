@@ -1,29 +1,46 @@
-// Couleurs
+// ====================================
+// 🎨 VARIABLES SCSS (pour calculs)
+// ====================================
 $primary-color: #006D77;
 $secondary-color: #83C5BE;
 $accent-color: #E29578;
 $text-color: #333;
 $bg-color: #EDF6F9;
-$layer1-colors: (#30cfd0, #571400, #00b894, #0096c7); // turquoise, bleu ciel, vert doux, bleu profond
-$layer2-colors: (#a0d5cb, #ffe2b5, #d4b8ff, #a7f5a0); // turquoise, jaune pâle, violet, orange doux
-$layer3-colors: (#a0e0d0, #f4d6a3, #e2a8ff, #c0e8e0); // vert d’eau, orange clair, lavande, aqua
+$background-color: $bg-color; // Alias pour compatibilité
 
+// ====================================
+// 🌈 GRADIENT BACKGROUNDS
+// ====================================
+$layer1-colors: (#30cfd0, #571400, #00b894, #0096c7);
+$layer2-colors: (#a0d5cb, #ffe2b5, #d4b8ff, #a7f5a0);
+$layer3-colors: (#a0e0d0, #f4d6a3, #e2a8ff, #c0e8e0);
 
-// Breakpoints
+// ====================================
+// 📱 BREAKPOINTS
+// ====================================
 $mobile: 768px;
 $tablet: 1024px;
 $desktop: 1200px;
 
-// Spacing
+// ====================================
+// 📐 ESPACEMENTS
+// ====================================
+$spacing-xs: 0.25rem;
 $spacing-sm: 0.5rem;
 $spacing-md: 1rem;
 $spacing-lg: 2rem;
+$spacing-xl: 3rem;
+$spacing-2xl: 4rem;
 
-// === TYPOGRAPHIE ===
+// ====================================
+// 🔤 TYPOGRAPHIE
+// ====================================
 $font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
                'Helvetica Neue', Arial, sans-serif;
 
-// Poids de police disponibles
+// ====================================
+// ⚖️ POIDS DE POLICE
+// ====================================
 $font-weight-thin: 100;
 $font-weight-extra-light: 200;
 $font-weight-light: 300;
@@ -34,12 +51,98 @@ $font-weight-bold: 700;
 $font-weight-extra-bold: 800;
 $font-weight-black: 900;
 
-// Tailles de police
-$font-size-xs: 0.75rem;    // 12px
-$font-size-sm: 0.875rem;   // 14px
-$font-size-base: 1rem;     // 16px
-$font-size-lg: 1.125rem;   // 18px
-$font-size-xl: 1.25rem;    // 20px
-$font-size-2xl: 1.5rem;    // 24px
-$font-size-3xl: 1.875rem;  // 30px
-$font-size-4xl: 2.25rem;   // 36px
+// ====================================
+// 📏 TAILLES DE POLICE
+// ====================================
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-md: 1.125rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.25rem;
+$font-size-2xl: 1.5rem;
+$font-size-3xl: 1.875rem;
+$font-size-4xl: 2.25rem;
+
+// ====================================
+// 🎯 ÉLÉMENTS UI
+// ====================================
+$border-radius: 8px;
+$border-radius-sm: 4px;
+$border-radius-lg: 12px;
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+// ====================================
+// 🌈 CSS CUSTOM PROPERTIES (pour theming)
+// ====================================
+:root {
+  // Couleurs principales
+  --color-primary: #{$primary-color};
+  --color-primary-dark: #{darken($primary-color, 10%)};
+  --color-secondary: #{$secondary-color};
+  --color-accent: #{$accent-color};
+  
+  // Couleurs de fond
+  --color-bg: #{$bg-color};
+  --color-white: #ffffff;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-900: #111827;
+  
+  // Couleurs texte
+  --color-text-primary: #{$text-color};
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  
+  // Couleurs système
+  --color-border: #e5e7eb;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  
+  // Typographie
+  --font-size-xs: #{$font-size-xs};
+  --font-size-sm: #{$font-size-sm};
+  --font-size-base: #{$font-size-base};
+  --font-size-md: #{$font-size-md};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xl: #{$font-size-xl};
+  --font-size-2xl: #{$font-size-2xl};
+  --font-size-3xl: #{$font-size-3xl};
+  --font-size-4xl: #{$font-size-4xl};
+  
+  // Espacements
+  --spacing-xs: #{$spacing-xs};
+  --spacing-sm: #{$spacing-sm};
+  --spacing-md: #{$spacing-md};
+  --spacing-lg: #{$spacing-lg};
+  --spacing-xl: #{$spacing-xl};
+  --spacing-2xl: #{$spacing-2xl};
+  
+  // UI
+  --border-radius: #{$border-radius};
+  --border-radius-sm: #{$border-radius-sm};
+  --border-radius-lg: #{$border-radius-lg};
+  --box-shadow: #{$box-shadow};
+}
+
+// ====================================
+// 🌙 THÈME SOMBRE (pour plus tard)
+// ====================================
+[data-theme="dark"] {
+  --color-bg: #0f172a;
+  --color-white: #1e293b;
+  --color-gray-50: #334155;
+  --color-gray-100: #475569;
+  --color-gray-200: #64748b;
+  --color-gray-300: #94a3b8;
+  
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  
+  --color-border: #334155;
+  --color-primary: #{lighten($primary-color, 15%)};
+}

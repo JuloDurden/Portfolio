@@ -1,4 +1,3 @@
-// hooks/useProjects.ts
 import { useState, useEffect } from 'react';
 import projectsData from '../data/projects.json';
 
@@ -26,15 +25,21 @@ export const useProjects = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulation d'un chargement async
-    setTimeout(() => {
-      setProjects(projectsData);
-      setLoading(false);
-    }, 100);
+    // Chargement immédiat des données
+    console.log('🔄 Chargement des projets...');
+    setProjects(projectsData);
+    setLoading(false);
+    console.log('✅ Projets chargés:', projectsData.length);
   }, []);
 
   const getProjectById = (id: string): Project | undefined => {
-    return projects.find(project => project.id === id);
+    console.log('🔍 Recherche du projet avec ID:', id);
+    console.log('📋 Projets disponibles:', projects.map(p => p.id));
+    
+    const foundProject = projects.find(project => project.id === id);
+    console.log('🎯 Projet trouvé:', foundProject);
+    
+    return foundProject;
   };
 
   const getRecentProjects = (count: number = 3): Project[] => {

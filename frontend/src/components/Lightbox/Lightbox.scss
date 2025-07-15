@@ -1,0 +1,330 @@
+// components/Lightbox/Lightbox.scss
+@import '../../styles/globals/variables';
+@import '../../styles/globals/mixins';
+
+// ====================================
+// 🖼️ LIGHTBOX CONTAINER
+// ====================================
+
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  opacity: 0;
+  animation: lightboxFadeIn 0.3s ease-out forwards;
+  
+  // Contenu principal
+  &__content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: lightboxImageIn 0.4s ease-out 0.1s both;
+    }
+  }
+  
+  // Bouton fermer
+  &__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    
+    color: white;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1;
+    
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+    
+    // Responsive
+    @include respond-to('mobile') {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      top: 15px;
+      right: 15px;
+    }
+  }
+}
+
+// ====================================
+// 🧭 LIGHTBOX NAVIGATION
+// ====================================
+
+.lightbox-navigation {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  
+  // Boutons de navigation
+  &__btn {
+    width: 50px;
+    height: 50px;
+    
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+    
+    // Position spécifique
+    &--prev {
+      margin-left: 20px;
+    }
+    
+    &--next {
+      margin-right: 20px;
+    }
+    
+    // Responsive
+    @include respond-to('mobile') {
+      width: 40px;
+      height: 40px;
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+      
+      &--prev {
+        margin-left: 15px;
+      }
+      
+      &--next {
+        margin-right: 15px;
+      }
+    }
+  }
+  
+  // Compteur d'images
+  &__counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    
+    padding: 8px 16px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    
+    pointer-events: auto;
+    
+    @include respond-to('mobile') {
+      bottom: 15px;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  }
+}
+
+// ====================================
+// 🎨 VARIANTE POUR HOME PAGE
+// ====================================
+
+.project-showcase__navigation {
+  .lightbox-navigation {
+    &__btn {
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      color: var(--color-text);
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.2);
+      }
+    }
+    
+    &__counter {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: var(--color-text);
+    }
+  }
+}
+
+// ====================================
+// 🎬 ANIMATIONS
+// ====================================
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightboxImageIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ====================================
+// 📱 RESPONSIVE AMÉLIORÉ
+// ====================================
+
+@include respond-to('tablet') {
+  .lightbox {
+    &__content {
+      max-width: 95vw;
+      max-height: 95vh;
+    }
+  }
+  
+  .lightbox-navigation {
+    &__btn {
+      width: 45px;
+      height: 45px;
+      
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  }
+}
+
+@include respond-to('mobile') {
+  .lightbox {
+    &__content {
+      max-width: 100vw;
+      max-height: 100vh;
+      
+      img {
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+// ====================================
+// 🌙 SUPPORT DARK MODE
+// ====================================
+
+@media (prefers-color-scheme: dark) {
+  .project-showcase__navigation {
+    .lightbox-navigation {
+      &__btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+      }
+      
+      &__counter {
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+    }
+  }
+}
+
+// ====================================
+// ♿ ACCESSIBILITÉ
+// ====================================
+
+// Focus visible pour navigation clavier
+.lightbox__close,
+.lightbox-navigation__btn {
+  &:focus-visible {
+    outline: 2px solid var(--color-primary, #007bff);
+    outline-offset: 2px;
+  }
+}
+
+// Réduction des animations si demandé
+@media (prefers-reduced-motion: reduce) {
+  .lightbox,
+  .lightbox__content img {
+    animation: none;
+  }
+  
+  .lightbox__close,
+  .lightbox-navigation__btn {
+    transition: none;
+  }
+}
