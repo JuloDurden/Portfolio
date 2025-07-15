@@ -5,6 +5,9 @@
   height: 100%;
   opacity: 0.3;
   filter: blur(10px);
-  z-index: 0; // Important pour être sous le ::after (qui est au-dessus dans le DOM)
+  z-index: 2; // PAR-DESSUS les layers pour adoucir
   pointer-events: none;
+  
+  // Masque sur Iridescence aussi
+  // mask: linear-gradient(to bottom, black 30vh, transparent 65vh);
 }

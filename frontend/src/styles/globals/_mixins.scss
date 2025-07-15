@@ -15,6 +15,10 @@
   font-weight: $font-weight-medium;
 }
 
+@mixin font-semibold {
+  font-weight: $font-weight-semi-bold;
+}
+
 @mixin font-semi-bold {
   font-weight: $font-weight-semi-bold;
 }
