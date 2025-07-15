@@ -183,12 +183,12 @@
 		"id": "006menumaker",
 		"title": "Menu Maker by Qwenta",
         "subtitle": "Planifier le développement du site d'un client",
-		"cover": "/assets/projects/006menumaker/cover.png",
+		"cover": "/assets/projects/006menumaker/cover.webp",
 		"description": "Pour ce projet, j’ai endossé le rôle de chef de projet technique en planifiant le développement d’un site web professionnel pour un client, sans coder directement. L’objectif était d’assurer une préparation claire, structurée et efficace du futur développement. À partir des maquettes Figma, des spécifications fonctionnelles et des User Stories, j’ai réalisé une veille technologique pour recommander les outils et technologies les plus adaptés au projet, rédigé les spécifications techniques détaillées, décomposé les besoins en tâches techniques claires, structuré le projet dans Notion, en créant un tableau Kanban pour assurer un suivi rigoureux, préparé une présentation de la solution technique, en tenant compte des contraintes, des priorités et de la scalabilité. Ce projet m’a permis de développer des compétences transversales en gestion de projet web, essentielles pour collaborer efficacement dans des équipes agiles ou encadrer le développement d’une application web.",
         "pictures": [
-			"/assets/projects/006menumaker/1.png",
-			"/assets/projects/006menumaker/2.png",
-			"/assets/projects/006menumaker/3.png"
+			"/assets/projects/006menumaker/1.webp",
+			"/assets/projects/006menumaker/2.webp",
+			"/assets/projects/006menumaker/3.webp"
 		],
         "competences": [
             "Rédaction de spécifications techniques à partir de besoins fonctionnels",
@@ -216,11 +216,11 @@
 		"id": "007devtoolbox",
 		"title": "DevToolBox",
         "subtitle": "Recenser les technologies web les plus utilisées et faciliter l'accès à leur documentation",
-		"cover": "/assets/projects/007devtoolbox/cover.png",
+		"cover": "/assets/projects/007devtoolbox/cover.webp",
 		"description": "DevToolBox est un projet personnel de veille technologique que j’ai conçu pour recenser, de façon claire et accessible, les principaux langages, frameworks et outils utilisés par les développeurs web. J’ai développé une page responsive en HTML et CSS, mettant en avant une interface simple et moderne, avec un système de cartes cliquables menant directement vers les sites officiels des technologies présentées. L’ensemble de la page propose un thème clair/sombre activable sans JavaScript, et s’appuie sur des animations CSS douces pour enrichir l’expérience utilisateur. Ce projet m’a permis de renforcer mes compétences en intégration responsive, en design accessible, et en animation front-end, tout en créant un support de veille technique utile et agréable à utiliser.",
         "pictures": [
-			"/assets/projects/007devtoolbox/1.png",
-			"/assets/projects/007devtoolbox/2.png"
+			"/assets/projects/007devtoolbox/1.webp",
+			"/assets/projects/007devtoolbox/2.webp"
 		],
         "competences": [
             "Intégration responsive en HTML/CSS",
@@ -237,8 +237,8 @@
             "github": "https://github.com/JuloDurden/DevToolBox"
 		},
 		"technologies": [
-			"HTML5",
-			"CSS3"
+			"HTML",
+			"CSS"
 		]
 	}
 ]

@@ -1,0 +1,285 @@
+// Projects.scss
+// ====================================
+// 📁 PROJECTS PAGE - STYLE MODERNE
+// ====================================
+
+.projects {
+  min-height: 100vh;
+  padding: 2rem 0;
+  
+  // ====================================
+  // 📦 CONTAINER
+  // ====================================
+  
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  
+  // ====================================
+  // 🎯 HEADER
+  // ====================================
+  
+  &__header {
+    text-align: center;
+    margin-bottom: 3rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  &__title {
+    font-size: var(--font-size-4xl);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+      border-radius: 2px;
+    }
+  }
+  
+  &__description {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    margin-top: 1.5rem;
+  }
+  
+  // ====================================
+  // 🔄 LOADING STATE
+  // ====================================
+  
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    
+    &::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--color-border);
+      border-top: 2px solid var(--color-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 1rem;
+    }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  // ====================================
+  // 🗂️ PROJECTS GRID
+  // ====================================
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+  
+  // ====================================
+  // 📊 STATISTICS
+  // ====================================
+  
+  &__stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    padding: 2rem;
+    background: var(--color-gray-50);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    
+    @media (max-width: 768px) {
+      gap: 2rem;
+      padding: 1.5rem;
+    }
+    
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+  }
+  
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    &-number {
+      font-size: var(--font-size-3xl);
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    &-label {
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  // ====================================
+  // 🎨 ANIMATIONS
+  // ====================================
+  
+  &__header {
+    animation: fadeInUp 0.6s ease-out;
+  }
+  
+  &__grid {
+    animation: fadeIn 0.8s ease-out 0.2s both;
+  }
+  
+  &__stats {
+    animation: fadeInUp 0.6s ease-out 0.4s both;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  // ====================================
+  // 📱 RESPONSIVE
+  // ====================================
+  
+  @media (max-width: 1024px) {
+    &__container {
+      padding: 0 1rem;
+    }
+    
+    &__grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem 0;
+    
+    &__header {
+      margin-bottom: 2rem;
+    }
+    
+    &__title {
+      font-size: var(--font-size-3xl);
+    }
+    
+    &__description {
+      font-size: var(--font-size-base);
+    }
+    
+    &__stat {
+      &-number {
+        font-size: var(--font-size-2xl);
+      }
+      
+      &-label {
+        font-size: var(--font-size-sm);
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: 1rem 0;
+    
+    &__container {
+      padding: 0 0.75rem;
+    }
+    
+    &__title {
+      font-size: var(--font-size-2xl);
+    }
+    
+    &__description {
+      font-size: var(--font-size-sm);
+    }
+    
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+}
+
+// ====================================
+// 🎯 EMPTY STATE (si besoin futur)
+// ====================================
+
+.projects__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-secondary);
+  
+  &-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  &-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  &-description {
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+  }
+}

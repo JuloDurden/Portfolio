@@ -31,6 +31,18 @@ $spacing-md: 1rem;
 $spacing-lg: 2rem;
 $spacing-xl: 3rem;
 $spacing-2xl: 4rem;
+$spacing-3xl: 6rem; // 🎯 AJOUTÉ
+
+// ====================================
+// 🚀 LAYOUT & HEADER - NOUVEAU
+// ====================================
+$header-height: 80px;
+$header-top-spacing: 20px;
+$header-total-height: 100px;
+$header-height-mobile: 60px;
+$header-top-spacing-mobile: 10px;
+$header-total-height-mobile: 70px;
+$max-width: 1200px;
 
 // ====================================
 // 🔤 TYPOGRAPHIE
@@ -124,6 +136,15 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   // Background color pour le masque
   --color-background: #{$bg-color};
   
+  // 🚀 LAYOUT & HEADER VARIABLES - NOUVEAU
+  --header-height: #{$header-height};
+  --header-top-spacing: #{$header-top-spacing};
+  --header-total-height: #{$header-total-height};
+  --header-height-mobile: #{$header-height-mobile};
+  --header-top-spacing-mobile: #{$header-top-spacing-mobile};
+  --header-total-height-mobile: #{$header-total-height-mobile};
+  --max-width: #{$max-width};
+  
   // Typographie
   --font-size-xs: #{$font-size-xs};
   --font-size-sm: #{$font-size-sm};
@@ -142,6 +163,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --spacing-lg: #{$spacing-lg};
   --spacing-xl: #{$spacing-xl};
   --spacing-2xl: #{$spacing-2xl};
+  --spacing-3xl: #{$spacing-3xl};
   
   // UI
   --border-radius: #{$border-radius};

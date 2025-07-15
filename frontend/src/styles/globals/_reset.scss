@@ -17,6 +17,15 @@
   }
 }
 
+// 🎯 SCROLL PADDING POUR LES ANCRES
+html {
+  scroll-padding-top: var(--header-total-height);
+  
+  @media (max-width: $mobile) {
+    scroll-padding-top: var(--header-total-height-mobile);
+  }
+}
+
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;

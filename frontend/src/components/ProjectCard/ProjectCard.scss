@@ -1,0 +1,221 @@
+// ProjectCard.scss
+// ====================================
+// 🃏 PROJECT CARD - STYLE MODERNE
+// ====================================
+
+.project-card {
+  display: block;
+  text-decoration: none;
+  background: var(--color-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid var(--color-border);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border-color: var(--color-primary);
+  }
+  
+  // ====================================
+  // 🖼️ IMAGE CONTAINER
+  // ====================================
+  
+  &__image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.4s ease;
+    }
+    
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+  
+  // ====================================
+  // 🎭 OVERLAY
+  // ====================================
+  
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  &:hover &__overlay {
+    opacity: 1;
+  }
+  
+  &__view {
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover &__view {
+    transform: translateY(0);
+  }
+  
+  // ====================================
+  // 📝 CONTENT
+  // ====================================
+  
+  &__content {
+    padding: 1.5rem;
+  }
+  
+  &__title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+    transition: color 0.3s ease;
+  }
+  
+  &:hover &__title {
+    color: var(--color-primary);
+  }
+  
+  &__subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin: 0 0 1rem 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  // ====================================
+  // 📊 META INFORMATIONS
+  // ====================================
+  
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--font-size-sm);
+  }
+  
+  &__client {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+  
+  &__date {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+  
+  // ====================================
+  // 🏷️ TECHNOLOGIES
+  // ====================================
+  
+  &__technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  &__tech {
+    background: var(--color-gray-50);
+    color: var(--color-text-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+  }
+  
+  &:hover &__tech {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+  }
+  
+  &__tech-more {
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    border: 1px solid var(--color-primary);
+  }
+  
+  // ====================================
+  // 📱 RESPONSIVE
+  // ====================================
+  
+  @media (max-width: 768px) {
+    &__image {
+      height: 200px;
+    }
+    
+    &__content {
+      padding: 1rem;
+    }
+    
+    &__title {
+      font-size: var(--font-size-lg);
+    }
+    
+    &__subtitle {
+      font-size: var(--font-size-sm);
+    }
+    
+    &__meta {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    
+    &__technologies {
+      gap: 0.25rem;
+    }
+    
+    &__tech {
+      font-size: var(--font-size-xs);
+      padding: 0.2rem 0.6rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    &__image {
+      height: 180px;
+    }
+    
+    &__content {
+      padding: 0.75rem;
+    }
+  }
+}
