@@ -1,4 +1,3 @@
-import React from 'react';
 import './BackgroundGradient.scss';
 
 import Iridescence from '../Iridescence/Iridescence';

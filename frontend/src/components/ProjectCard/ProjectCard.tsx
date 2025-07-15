@@ -1,7 +1,7 @@
 // components/ProjectCard/ProjectCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Project } from '../../hooks/useProjects';
+import type { Project } from '../../hooks/useProjects';
 import './ProjectCard.scss';
 
 interface ProjectCardProps {
