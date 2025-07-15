@@ -3,7 +3,7 @@
 		"id": "001booki",
 		"title": "Booki",
         "subtitle": "Créer la page d'accueil d'une agence de voyage avec HTML & CSS",
-		"cover": "https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/01%20-%20booki/cover.webp",
+		"cover": "../assets/projects/booki/cover.webp",
 		"description": "Pour ce projet, j’ai réalisé l’intégration responsive de la page d’accueil du site Booki, à partir de maquettes Figma pour desktop, tablette et mobile. L’objectif : créer une interface claire et fonctionnelle, adaptée à tous les écrans, en utilisant uniquement HTML5 et CSS3. J’ai codé l’ensemble de la structure et du style à la main, sans générateur automatique, afin de respecter au plus près le design tout en optimisant l’accessibilité et la performance. La mise en page repose sur Flexbox et des media queries, pour une expérience utilisateur fluide quel que soit le support.",
         "pictures": [
 			"https://github.com/JuloDurden/Portfolio/blob/main/frontend/src/assets/projects/01%20-%20booki/1.webp",

@@ -72,7 +72,7 @@ function Home() {
       {/* Projects Preview */}
       <section className="home__section home__section--alt">
         <div className="home__container">
-          <h2 className="home__section-title">Projets récents</h2>
+          <h2 className="home__section-title">Mes derniers projets</h2>
           
           {loading ? (
             <div className="home__loading">Chargement des projets...</div>
@@ -89,53 +89,11 @@ function Home() {
               </div>
               <div className="home__projects-cta">
                 <Link to="/projects" className="btn btn--primary">
-                  Voir tous les projets
+                  Voir tous mes projets
                 </Link>
               </div>
             </>
           )}
-        </div>
-      </section>
-
-      {/* Experience */}
-      <section className="home__section">
-        <div className="home__container">
-          <h2 className="home__section-title">Expérience</h2>
-          <div className="home__timeline">
-            <div className="home__timeline-item">
-              <div className="home__timeline-date">2024 - Présent</div>
-              <div className="home__timeline-content">
-                <h3>Développeur Full Stack Senior</h3>
-                <p className="home__company">TechCorp Solutions</p>
-                <p>
-                  Développement d'applications web complexes et encadrement d'équipes de développement.
-                  Mise en place d'architectures scalables et optimisation des performances.
-                </p>
-              </div>
-            </div>
-            <div className="home__timeline-item">
-              <div className="home__timeline-date">2021 - 2023</div>
-              <div className="home__timeline-content">
-                <h3>Développeur Frontend</h3>
-                <p className="home__company">Digital Agency</p>
-                <p>
-                  Création d'interfaces utilisateur modernes et responsives. Collaboration étroite 
-                  avec les équipes design et backend pour livrer des produits de qualité.
-                </p>
-              </div>
-            </div>
-            <div className="home__timeline-item">
-              <div className="home__timeline-date">2020 - 2021</div>
-              <div className="home__timeline-content">
-                <h3>Développeur Junior</h3>
-                <p className="home__company">StartUp Innovante</p>
-                <p>
-                  Premiers pas dans le développement professionnel. Apprentissage des bonnes 
-                  pratiques et contribution au développement de produits innovants.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

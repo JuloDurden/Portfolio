@@ -38,7 +38,7 @@ export const useProjects = () => {
   };
 
   const getRecentProjects = (count: number = 3): Project[] => {
-    return projects.slice(0, count);
+    return projects.slice(-count).reverse();
   };
 
   return { 
