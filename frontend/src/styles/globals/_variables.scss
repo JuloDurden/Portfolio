@@ -97,6 +97,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   // Couleurs de fond
   --color-bg: #{$bg-color};
   --color-white: #ffffff;
+  --color-surface: #ffffff;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -144,6 +145,21 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --header-top-spacing-mobile: #{$header-top-spacing-mobile};
   --header-total-height-mobile: #{$header-total-height-mobile};
   --max-width: #{$max-width};
+
+  // FONT WEIGHTS
+  --font-weight-thin: #{$font-weight-thin};
+  --font-weight-extra-light: #{$font-weight-extra-light};
+  --font-weight-light: #{$font-weight-light};
+  --font-weight-regular: #{$font-weight-regular};
+  --font-weight-medium: #{$font-weight-medium};
+  --font-weight-semi-bold: #{$font-weight-semi-bold};
+  --font-weight-bold: #{$font-weight-bold};
+  --font-weight-extra-bold: #{$font-weight-extra-bold};
+  --font-weight-black: #{$font-weight-black};
+  
+  // FONT FAMILY
+  --font-primary: #{$font-primary};
+  --font-secondary: #{$font-primary};
   
   // Typographie
   --font-size-xs: #{$font-size-xs};

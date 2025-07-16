@@ -17,6 +17,7 @@ import ProjectDetail from './pages/ProjectDetail/ProjectDetail';
 // Importation des components
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import BackToTop from './components/BackToTop/BackToTop'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -33,6 +34,7 @@ createRoot(document.getElementById('root')!).render(
         </Routes>
         <Footer />
       </Router>
+      <BackToTop />
     </ThemeProvider>
   </StrictMode>,
 );

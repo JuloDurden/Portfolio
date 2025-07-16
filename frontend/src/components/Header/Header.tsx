@@ -72,7 +72,7 @@ function Header() {
         <div className="header__separator"></div>
 
         <div className="header__social-links">
-          <ThemeToggle />
+        <ThemeToggle />
 
           {/* GitHub */}
           <a 

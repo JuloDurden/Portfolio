@@ -1,24 +1,8 @@
 import './BackgroundGradient.scss';
-import { useState, useEffect } from 'react';
+
 import Iridescence from '../Iridescence/Iridescence';
 
 const BackgroundGradient = () => {
-  const [isDesktop, setIsDesktop] = useState(true);
-
-  useEffect(() => {
-    const checkDevice = () => {
-      setIsDesktop(window.innerWidth > 1024);
-    };
-
-    checkDevice();
-    window.addEventListener('resize', checkDevice);
-
-    return () => window.removeEventListener('resize', checkDevice);
-  }, []);
-
-  // 🚫 NE REND RIEN SUR MOBILE/TABLETTE
-  if (!isDesktop) return null;
-
   return (
     <div className="background-wrapper">
       <div className="background-layer layer1" />

@@ -1,0 +1,215 @@
+@import "../../styles/globals/variables";
+@import "../../styles/globals/mixins";
+
+.error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--color-bg-primary);
+
+  &__container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    
+    @include respond-to('tablet') {
+      flex-direction: column;
+      gap: 3rem;
+      max-width: 600px;
+      text-align: center;
+    }
+    
+    @include respond-to('mobile') {
+      gap: 2rem;
+      max-width: 100%;
+    }
+  }
+
+  &__content {
+    text-align: left;
+    
+    @include respond-to('tablet') {
+      text-align: center;
+      order: 2;
+    }
+  }
+
+  &__title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: var(--font-weight-extra-bold);
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-family: var(--font-primary);
+  }
+
+  &__subtitle {
+    font-size: clamp(1.5rem, 3vw, 1.8rem);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    font-family: var(--font-primary);
+  }
+
+  &__description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: 3rem;
+    font-family: var(--font-secondary);
+  }
+
+  &__links {
+    h3 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+      margin-bottom: 1rem;
+      font-family: var(--font-primary);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-start;
+      
+      @include respond-to('tablet') {
+        justify-content: center;
+      }
+
+      @include respond-to('mobile') {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    li {
+      a {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--color-primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: var(--font-weight-medium);
+        font-family: var(--font-primary);
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: var(--color-primary-dark);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-lg);
+        }
+      }
+    }
+  }
+
+  &__illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    @include respond-to('tablet') {
+      order: 1;
+    }
+  }
+}
+
+// ====================================
+// 📺 TV CONTAINER
+// ====================================
+
+.tv-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  
+  @include respond-to('tablet') {
+    max-width: 350px;
+  }
+  
+  @include respond-to('mobile') {
+    max-width: 280px;
+  }
+}
+
+.tv-gif {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.tv-overlay {
+  position: absolute;
+  top: 95px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 70%;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include respond-to('tablet') {
+    top: 85px;
+  }
+
+  @include respond-to('mobile') {
+    top: 68px;
+  }
+}
+
+.tv-text {
+  text-align: center;
+  font-family: 'Arial Black', Arial, sans-serif;
+  color: rgba(218, 218, 218, 0.75);
+  text-shadow: 0 0 15px rgba(218, 218, 218, 0.60);
+  width: 100%;
+}
+
+.tv-line {
+  display: block;
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  
+  // Ombre intérieure avec box-shadow sur pseudo-élément
+  position: relative;
+  
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: transparent;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.6) 0%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    z-index: 1;
+  }
+  
+  @include respond-to('tablet') {
+    font-size: clamp(2.8rem, 4vw, 3.4rem);
+  }
+  
+  @include respond-to('mobile') {
+    font-size: clamp(2.3rem, 6vw, 2.6rem);
+  }
+}

@@ -11,7 +11,7 @@ function Footer() {
         </div>
         
         <div className="footer__bottom">
-          <p>Développé avec ❤️ et React + TypeScript</p>
+          <p>Développé avec <span className="footer__heart">❤️</span> et React + TypeScript</p>
         </div>
       </div>
     </footer>

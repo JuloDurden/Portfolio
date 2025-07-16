@@ -16,7 +16,7 @@ const ProjectDetail: React.FC = () => {
         <main className="project-detail main-content">
           <div className="page-content">
             <div className="project-detail__container">
-              <div className="project-detail__loading">
+              <div className="project-detail__loading animate-fade-in">
                 Chargement du projet...
               </div>
             </div>
@@ -53,7 +53,7 @@ const ProjectDetail: React.FC = () => {
       <main className="project-detail main-content">
         <div className="page-content">
           {/* Breadcrumb */}
-          <nav className="project-detail__breadcrumb">
+          <nav className="project-detail__breadcrumb animate-fade-in-down">
             <div className="project-detail__breadcrumb-container">
               <Link to="/projects" className="project-detail__breadcrumb-link">
                 ← Retour aux projets
@@ -62,7 +62,7 @@ const ProjectDetail: React.FC = () => {
           </nav>
 
           {/* Title */}
-          <div className="project-detail__header">
+          <div className="project-detail__header animate-fade-in-up animate-delay-100">
             <div className="project-detail__header-container">
               <h1 className="project-detail__title">{project.title}</h1>
               <p className="project-detail__subtitle">{project.subtitle}</p>
@@ -70,7 +70,7 @@ const ProjectDetail: React.FC = () => {
           </div>
 
           {/* Photo Gallery - Style Airbnb */}
-          <div className="project-detail__gallery">
+          <div className="project-detail__gallery animate-fade-in animate-delay-200">
             <div className="project-detail__gallery-container">
               <div className="project-detail__gallery-grid">
                 {/* Image principale - 2/3 de la largeur */}
@@ -125,12 +125,12 @@ const ProjectDetail: React.FC = () => {
           </div>
 
           {/* Contenu principal */}
-          <div className="project-detail__content">
+          <div className="project-detail__content animate-fade-in-up animate-delay-300">
             <div className="project-detail__content-container">
               {/* Colonne principale */}
               <div className="project-detail__main">
                 {/* Meta informations */}
-                <div className="project-detail__meta">
+                <div className="project-detail__meta animate-fade-in-up animate-delay-400">
                   <div className="project-detail__meta-item">
                     <span className="project-detail__meta-label">Client</span>
                     <span className="project-detail__meta-value">{project.informations.client}</span>
@@ -144,7 +144,7 @@ const ProjectDetail: React.FC = () => {
                 <hr className="project-detail__divider" />
 
                 {/* Description */}
-                <div className="project-detail__description">
+                <div className="project-detail__description animate-fade-in-up animate-delay-500">
                   <h2 className="project-detail__section-title">À propos de ce projet</h2>
                   <p className="project-detail__text">{project.description}</p>
                 </div>
@@ -152,7 +152,7 @@ const ProjectDetail: React.FC = () => {
                 <hr className="project-detail__divider" />
 
                 {/* Technologies */}
-                <div className="project-detail__technologies">
+                <div className="project-detail__technologies animate-fade-in-up animate-delay-600">
                   <h3 className="project-detail__section-title">Technologies utilisées</h3>
                   <div className="project-detail__tech-list">
                     {project.technologies.map((tech, index) => (
@@ -166,7 +166,7 @@ const ProjectDetail: React.FC = () => {
                 <hr className="project-detail__divider" />
 
                 {/* Compétences */}
-                <div className="project-detail__competences">
+                <div className="project-detail__competences animate-fade-in-up animate-delay-700">
                   <h3 className="project-detail__section-title">Compétences développées</h3>
                   <ul className="project-detail__competences-list">
                     {project.competences.map((competence, index) => (
@@ -179,7 +179,7 @@ const ProjectDetail: React.FC = () => {
               </div>
 
               {/* Sidebar */}
-              <div className="project-detail__sidebar">
+              <div className="project-detail__sidebar animate-fade-in-left animate-delay-400">
                 <div className="project-detail__card">
                   <h3 className="project-detail__card-title">Liens du projet</h3>
                   

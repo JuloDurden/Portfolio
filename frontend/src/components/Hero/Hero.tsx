@@ -7,16 +7,16 @@ function Hero() {
         <section className="hero__section">
             <div className="hero__content">
                 <div className='hero__content--titles'>
-                    <p className="hero__content--greeting">
+                    <p className="hero__content--greeting animate-fade-in-up">
                         bonjour, moi c'est
                     </p>
-                    <h1 className="hero__content--title">
+                    <h1 className="hero__content--title animate-fade-in-up animate-delay-200">
                         <span className="hero__name">Julien Clavel</span>
                     </h1>
-                    <p className="hero__content--subtitle">
+                    <p className="hero__content--subtitle animate-fade-in-up animate-delay-400">
                         Développeur Web passionné par la création d'expériences web modernes
                     </p>
-                    <div className="hero__content--cta">
+                    <div className="hero__content--cta animate-fade-in-up animate-delay-600">
                         <Link 
                             to="/projects" 
                             className="hero__btn hero__btn--primary"
@@ -34,7 +34,7 @@ function Hero() {
                 <img 
                     src={HeroImage} 
                     alt='Julien Clavel, Développeur Web'
-                    className="hero__image"
+                    className="hero__image animate-fade-in-right animate-delay-400"
                 />
             </div>
         </section>
