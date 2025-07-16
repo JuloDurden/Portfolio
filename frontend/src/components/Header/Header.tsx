@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import './Header.scss';
 
 import MenuPicture from './img/menu-picture.png'
@@ -71,6 +72,8 @@ function Header() {
         <div className="header__separator"></div>
 
         <div className="header__social-links">
+          <ThemeToggle />
+
           {/* GitHub */}
           <a 
             href="https://github.com/JuloDurden" 

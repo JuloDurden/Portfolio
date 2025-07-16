@@ -11,6 +11,7 @@
 // Styles globaux de l'app
 body {
   font-family: 'Inter', sans-serif;
-  color: $text-color;
-  background-color: $bg-color;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  transition: var(--transition);
 }

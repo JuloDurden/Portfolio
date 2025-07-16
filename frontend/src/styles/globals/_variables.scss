@@ -31,7 +31,7 @@ $spacing-md: 1rem;
 $spacing-lg: 2rem;
 $spacing-xl: 3rem;
 $spacing-2xl: 4rem;
-$spacing-3xl: 6rem; // 🎯 AJOUTÉ
+$spacing-3xl: 6rem;
 
 // ====================================
 // 🚀 LAYOUT & HEADER - NOUVEAU
@@ -173,20 +173,70 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 // ====================================
-// 🌙 THÈME SOMBRE (pour plus tard)
+// 🌙 THÈME SOMBRE
 // ====================================
 [data-theme="dark"] {
+  --color-primary: #4db6ac;
+  --color-secondary: #26a69a;
+  --color-accent: #ff8a65;
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #b0b0b0;
+  --color-text-muted: #888888;
+  --color-background: #0f172a;
   --color-bg: #0f172a;
+  --color-surface: #1e293b;
   --color-white: #1e293b;
-  --color-gray-50: #334155;
-  --color-gray-100: #475569;
-  --color-gray-200: #64748b;
-  --color-gray-300: #94a3b8;
+  --color-gray-50: #1e293b;
+  --color-gray-100: #334155;
+  --color-gray-200: #475569;
+  --color-gray-300: #64748b;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #cbd5e1;
+  --color-gray-900: #f1f5f9;
   
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted: #94a3b8;
+  // 🎯 Couleurs système pour le dark mode
+  --color-border: #475569;
+  --color-success: #22c55e;
+  --color-warning: #eab308;
+  --color-error: #f87171;
   
-  --color-border: #334155;
-  --color-primary: #{lighten($primary-color, 15%)};
+  // 🌈 GRADIENTS MODE SOMBRE
+  --gradient-layer1-color1: #1a365d;
+  --gradient-layer1-color2: #2d1b47;
+  --gradient-layer1-color3: #1a4d3a;
+  --gradient-layer1-color4: #1e3a8a;
+  
+  --gradient-layer2-color1: rgba(26, 54, 93, 0.8);
+  --gradient-layer2-color2: rgba(45, 27, 71, 0.8);
+  --gradient-layer2-color3: rgba(26, 77, 58, 0.8);
+  --gradient-layer2-color4: rgba(30, 58, 138, 0.8);
+  
+  --gradient-layer3-color1: rgba(26, 54, 93, 0.6);
+  --gradient-layer3-color2: rgba(45, 27, 71, 0.6);
+  --gradient-layer3-color3: rgba(26, 77, 58, 0.6);
+  --gradient-layer3-color4: rgba(30, 58, 138, 0.6);
+
+  // 🎯 HEADER MODE SOMBRE
+  --color-header-bg: rgba(30, 41, 59, 0.85);
+  --color-header-border: rgba(71, 85, 105, 0.5);
+  --color-header-hover: rgba(148, 163, 184, 0.2);
+  --color-header-active: rgba(148, 163, 184, 0.15);
+  --color-header-separator: rgba(148, 163, 184, 0.3);
+  --color-header-photo-border: rgba(148, 163, 184, 0.4);
+  --shadow-header: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-header-photo: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  // 🎯 HERO MODE SOMBRE
+  --color-hero-card-bg: rgba(30, 41, 59, 0.8);
+  --color-hero-card-border: rgba(71, 85, 105, 0.3);
+  --color-hero-image-border: rgba(148, 163, 184, 0.4);
+  --shadow-hero-card: 0 15px 40px rgba(0, 0, 0, 0.4);
+  --shadow-hero-image: 0 15px 40px rgba(0, 0, 0, 0.5);
+  --shadow-hero-btn-primary: 0 8px 25px rgba(0, 109, 119, 0.4);
+  --shadow-hero-btn-secondary: 0 8px 25px rgba(0, 109, 119, 0.3);
+  
+  // 🎯 AJOUTÉ - Ombres pour le dark mode
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
 }

@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { Navigate, BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './styles/main.scss'
 
+// Importation du ThemeProvider
+import { ThemeProvider } from './contexts/ThemeContext'
+
 // Importation des pages
 import Home from './pages/Home/Home';
 import About from './pages/About/About';
@@ -17,17 +20,19 @@ import Footer from './components/Footer/Footer';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Router>
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/projects' element={<Projects />} />
-        <Route path='/projects/:id' element={<ProjectDetail />} />
-        <Route path='/404' element={<Error />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/projects' element={<Projects />} />
+          <Route path='/projects/:id' element={<ProjectDetail />} />
+          <Route path='/404' element={<Error />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </ThemeProvider>
   </StrictMode>,
 );

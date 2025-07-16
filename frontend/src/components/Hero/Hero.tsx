@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Hero.scss';
 import HeroImage from './img/Me.webp';
 
@@ -16,12 +17,18 @@ function Hero() {
                         Développeur Web passionné par la création d'expériences web modernes
                     </p>
                     <div className="hero__content--cta">
-                        <button className="hero__btn hero__btn--primary">
+                        <Link 
+                            to="/projects" 
+                            className="hero__btn hero__btn--primary"
+                        >
                             Voir mes projets
-                        </button>
-                        <button className="hero__btn hero__btn--secondary">
+                        </Link>
+                        <a 
+                            href="mailto:julowebdev@gmail.com?subject=Votre profil m'intéresse" 
+                            className="hero__btn hero__btn--secondary"
+                        >
                             Me contacter
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <img 
