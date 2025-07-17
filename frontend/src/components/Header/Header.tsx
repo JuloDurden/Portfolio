@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import './Header.scss';
 
-import MenuPicture from './img/menu-picture.png'
+import MenuPicture from './img/menu-picture.webp'
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,6 +34,8 @@ function Header() {
               src={MenuPicture} 
               alt="Photo de profil" 
               className="header__profile-photo"
+              loading="lazy" 
+              decoding="async"
             />
           </Link>
 

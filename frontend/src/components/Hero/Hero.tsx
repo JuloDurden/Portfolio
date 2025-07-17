@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
 import './Hero.scss';
-import HeroImage from './img/Me.webp';
+// Import des différentes tailles
+import HeroImageMobile from './img/Me-150x150.webp';
+import HeroImageTablet from './img/Me-200x200.webp';
+import HeroImageDesktop from './img/Me-500x500.webp';
+import HeroImageDesktopLarge from './img/Me.webp';
 
 function Hero() {
     return (
@@ -31,11 +35,31 @@ function Hero() {
                         </a>
                     </div>
                 </div>
-                <img 
-                    src={HeroImage} 
-                    alt='Julien Clavel, Développeur Web'
-                    className="hero__image animate-fade-in-right animate-delay-400"
-                />
+                
+                {/* 🚀 IMAGE RESPONSIVE */}
+                <picture className="hero__image animate-fade-in-right animate-delay-400">
+                    <source 
+                        media="(max-width: 767px)" 
+                        srcSet={HeroImageMobile}
+                    />
+                    <source 
+                        media="(max-width: 1023px)" 
+                        srcSet={HeroImageTablet}
+                    />
+                    <source 
+                        media="(max-width: 1199px)" 
+                        srcSet={HeroImageDesktop}
+                    />
+                    <img 
+                        src={HeroImageDesktopLarge}
+                        loading="eager"
+                        decoding="async"
+                        fetchPriority="high"
+                        alt="Julien Clavel, Développeur Web"
+                        width="600"
+                        height="600"
+                    />
+                </picture>
             </div>
         </section>
     );

@@ -13,7 +13,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className = '' }) =>
   return (
     <Link to={`/projects/${project.id}`} className={`project-card ${className}`}>
       <div className="project-card__image">
-        <img src={project.cover} alt={project.title} />
+        <img src={project.cover} alt={project.title} loading="lazy" decoding="async" />
         <div className="project-card__overlay">
           <span className="project-card__view">Voir le projet</span>
         </div>
