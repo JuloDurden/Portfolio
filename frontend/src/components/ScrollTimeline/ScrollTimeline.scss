@@ -1,0 +1,458 @@
+@import "../../styles/globals/variables";
+
+// ====================================
+// 🎯 SCROLL TIMELINE - STYLE MODERNE
+// ====================================
+
+.scroll-timeline {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+}
+
+// ====================================
+// 📊 PROGRESS BAR - VISIBLE ET STYLÉE
+// ====================================
+
+.timeline-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  backdrop-filter: blur(5px);
+  
+  &-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary, var(--color-primary)));
+    transition: width 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(0, 109, 119, 0.3);
+  }
+}
+
+// ====================================
+// 📱 SECTIONS TIMELINE
+// ====================================
+
+.timeline-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.timeline-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  
+  &.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ====================================
+// 🎴 CARTE TIMELINE - AMÉLIORÉE
+// ====================================
+
+.timeline-card {
+  background: var(--color-white);
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--color-border);
+  transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+  position: relative;
+  backdrop-filter: blur(10px);
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 109, 119, 0.1);
+  }
+  
+  // ✅ ICÔNE AMÉLIORÉE
+  &-icon {
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    
+    @media (max-width: 768px) {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 3rem;
+    }
+  }
+  
+  // ✅ TITRE AMÉLIORÉ
+  &-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    
+    @media (max-width: 768px) {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+  
+  // ✅ DESCRIPTION PARFAITE
+  &-description {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      max-width: 100%;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+  }
+  
+  // Animation d'apparition du contenu
+  &-icon,
+  &-title,
+  &-description {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInContent 0.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+  }
+  
+  &-icon { animation-delay: 0.1s; }
+  &-title { animation-delay: 0.2s; }
+  &-description { animation-delay: 0.3s; }
+}
+
+@keyframes slideInContent {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ====================================
+// 🎯 NAVIGATION DOTS - BULLETPROOF VERSION
+// ====================================
+
+.timeline-navigation {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  z-index: 1000;
+  
+  @media (max-width: 768px) {
+    right: 1.5rem;
+    gap: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    right: 1rem;
+    gap: 0.8rem;
+  }
+}
+
+.timeline-dot {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%; // ✅ TOUJOURS 50% POUR UN CERCLE PARFAIT
+  background: transparent;
+  border: 2px solid rgba(0, 109, 119, 0.3);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  
+  // ✅ VERSION DESKTOP/TABLETTE
+  &:hover {
+    border-color: var(--color-primary);
+    transform: scale(1.3);
+  }
+  
+  &.visited {
+    background: rgba(0, 109, 119, 0.2);
+    border-color: var(--color-primary);
+  }
+  
+  &.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: scale(1.4);
+    box-shadow: 
+      0 0 15px rgba(0, 109, 119, 0.4),
+      0 0 25px rgba(0, 109, 119, 0.2);
+  }
+  
+  // ✅ MOBILE UNIQUEMENT - SANS REDÉFINIR LES TAILLES
+  @media (max-width: 480px) {
+    // Garde la même taille mais désactive les transforms problématiques
+    &:hover {
+      transform: none; // ✅ DÉSACTIVE LE SCALE
+      border-color: var(--color-primary);
+      background: rgba(0, 109, 119, 0.1);
+    }
+    
+    &.active {
+      transform: none; // ✅ DÉSACTIVE LE SCALE
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      // Garde juste la shadow
+      box-shadow: 
+        0 0 10px rgba(0, 109, 119, 0.6),
+        0 0 20px rgba(0, 109, 119, 0.3);
+    }
+  }
+}
+
+
+// ====================================
+// 📱 INSTRUCTIONS - VISIBLES ET STYLÉES  
+// ====================================
+
+.timeline-instructions {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--color-white);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  z-index: 1000;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(0, 109, 119, 0.1);
+  
+  // Animation d'apparition
+  animation: slideUpFade 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  
+  span {
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    
+    @media (max-width: 480px) {
+      white-space: normal;
+      line-height: 1.4;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    bottom: 1.5rem;
+    font-size: 0.9rem;
+    padding: 0.8rem 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    bottom: 1rem;
+    font-size: 0.85rem;
+    padding: 0.7rem 1.2rem;
+    max-width: 90%;
+  }
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+// ====================================
+// 💡 INDICATEUR DE SORTIE - AMÉLIORÉ
+// ====================================
+
+.timeline-exit-hint {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary, var(--color-primary)));
+  color: var(--color-white);
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 1000;
+  animation: pulseGlow 2s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(0, 109, 119, 0.3);
+  
+  @media (max-width: 768px) {
+    bottom: 1rem;
+    font-size: 0.8rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { 
+    opacity: 0.8; 
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 4px 20px rgba(0, 109, 119, 0.3);
+  }
+  50% { 
+    opacity: 1; 
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 8px 30px rgba(0, 109, 119, 0.5);
+  }
+}
+
+// ====================================
+// 📱 RESPONSIVE DESIGN AMÉLIORÉ
+// ====================================
+
+@media (max-width: 1024px) {
+  .timeline-card {
+    max-width: 520px;
+    padding: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .timeline-card {
+    padding: 2rem;
+    width: 95%;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-card {
+    padding: 1.5rem;
+    width: 100%;
+    margin: 0 1rem;
+    border-radius: 12px;
+  }
+  
+  .scroll-timeline {
+    padding: 0 0.5rem;
+  }
+}
+
+// ====================================
+// 🌙 DARK MODE SUPPORT
+// ====================================
+
+@media (prefers-color-scheme: dark) {
+  .timeline-progress {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .timeline-dot {
+    border-color: rgba(255, 255, 255, 0.4);
+    
+    &:hover {
+      border-color: var(--color-primary);
+    }
+  }
+}
+
+// ====================================
+// ⚡ PERFORMANCE & ACCESSIBILITY
+// ====================================
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-section {
+    transition: opacity 0.3s ease;
+  }
+  
+  .timeline-card {
+    &:hover {
+      transform: none;
+    }
+    
+    &-icon,
+    &-title,
+    &-description {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+  
+  .timeline-dot {
+    transition: background-color 0.2s ease;
+    
+    &:hover,
+    &.active {
+      transform: none;
+    }
+  }
+  
+  .timeline-instructions {
+    animation: none;
+  }
+  
+  .timeline-exit-hint {
+    animation: none;
+  }
+}
+
+// ====================================
+// 🎯 FOCUS STATES POUR ACCESSIBILITY
+// ====================================
+
+.timeline-dot {
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}

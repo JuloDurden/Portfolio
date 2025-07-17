@@ -14,7 +14,7 @@
 
     // Section alternée avec fond gris
     &--alt {
-      background-color: var(--color-gray-200);
+      background-color: var(--color-light-gray);
       
       &::before {
         content: '';
@@ -37,61 +37,6 @@
       }
     }
 
-    // Section methodology - style spécial
-    &--methodology {
-      padding: 4rem 0 0 0; // Padding top normal, pas de bottom
-      background: var(--color-bg);
-      
-      // Container pour titre et intro
-      .home__container {
-        max-width: 800px;
-        text-align: center;
-        margin-bottom: 3rem;
-        
-        @media (max-width: 768px) {
-          margin-bottom: 2rem;
-        }
-      }
-      
-      // Titre spécifique à la méthodologie
-      .home__section-title {
-        color: var(--color-text-secondary);
-        margin-bottom: 1.5rem;
-        
-        @media (max-width: 768px) {
-          font-size: 1.75rem;
-          margin-bottom: 1rem;
-        }
-      }
-      
-      // Intro spécifique à la méthodologie
-      .home__section-intro {
-        color: var(--color-text-secondary);
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 0;
-        
-        @media (max-width: 768px) {
-          font-size: 1rem;
-        }
-      }
-      
-      // Timeline wrapper
-      .home__methodology-timeline {
-        width: 100%;
-      }
-      
-      // Animation cohérente avec les autres sections
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 0.6s ease forwards;
-      animation-delay: 0.3s;
-      
-      @media (max-width: 768px) {
-        padding: 3rem 0 0 0;
-      }
-    }
-
     @media (max-width: 768px) {
       padding: 2.5rem 0;
     }
@@ -107,6 +52,17 @@
 
     @media (max-width: 768px) {
       padding: 0 1rem;
+    }
+
+    // Container spécial pour About
+    &--about {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+
+      @media (max-width: 768px) {
+        padding: 0 1rem;
+      }
     }
   }
 
@@ -140,101 +96,107 @@
   }
 
   // ====================================
-  // 📝 TEXTE D'INTRODUCTION SECTION
+  // 👤 SECTION ABOUT
   // ====================================
-  &__section-intro {
-    max-width: 800px;
-    margin: 0 auto 3rem auto;
-    text-align: center;
-    
+  &__about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+
+    @media (max-width: 968px) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+
+  &__about-text {
     p {
-      font-size: var(--font-size-lg);
-      color: var(--color-text-secondary);
+      font-size: 1.1rem;
       line-height: 1.7;
+      color: var(--color-text);
       margin-bottom: 1.5rem;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
     }
-    
-    @media (max-width: 768px) {
-      margin-bottom: 2rem;
-      
-      p {
-        font-size: var(--font-size-base);
-        margin-bottom: 1rem;
-      }
-    }
   }
 
   // ====================================
-  // ⭐ POURQUOI ME CHOISIR
+  // 🛠️ COMPÉTENCES
   // ====================================
-  &__features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-top: 1rem;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-  }
-
-  &__feature {
+  &__skills {
     background: var(--color-white);
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid var(--color-border);
     transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &__skills-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 1.5rem;
+    justify-items: center;
+  }
+
+  &__skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
     position: relative;
 
     &:hover {
+      background-color: var(--color-light-gray);
       transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     }
 
-    &-icon {
-      font-size: 2.5rem;
-      display: block;
-      margin-bottom: 1rem;
-      text-align: center;
-      
-      @media (max-width: 768px) {
-        font-size: 2rem;
-      }
+    // Tooltip au hover
+    &:hover::after {
+      content: attr(data-skill);
+      position: absolute;
+      bottom: -2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-dark);
+      color: var(--color-white);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 10;
     }
+  }
 
-    h3 {
-      font-size: var(--font-size-xl);
-      font-weight: 600;
-      color: var(--color-text-primary);
-      margin-bottom: 1rem;
-      line-height: 1.3;
-      text-align: center;
-    }
+  &__skill-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    transition: all 0.3s ease;
 
-    p {
-      font-size: var(--font-size-base);
-      color: var(--color-text-secondary);
-      line-height: 1.6;
-      margin-bottom: 0.8rem;
-      text-align: center;
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    @media (max-width: 768px) {
-      padding: 1.5rem;
-      
-      h3 {
-        font-size: var(--font-size-lg);
-      }
+    .home__skill:hover & {
+      transform: scale(1.1);
     }
   }
 
@@ -264,68 +226,6 @@
   &__projects-cta {
     text-align: center;
     margin-top: 3rem;
-  }
-
-  // ====================================
-  // 🔗 LIEN "VOIR TOUS MES PROJETS"
-  // ====================================
-  &__projects-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background-color: transparent;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--border-radius);
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-base);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: var(--color-primary);
-      transition: left 0.3s ease;
-      z-index: -1;
-    }
-    
-    &:hover {
-      color: var(--color-white);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 109, 119, 0.25);
-      
-      &::before {
-        left: 0;
-      }
-    }
-    
-    &:active {
-      transform: translateY(0);
-    }
-    
-    // Icône flèche
-    &::after {
-      content: '→';
-      font-size: 1.1em;
-      transition: transform 0.3s ease;
-    }
-    
-    &:hover::after {
-      transform: translateX(4px);
-    }
-    
-    @media (max-width: 768px) {
-      padding: 0.6rem 1.2rem;
-      font-size: 0.9rem;
-    }
   }
 
   &__loading {
@@ -456,7 +356,8 @@
 // 📱 RESPONSIVE DESIGN
 // ====================================
 @media (max-width: 1200px) {
-  .home__container {
+  .home__container,
+  .home__container--about {
     padding: 0 1.5rem;
   }
 }
@@ -465,6 +366,28 @@
   .home {
     &__section {
       padding: 2rem 0;
+    }
+
+    &__about-grid {
+      gap: 2rem;
+    }
+
+    &__skills {
+      padding: 1.5rem;
+    }
+
+    &__skills-grid {
+      grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+      gap: 1rem;
+    }
+
+    &__skill {
+      padding: 0.8rem;
+    }
+
+    &__skill-icon {
+      width: 35px;
+      height: 35px;
     }
 
     &__cta {

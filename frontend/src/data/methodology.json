@@ -1,0 +1,43 @@
+{
+  "title": "Une méthode claire",
+  "theme": "light",
+  "showImages": true,
+  "items": [
+    {
+      "id": "analyse",
+      "title": "Analyse",
+      "content": "Nous analysons vos besoins et défis pour comprendre parfaitement votre projet. Cette étape fondamentale nous permet de définir une stratégie adaptée et personnalisée.",
+      "icon": "📊"
+    },
+    {
+      "id": "planification",
+      "title": "Planification",
+      "content": "Élaboration d'un plan détaillé avec des étapes claires et des délais précis. Nous définissons l'architecture, les technologies et la roadmap de développement.",
+      "icon": "📋"
+    },
+    {
+      "id": "mise-en-place",
+      "title": "Mise en place",
+      "content": "Développement et implémentation des solutions avec un suivi rigoureux. Nous mettons en place les bases solides de votre projet digital.",
+      "icon": "⚙️"
+    },
+    {
+      "id": "creation",
+      "title": "Création",
+      "content": "Conception et développement de votre solution sur mesure. Je donne vie à votre vision avec expertise et créativité.",
+      "icon": "🎨"
+    },
+    {
+      "id": "validation",
+      "title": "Validation",
+      "content": "Tests approfondis et validation de toutes les fonctionnalités. Nous nous assurons que votre solution répond parfaitement à vos attentes.",
+      "icon": "✅"
+    },
+    {
+      "id": "mise-en-ligne",
+      "title": "Mise en ligne",
+      "content": "Déploiement et lancement de votre projet. Je m'occupe des dernières finition et propose un support technique complet.",
+      "icon": "🚀"
+    }
+  ]
+}
