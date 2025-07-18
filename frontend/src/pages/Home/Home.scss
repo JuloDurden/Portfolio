@@ -39,6 +39,7 @@
 
     // Section methodology - style spécial
     &--methodology {
+      max-height: 90vh;
       padding: 4rem 0 0 0; // Padding top normal, pas de bottom
       background: var(--color-bg);
       
@@ -46,10 +47,10 @@
       .home__container {
         max-width: 800px;
         text-align: center;
-        margin-bottom: 3rem;
+        margin-bottom: 0;
         
         @media (max-width: 768px) {
-          margin-bottom: 2rem;
+          margin-bottom: 0;
         }
       }
       

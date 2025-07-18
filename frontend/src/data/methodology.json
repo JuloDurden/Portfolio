@@ -6,19 +6,19 @@
     {
       "id": "analyse",
       "title": "Analyse",
-      "content": "Nous analysons vos besoins et défis pour comprendre parfaitement votre projet. Cette étape fondamentale nous permet de définir une stratégie adaptée et personnalisée.",
+      "content": "J'analyse vos besoins et défis pour comprendre parfaitement votre projet. Cette étape fondamentale nous permet de définir ensemble une stratégie adaptée et personnalisée.",
       "icon": "📊"
     },
     {
       "id": "planification",
       "title": "Planification",
-      "content": "Élaboration d'un plan détaillé avec des étapes claires et des délais précis. Nous définissons l'architecture, les technologies et la roadmap de développement.",
+      "content": "Élaboration d'un plan détaillé avec des étapes claires et des délais précis. Je définis l'architecture, les technologies et la roadmap de développement.",
       "icon": "📋"
     },
     {
       "id": "mise-en-place",
       "title": "Mise en place",
-      "content": "Développement et implémentation des solutions avec un suivi rigoureux. Nous mettons en place les bases solides de votre projet digital.",
+      "content": "Développement et implémentation des solutions avec un suivi rigoureux. Je mets en place les bases solides de votre projet digital.",
       "icon": "⚙️"
     },
     {
@@ -30,7 +30,7 @@
     {
       "id": "validation",
       "title": "Validation",
-      "content": "Tests approfondis et validation de toutes les fonctionnalités. Nous nous assurons que votre solution répond parfaitement à vos attentes.",
+      "content": "Tests approfondis et validation de toutes les fonctionnalités. Nous nous assurons que ma solution répond parfaitement à vos attentes.",
       "icon": "✅"
     },
     {

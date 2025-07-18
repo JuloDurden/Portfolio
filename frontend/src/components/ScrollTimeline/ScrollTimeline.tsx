@@ -19,6 +19,26 @@ const ScrollTimeline: React.FC<ScrollTimelineProps> = ({ items, className = '' }
   const [isTimelineActive, setIsTimelineActive] = useState(false);
   const timelineRef = useRef<HTMLDivElement>(null);
 
+  // ✅ FONCTION POUR POSITIONNER LA VUE AVEC TITRE VISIBLE
+  const centerTimelineInView = () => {
+    if (timelineRef.current) {
+      const timelineRect = timelineRef.current.getBoundingClientRect();
+      
+      // ✅ Calculer la position pour garder un espace en haut (titre + sous-titre)
+      const desiredTopOffset = 230; // Ajuster cette valeur selon les besoins
+      const currentTopOffset = timelineRect.top;
+      const scrollOffset = currentTopOffset - desiredTopOffset;
+      
+      // ✅ Ajuster seulement si nécessaire
+      if (Math.abs(scrollOffset) > 50) {
+        window.scrollBy({
+          top: scrollOffset,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+
   // ✅ OBSERVER pour détecter quand on entre/sort de la timeline
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -38,7 +58,7 @@ const ScrollTimeline: React.FC<ScrollTimelineProps> = ({ items, className = '' }
     return () => observer.disconnect();
   }, []);
 
-  // ✅ GESTION DU SCROLL - LOGIQUE SIMPLIFIÉE
+  // ✅ GESTION DU SCROLL - LOGIQUE AVEC CENTRAGE AUTOMATIQUE
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       // ✅ Hijack SEULEMENT si on est dans la timeline
@@ -64,6 +84,12 @@ const ScrollTimeline: React.FC<ScrollTimelineProps> = ({ items, className = '' }
       if (newIndex >= 0 && newIndex < items.length) {
         console.log('✅ Changement vers index:', newIndex);
         
+        // ✅ CENTRAGE AUTOMATIQUE au premier hijack
+        if (currentIndex === 0 && newIndex === 1) {
+          console.log('🎯 Premier hijack - centrage de la timeline');
+          centerTimelineInView();
+        }
+        
         setIsScrolling(true);
         setCurrentIndex(newIndex);
         
@@ -74,18 +100,39 @@ const ScrollTimeline: React.FC<ScrollTimelineProps> = ({ items, className = '' }
         return;
       }
       
-      // ✅ Sortie de timeline (fin atteinte)
+      // ✅ Sortie de timeline vers le bas (fin atteinte)
       if (newIndex >= items.length) {
-        console.log('🚀 Fin de timeline atteinte - libération du scroll');
+        console.log('🚀 Fin de timeline atteinte - libération du scroll vers le bas');
         setIsTimelineActive(false);
         
-        // Forcer la sortie de la section
+        // Forcer la sortie vers la section suivante
         setTimeout(() => {
           const nextSection = timelineRef.current?.nextElementSibling as HTMLElement;
           if (nextSection) {
             nextSection.scrollIntoView({ behavior: 'smooth' });
           }
         }, 100);
+        
+        return;
+      }
+      
+      // ✅ Sortie de timeline vers le haut (début atteint)
+      if (newIndex < 0) {
+        console.log('🚀 Début de timeline atteint - libération du scroll vers le haut');
+        setIsTimelineActive(false);
+        
+        // Forcer la sortie vers la section précédente
+        setTimeout(() => {
+          const prevSection = timelineRef.current?.previousElementSibling as HTMLElement;
+          if (prevSection) {
+            prevSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            // Si pas de section précédente, remonter vers le haut de la page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 100);
+        
+        return;
       }
     };
 
@@ -152,7 +199,7 @@ const ScrollTimeline: React.FC<ScrollTimelineProps> = ({ items, className = '' }
       ref={timelineRef}
       className={`scroll-timeline ${className} ${isTimelineActive ? 'active' : ''}`}
       data-current-index={currentIndex}
-      style={{ minHeight: '100vh' }} // ✅ Assurer la hauteur pour intersection
+      style={{ minHeight: '90vh' }} // ✅ Assurer la hauteur pour intersection
     >
       {/* Progress Bar */}
       <div className="timeline-progress">

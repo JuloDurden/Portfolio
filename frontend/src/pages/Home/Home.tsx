@@ -2,6 +2,7 @@ import { lazy, Suspense, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useProjects } from '../../hooks/useProjects';
 import Hero from '../../components/Hero/Hero';
+import SectionNavigation from '../../components/SectionNavigation/SectionNavigation';
 import methodologyData from '../../data/methodology.json';
 
 import './Home.scss';
@@ -10,6 +11,13 @@ import './Home.scss';
 const ProjectCard = lazy(() => import('../../components/ProjectCard/ProjectCard'));
 const BackgroundGradient = lazy(() => import('../../components/BackgroundGradient/BackgroundGradient'));
 const ScrollTimeline = lazy(() => import('../../components/ScrollTimeline/ScrollTimeline'));
+
+const homeNavigationItems = [
+  { id: 'me-choisir', label: 'Me choisir', selector: '.home__section--alt' },
+  { id: 'methode', label: 'Méthode', selector: '.home__section--methodology' },
+  { id: 'portfolio', label: 'Portfolio', selector: '.home__projects-grid' },
+  { id: 'contact', label: 'Contact', selector: '.home__section--cta' }
+];
 
 function Home() {
   const [shouldLoadBelowFold, setShouldLoadBelowFold] = useState(false);
@@ -45,6 +53,12 @@ function Home() {
         <BackgroundGradient />
       </Suspense>
       
+      <SectionNavigation 
+        navigationItems={homeNavigationItems}
+        defaultActiveSection="me-choisir"
+        offsetTop={120}
+      />
+      
       <main className="home main-content">
         <div className="page-content">
           
@@ -55,7 +69,7 @@ function Home() {
           {shouldLoadBelowFold && (
             <Suspense fallback={<div className="home__loading">Chargement...</div>}>
               
-              {/* Why Choose Me */}
+              {/* 🎯 SECTION 1 - ME CHOISIR */}
               <section className="home__section home__section--alt">
                 <div className="home__container">
                   <h2 className="home__section-title">Pourquoi me choisir ?</h2>
@@ -75,7 +89,7 @@ function Home() {
                       <p>Ils sont aussi parfaitement adaptés à tous les supports.</p>
                     </div>
                     <div className="home__feature">
-                      <span className="home__feature-icon">🚀</span>
+                      <span className="home__feature-icon">🎯</span>
                       <h3>Performance & SEO</h3>
                       <p>Mon code est propre, rapide à charger et facilement maintenable.</p>
                       <p>Mes sites sont parfaitement optimisés pour le référencement.</p>
@@ -90,7 +104,7 @@ function Home() {
                 </div>
               </section>
 
-              {/* 🎯 METHODOLOGY TIMELINE */}
+              {/* 🎯 SECTION 2 - MÉTHODE */}
               <section className="home__section home__section--methodology">
                 <div className="home__container">
                   <h2 className="home__section-title">Ma méthodologie de travail</h2>
@@ -111,8 +125,7 @@ function Home() {
                 />
               </section>
 
-
-              {/* Projects Preview */}
+              {/* 🎯 SECTION 3 - PORTFOLIO */}
               <section className="home__section">
                 <div className="home__container">
                   <h2 className="home__section-title">Mes derniers projets</h2>
@@ -140,7 +153,7 @@ function Home() {
                 </div>
               </section>
 
-              {/* Contact CTA */}
+              {/* 🎯 SECTION 4 - CONTACT */}
               <section className="home__section home__section--cta">
                 <div className="home__container">
                   <h2 className="home__section-title">Prêt à collaborer ?</h2>
@@ -149,12 +162,21 @@ function Home() {
                     N'hésitez pas à me contacter pour discuter de vos idées !
                   </p>
                   <div className="home__cta">
-                    <button className="home__btn home__btn--primary">
-                      Démarrer un projet
-                    </button>
-                    <button className="home__btn home__btn--secondary">
-                      Télécharger CV
-                    </button>
+                    <a 
+                      href="mailto:julowebdev@gmail.com?subject=Votre%20profil%20m'intéresse"
+                      className="home__btn home__btn--primary"
+                    >
+                      Me contacter
+                    </a>
+                    <a 
+                      href="/cv-julien-clavel.pdf" 
+                      className="home__btn home__btn--secondary"
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Télécharger mon CV
+                    </a>
                   </div>
                 </div>
               </section>

@@ -1,43 +1,105 @@
-// pages/About/About.tsx
+import { lazy, Suspense, useState, useEffect } from 'react';
+import SectionNavigation from '../../components/SectionNavigation/SectionNavigation';
 import './About.scss';
 
-function About() {
-  return (
-    <div className="about">
-      <div className="about__container">
-        <section className="about__intro">
-          <h1>À propos de moi</h1>
-          <p>
-            Développeur passionné avec une expérience dans la création 
-            d'applications web responsives utilisant JavaScript, React.js, 
-            Node.js et diverses autres technologies.
-          </p>
-        </section>
+// Lazy imports pour le contenu below-the-fold
+const Biography = lazy(() => import('../../components/Biography/Biography'));
+const Experience = lazy(() => import('../../components/Experience/Experience'));
+const Skills = lazy(() => import('../../components/Skills/Skills'));
 
-        <section className="about__skills">
-          <h2>Compétences & Technologies</h2>
-          <div className="skills-grid">
-            <div className="skill-category">
-              <h3>Frontend</h3>
-              <ul>
-                <li>React.js</li>
-                <li>TypeScript</li>
-                <li>HTML/CSS</li>
-                <li>SCSS</li>
-              </ul>
+const aboutNavigationItems = [
+  { id: 'biography', label: 'Biographie', selector: '.about__biography' },
+  { id: 'experience', label: 'Expérience', selector: '.about__experience' },
+  { id: 'skills', label: 'Compétences', selector: '.about__skills' }
+];
+
+function About() {
+  const [shouldLoadBelowFold, setShouldLoadBelowFold] = useState(false);
+
+  // Intersection Observer pour détecter le scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadBelowFold(true);
+        }
+      },
+      { 
+        threshold: 0.1,
+        rootMargin: '100px'
+      }
+    );
+
+    const triggerElement = document.querySelector('.below-fold-trigger');
+    if (triggerElement) {
+      observer.observe(triggerElement);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="app">
+      <SectionNavigation 
+        navigationItems={aboutNavigationItems}
+        defaultActiveSection="biography"
+        offsetTop={120}
+      />
+      
+      <main className="about main-content">
+        <div className="page-content">
+          
+          {/* 🎯 HERO SECTION - ABOVE THE FOLD */}
+          <section className="about__hero">
+            <div className="about__container">
+              <div className="about__hero-content">
+                <h1 className="about__hero-title">
+                  À propos de moi
+                </h1>
+                <p className="about__hero-subtitle">
+                  Développeur web passionné avec plus de 20 ans d'expérience en équipe, 
+                  je transforme des idées en solutions digitales performantes et sur mesure.
+                </p>
+              </div>
             </div>
-            <div className="skill-category">
-              <h3>Backend</h3>
-              <ul>
-                <li>Node.js</li>
-                <li>Express</li>
-                <li>MongoDB</li>
-                <li>PostgreSQL</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-      </div>
+          </section>
+          
+          <div className="below-fold-trigger" style={{ height: '1px' }}></div>
+
+          {shouldLoadBelowFold && (
+            <Suspense fallback={<div className="about__loading">Chargement...</div>}>
+              
+              {/* 🎯 SECTION 1 - BIOGRAPHIE */}
+              <section className="about__section about__biography">
+                <div className="about__container">
+                  <h2 className="about__section-title">Ma biographie</h2>
+                  <Biography />
+                </div>
+              </section>
+
+              {/* 🎯 SECTION 2 - EXPÉRIENCE */}
+              <section className="about__section about__experience">
+                <div className="about__container">
+                  <h2 className="about__section-title">Mon expérience</h2>
+                  <Experience />
+                </div>
+              </section>
+
+              {/* 🎯 SECTION 3 - COMPÉTENCES */}
+              <section className="about__section about__skills">
+                <div className="about__container">
+                  <h2 className="about__section-title">Mes compétences</h2>
+                  <Skills />
+                </div>
+              </section>
+
+              <div style={{ height: '200px' }}></div>
+              
+            </Suspense>
+          )}
+          
+        </div>
+      </main>
     </div>
   );
 }
