@@ -49,18 +49,11 @@ function About() {
       <main className="about main-content">
         <div className="page-content">
           
-          {/* 🎯 HERO SECTION - ABOVE THE FOLD */}
-          <section className="about__hero">
+          {/* 🎯 SECTION 1 - BIOGRAPHIE (DIRECTLY ABOVE FOLD) */}
+          <section className="about__section about__biography">
             <div className="about__container">
-              <div className="about__hero-content">
-                <h1 className="about__hero-title">
-                  À propos de moi
-                </h1>
-                <p className="about__hero-subtitle">
-                  Développeur web passionné avec plus de 20 ans d'expérience en équipe, 
-                  je transforme des idées en solutions digitales performantes et sur mesure.
-                </p>
-              </div>
+              <h2 className="about__section-title">Ma biographie</h2>
+              <Biography />
             </div>
           </section>
           
@@ -69,16 +62,8 @@ function About() {
           {shouldLoadBelowFold && (
             <Suspense fallback={<div className="about__loading">Chargement...</div>}>
               
-              {/* 🎯 SECTION 1 - BIOGRAPHIE */}
-              <section className="about__section about__biography">
-                <div className="about__container">
-                  <h2 className="about__section-title">Ma biographie</h2>
-                  <Biography />
-                </div>
-              </section>
-
               {/* 🎯 SECTION 2 - EXPÉRIENCE */}
-              <section className="about__section about__experience">
+              <section className="about__section about__section--alt about__experience">
                 <div className="about__container">
                   <h2 className="about__section-title">Mon expérience</h2>
                   <Experience />

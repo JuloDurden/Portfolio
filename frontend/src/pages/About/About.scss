@@ -1,0 +1,345 @@
+// ====================================
+// 🎨 PAGE ABOUT - STYLE MODERNE & COHÉRENT
+// ====================================
+
+.about {
+  min-height: 100vh;
+  padding-top: 120px; // Offset pour la navigation fixe
+
+  // ====================================
+  // 🏗️ STRUCTURE GÉNÉRALE
+  // ====================================
+  &__section {
+    padding: 2rem 0 4rem 0;
+    position: relative;
+
+    // Section alternée avec fond gris
+    &--alt {
+      background-color: var(--color-gray-200);
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 2.5rem 0;
+    }
+  }
+
+  // ====================================
+  // 📦 CONTAINERS
+  // ====================================
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+
+    @media (max-width: 768px) {
+      padding: 0 1rem;
+    }
+  }
+
+  // ====================================
+  // 🎯 TITRES DE SECTION
+  // ====================================
+  &__section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 3rem;
+    text-align: center;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  // ====================================
+  // 👤 BIOGRAPHIE SECTION
+  // ====================================
+  &__biography {
+    .biography {
+      &__content {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 4rem;
+        align-items: start;
+        
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+          text-align: center;
+        }
+      }
+      
+      &__photo {
+        position: relative;
+        
+        img {
+          width: 100%;
+          border-radius: 16px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+          transition: transform 0.3s ease;
+          
+          &:hover {
+            transform: scale(1.02);
+          }
+        }
+        
+        @media (max-width: 768px) {
+          max-width: 250px;
+          margin: 0 auto;
+        }
+      }
+      
+      &__info {
+        h3 {
+          font-size: 1.5rem;
+          color: var(--color-text-primary);
+          margin-bottom: 1rem;
+          font-weight: 600;
+        }
+        
+        &-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1rem;
+          font-size: 1.1rem;
+          color: var(--color-text-secondary);
+          
+          &-label {
+            font-weight: 600;
+            color: var(--color-primary);
+            min-width: 80px;
+          }
+          
+          @media (max-width: 768px) {
+            justify-content: center;
+          }
+        }
+        
+        &-description {
+          margin-top: 2rem;
+          
+          h4 {
+            font-size: 1.3rem;
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+          }
+          
+          p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--color-text-secondary);
+            margin-bottom: 1.5rem;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // ====================================
+  // 💼 EXPÉRIENCE SECTION
+  // ====================================
+  &__experience {
+    .experience {
+      &__timeline {
+        position: relative;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: 0;
+          bottom: 0;
+          width: 2px;
+          background: var(--color-primary);
+          transform: translateX(-50%);
+          
+          @media (max-width: 768px) {
+            left: 20px;
+          }
+        }
+      }
+      
+      &__item {
+        display: flex;
+        margin-bottom: 3rem;
+        position: relative;
+        
+        &:nth-child(even) {
+          flex-direction: row-reverse;
+          
+          @media (max-width: 768px) {
+            flex-direction: row;
+          }
+        }
+        
+        &::before {
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: 1rem;
+          width: 12px;
+          height: 12px;
+          background: var(--color-primary);
+          border-radius: 50%;
+          transform: translateX(-50%);
+          
+          @media (max-width: 768px) {
+            left: 20px;
+          }
+        }
+        
+        @media (max-width: 768px) {
+          flex-direction: row;
+          margin-left: 2rem;
+        }
+      }
+      
+      &__content {
+        flex: 1;
+        background: var(--color-white);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin: 0 2rem;
+        
+        @media (max-width: 768px) {
+          margin: 0 0 0 1rem;
+        }
+      }
+    }
+  }
+
+  // ====================================
+  // 🛠️ COMPÉTENCES SECTION
+  // ====================================
+  &__skills {
+    .skills {
+      &__categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+      }
+      
+      &__category {
+        background: var(--color-white);
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--color-border);
+        
+        h3 {
+          font-size: 1.3rem;
+          color: var(--color-text-primary);
+          margin-bottom: 1.5rem;
+          font-weight: 600;
+        }
+      }
+      
+      &__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        
+        &-item {
+          background: var(--color-gray-100);
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          color: var(--color-text-secondary);
+          border: 1px solid var(--color-border);
+          
+          &--primary {
+            background: var(--color-primary);
+            color: var(--color-white);
+          }
+        }
+      }
+    }
+  }
+
+  // ====================================
+  // 🔄 LOADING
+  // ====================================
+  &__loading {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--color-text);
+    font-size: 1.1rem;
+  }
+
+  // ====================================
+  // 🎨 ANIMATIONS
+  // ====================================
+  &__section {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  &__section:nth-child(1) { animation-delay: 0.1s; }
+  &__section:nth-child(2) { animation-delay: 0.2s; }
+  &__section:nth-child(3) { animation-delay: 0.3s; }
+}
+
+// ====================================
+// 🎬 KEYFRAMES
+// ====================================
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ====================================
+// 📱 RESPONSIVE DESIGN
+// ====================================
+@media (max-width: 1200px) {
+  .about__container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding-top: 80px;
+    
+    &__section {
+      padding: 2rem 0;
+    }
+  }
+}
