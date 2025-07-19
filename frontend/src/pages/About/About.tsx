@@ -43,7 +43,7 @@ function About() {
       <SectionNavigation 
         navigationItems={aboutNavigationItems}
         defaultActiveSection="biography"
-        offsetTop={120}
+        offsetTop={60}
       />
       
       <main className="about main-content">

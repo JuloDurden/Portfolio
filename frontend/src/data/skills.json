@@ -1,0 +1,204 @@
+{
+  "skills": [
+    {
+      "id": "html",
+      "name": "HTML",
+      "description": "Langage de balisage standard pour créer des pages web structurées et accessibles",
+      "level": 95,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+      "categories": ["Web", "Front-end"]
+    },
+    {
+      "id": "css",
+      "name": "CSS",
+      "description": "Langage de feuille de style pour la mise en forme et la présentation des pages web",
+      "level": 90,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+      "categories": ["Web", "Front-end", "Design"]
+    },
+    {
+      "id": "sass",
+      "name": "SASS",
+      "description": "Préprocesseur CSS qui ajoute des fonctionnalités avancées comme les variables et mixins",
+      "level": 85,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg",
+      "categories": ["Web", "Front-end", "Tools"]
+    },
+    {
+      "id": "javascript",
+      "name": "JavaScript",
+      "description": "Langage de programmation dynamique pour créer des interfaces interactives et des applications web",
+      "level": 75,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+      "categories": ["Web", "Scripting", "Front-end"]
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "description": "Superset de JavaScript qui ajoute un typage statique pour un développement plus robuste",
+      "level": 75,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+      "categories": ["Web", "Scripting", "Front-end"]
+    },
+    {
+      "id": "react",
+      "name": "React",
+      "description": "Bibliothèque JavaScript pour construire des interfaces utilisateur composables et réactives",
+      "level": 85,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+      "categories": ["Web", "Front-end", "Frameworks"]
+    },
+    {
+      "id": "vue",
+      "name": "Vue.js",
+      "description": "Framework JavaScript progressif pour créer des interfaces utilisateur modernes",
+      "level": 70,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg",
+      "categories": ["Web", "Front-end", "Frameworks"]
+    },
+    {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "description": "Base de données NoSQL orientée document, flexible et scalable",
+      "level": 70,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+      "categories": ["Database", "Back-end"]
+    },
+    {
+      "id": "express",
+      "name": "Express.js",
+      "description": "Framework web minimaliste et flexible pour Node.js",
+      "level": 70,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+      "categories": ["Web", "Back-end", "Frameworks"]
+    },
+    {
+      "id": "node",
+      "name": "Node.js",
+      "description": "Environnement d'exécution JavaScript côté serveur pour créer des applications scalables",
+      "level": 60,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+      "categories": ["Web", "Back-end", "Scripting"]
+    },
+    {
+      "id": "windows",
+      "name": "Windows 11",
+      "description": "Système d'exploitation Microsoft moderne avec interface utilisateur repensée",
+      "level": 100,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg",
+      "categories": ["Operating System", "Software"]
+    },
+    {
+      "id": "macos",
+      "name": "macOS",
+      "description": "Système d'exploitation d'Apple pour ordinateurs Mac, optimisé pour la productivité",
+      "level": 100,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg",
+      "categories": ["Operating System", "Software"]
+    },
+    {
+      "id": "ios",
+      "name": "iOS",
+      "description": "Système d'exploitation mobile d'Apple pour iPhone et iPod Touch",
+      "level": 100,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/6/63/IOS_wordmark_%282017%29.svg",
+      "categories": ["Operating System", "Software"]
+    },
+    {
+      "id": "ipados",
+      "name": "iPadOS",
+      "description": "Système d'exploitation d'Apple spécialement conçu pour iPad",
+      "level": 100,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Apple_logo_grey.svg",
+      "categories": ["Operating System", "Software"]
+    },
+    {
+      "id": "figma",
+      "name": "Figma",
+      "description": "Outil de design collaboratif pour créer des interfaces utilisateur et prototypes",
+      "level": 80,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+      "categories": ["Design", "UX/UI", "Tools", "Workflow"]
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "description": "Système de contrôle de version distribué pour gérer le code source",
+      "level": 85,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+      "categories": ["Tools", "Workflow"]
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "description": "Plateforme de développement collaboratif basée sur Git",
+      "level": 85,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+      "categories": ["Tools", "Workflow", "Cloud"]
+    },
+    {
+      "id": "vscode",
+      "name": "VS Code",
+      "description": "Éditeur de code source léger et extensible de Microsoft",
+      "level": 90,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",
+      "categories": ["Tools", "Software"]
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "description": "Plateforme de communication d'équipe pour la collaboration en temps réel",
+      "level": 85,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg",
+      "categories": ["Tools", "Workflow"]
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "description": "Espace de travail tout-en-un pour la prise de notes, gestion de projets et collaboration",
+      "level": 80,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png",
+      "categories": ["Tools", "Workflow"]
+    },
+    {
+      "id": "blender",
+      "name": "Blender",
+      "description": "Suite de création 3D open-source pour la modélisation, l'animation et le rendu",
+      "level": 20,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg",
+      "categories": ["3D", "Design", "Software"]
+    },
+    {
+      "id": "photoshop",
+      "name": "Adobe Photoshop",
+      "description": "Logiciel de retouche photo et création graphique professionnel",
+      "level": 85,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg",
+      "categories": ["Design", "Software", "UX/UI"]
+    },
+    {
+      "id": "illustrator",
+      "name": "Adobe Illustrator",
+      "description": "Logiciel de création graphique vectorielle pour logos, illustrations et designs",
+      "level": 75,
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg",
+      "categories": ["Design", "Software", "UX/UI"]
+    },
+    {
+      "id": "affinity-photo",
+      "name": "Affinity Photo",
+      "description": "Alternative professionnelle à Photoshop pour la retouche photo",
+      "level": 85,
+      "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/affinityphoto.svg",
+      "categories": ["Design", "Software"]
+    },
+    {
+      "id": "affinity-designer",
+      "name": "Affinity Designer",
+      "description": "Outil de design vectoriel professionnel, alternative à Illustrator",
+      "level": 75,
+      "icon": "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/affinitydesigner.svg",
+      "categories": ["Design", "Software", "UX/UI"]
+    }
+  ]
+}

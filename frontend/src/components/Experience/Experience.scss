@@ -1,0 +1,180 @@
+.experience {
+  padding: 3rem 0;
+//   background: var(--color-background);
+
+  &__section {
+    margin-bottom: 3rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__section-title {
+    font-size: 1.8rem;
+    color: var(--color-text-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  // ✅ AFFICHAGE EN COLONNES
+  &__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px; // Largeur max pour lisibilité
+    margin: 0 auto;   // Centré
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: 140px 1fr; // ✅ Un peu plus large pour équilibrer
+    background: var(--color-white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-height: 160px; // ✅ Hauteur minimum de card
+    max-height: 400px; // ✅ Hauteur maximum comme demandé
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+  }
+
+  // ✅ ZONE IMAGE - PLEINE HAUTEUR
+  &__image {
+    background: var(--color-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 100%; // ✅ Prend toute la hauteur de la card
+    overflow: hidden;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%; // ✅ Pleine hauteur disponible
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__fallback {
+    font-size: 2rem;
+    color: var(--color-primary);
+  }
+
+  &__content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 100%; // ✅ Prend toute la hauteur
+    justify-content: space-between; // ✅ Répartit le contenu verticalement
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  &__period {
+    background: var(--color-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__company {
+    color: var(--color-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__location {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  &__description {
+    flex: 1; // ✅ Prend l'espace disponible
+    
+    p {
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin: 0 0 0.5rem 0;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto; // ✅ Pousse les tags en bas
+  }
+
+  &__tag {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  // 📱 RESPONSIVE
+  @media (max-width: 768px) {
+    &__grid {
+      max-width: 100%;
+      gap: 1rem;
+    }
+    
+    &__card {
+      grid-template-columns: 100px 1fr; // ✅ Taille mobile
+      min-height: 140px; // ✅ Hauteur minimum mobile
+      max-height: 300px; // ✅ Hauteur maximum mobile
+    }
+    
+    &__image {
+      width: 100px;
+      height: 100%; // ✅ Toujours pleine hauteur
+    }
+    
+    &__content {
+      padding: 1rem;
+      min-height: 100%; // ✅ Pleine hauteur
+    }
+    
+    &__header {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    &__fallback {
+      font-size: 1.5rem;
+    }
+  }
+}

@@ -1,0 +1,310 @@
+@import '../../styles/globals/variables';
+
+.skills {
+  width: 100%;
+
+  // 🎯 FILTRES ULTRA-COMPACTS - TAILLE RÉDUITE DE 50%
+  &__filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem; // ← Réduit de 0.75rem
+    margin-bottom: 1.5rem; // ← Réduit de 2rem
+    padding: 0.75rem; // ← Réduit de 1rem
+    background: var(--color-surface);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--color-border);
+  }
+
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem; // ← Réduit gap
+    align-items: flex-start;
+    justify-content: flex-start; // ← Important pour l'alignement
+    
+    // 🎯 FORCER L'ORGANISATION EN 3 LIGNES MAX
+    max-width: 100%;
+    line-height: 1.1; // ← Réduit line-height
+  }
+
+  &__category-btn {
+    // 🚀 LARGEUR AUTOMATIQUE - JUSTE LE TEXTE + PADDING
+    padding: 0.3rem 0.6rem; // ← Padding réduit
+    font-size: 0.75rem; // ← Font-size réduite
+    font-weight: 500;
+    border: 1.5px solid var(--color-border);
+    background: var(--color-white);
+    color: var(--color-text-secondary);
+    border-radius: 16px; // ← Plus petit radius
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    // 🎯 LARGEUR DYNAMIQUE - PAS DE LARGEUR FIXE !
+    display: inline-block;
+    width: auto; // ← Force largeur auto
+    min-width: auto; // ← Pas de min-width
+    max-width: none; // ← Pas de max-width
+    flex: none; // ← Pas de flex qui force la taille
+    white-space: nowrap;
+
+    &:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: rgba(var(--color-primary-rgb), 0.05);
+      transform: translateY(-1px);
+    }
+
+    &.active {
+      background: var(--color-primary);
+      color: var(--color-white);
+      border-color: var(--color-primary);
+      box-shadow: 0 2px 8px rgba(var(--color-primary-rgb), 0.3);
+    }
+  }
+
+  &__reset-btn {
+    padding: 0.3rem 0.8rem; // ← Padding réduit
+    font-size: 0.75rem; // ← Font-size réduite
+    font-weight: 600;
+    background: var(--color-accent);
+    color: var(--color-white);
+    border: none;
+    border-radius: 16px; // ← Plus petit radius
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-self: flex-start;
+    width: auto; // ← Largeur auto
+
+    &:hover {
+      background: var(--color-error);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(var(--color-error-rgb), 0.3);
+    }
+  }
+
+  // 🎯 GRILLE SKILLS
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  &__card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative; // ← Important pour le tooltip
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--color-primary);
+    }
+  }
+
+  &__card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  // 🎯 ICÔNES SVG OPTIMISÉES
+  &__icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  &__progress-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--color-gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    border-radius: 4px;
+    animation: progressSlide 0.8s ease-out;
+  }
+
+  &__level {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    min-width: 35px;
+  }
+
+  &__categories-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  &__category-tag {
+    background: var(--color-gray-100);
+    color: var(--color-text-secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
+  // 🚀 TOOLTIP CORRIGÉ - POSITION FIXED + ANIMATION COMPATIBLE
+  &__tooltip {
+    position: fixed;
+    z-index: 99999;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    max-width: 320px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    
+    // 🎯 ASSURER LA VISIBILITÉ MAXIMALE
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    
+    // 🎯 POSITION AU-DESSUS DU CURSEUR
+    transform: translate(-10px, -100%);
+    
+    // 🎯 ANIMATION SIMPLE SANS CONFLIT
+    animation: tooltipAppear 0.2s ease-out;
+  }
+
+  &__tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  &__tooltip-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  &__tooltip-title {
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &__tooltip-description {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+  }
+
+  &__tooltip-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__tooltip-category {
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  &__tooltip-level {
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    strong {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+  }
+
+  // ✅ ANIMATIONS CORRIGÉES
+  @keyframes progressSlide {
+    from { width: 0% }
+  }
+
+  @keyframes tooltipAppear {
+    from {
+      opacity: 0;
+      transform: translate(-10px, -100%) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-10px, -100%) scale(1);
+    }
+  }
+
+  // 📱 RESPONSIVE
+  @media (max-width: $mobile) {
+    &__filters {
+      padding: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    &__categories {
+      gap: 0.3rem;
+    }
+
+    &__category-btn,
+    &__reset-btn {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.7rem;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    &__card {
+      padding: 1.25rem;
+    }
+
+    &__tooltip {
+      max-width: 280px;
+      padding: 1rem;
+      transform: translate(-50%, -120%) !important;
+    }
+  }
+
+  // 📱 TRES PETIT ECRAN
+  @media (max-width: 480px) {
+    &__category-btn,
+    &__reset-btn {
+      padding: 0.2rem 0.4rem;
+      font-size: 0.65rem;
+    }
+  }
+}

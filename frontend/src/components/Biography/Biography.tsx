@@ -36,7 +36,7 @@ const Biography: React.FC = () => {
           <div className="biography__basic-info">
             <h3 className="biography__name">Julien Clavel</h3>
             <p className="biography__age">{age} ans</p>
-            <p className="biography__role">Développeur Web Full-Stack</p>
+            <p className="biography__role">Développeur Web</p>
           </div>
         </div>
         
@@ -45,24 +45,15 @@ const Biography: React.FC = () => {
           <h4 className="biography__section-title">Qui suis-je ?</h4>
           
           <p className="biography__text">
-            Développeur web passionné avec plus de 20 ans d'expérience, je me spécialise 
-            dans la création d'applications web modernes et performantes. Mon parcours 
-            m'a permis de développer une expertise technique solide tout en gardant une 
-            approche centrée sur l'utilisateur.
+            Passionné depuis toujours par l'informatique, j'ai toujours cherché à décortiquer et comprendre tout ce que je vois dans un écran d'ordinateur. Mon parcours atypique m'a permis d'acquérir une expérience solide de travail au cœur de nombreuses équipes de toutes tailles.
           </p>
           
           <p className="biography__text">
-            J'aime transformer des idées complexes en solutions digitales élégantes et 
-            fonctionnelles. Mon approche combine créativité, rigueur technique et 
-            attention particulière à l'expérience utilisateur pour créer des projets 
-            qui marquent et qui durent.
+            Aujourd'hui Développeur web, je me spécialise dans la création d'applications web modernes et performantes. J'aime transformer des idées complexes en solutions digitales élégantes et fonctionnelles. Mon approche combine créativité, rigueur technique et attention particulière à l'expérience utilisateur pour créer des projets qui marquent et qui durent.
           </p>
           
           <p className="biography__text">
-            Mes compétences organisationnelles et mon souci du détail sont mes atouts clés. 
-            Je prends en charge des projets de toutes tailles et contribue à leur développement 
-            pour améliorer leur qualité et leur efficacité. Toujours en veille technologique, 
-            je m'efforce de rester à la pointe des dernières innovations.
+            Mes compétences organisationnelles et mon souci du détail sont mes atouts clés. Je prends en charge des projets de toutes tailles et contribue à leur développement pour améliorer leur qualité et leur efficacité. Toujours en veille technologique, je m'efforce de rester à la pointe des dernières innovations.
           </p>
         </div>
         

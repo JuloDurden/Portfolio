@@ -1,7 +1,7 @@
 .biography {
   &__content {
     background: var(--color-white);
-    padding: 2.5rem;
+    padding: 2.5rem 2.5rem 2.5rem 0;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid var(--color-border);
@@ -40,28 +40,39 @@
     }
   }
   
-  // 📸 PROFILE SECTION (GAUCHE)
+  // 📸 PROFILE SECTION (GAUCHE) - CENTRÉ
   &__profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     text-align: center;
-    // Plus de background/padding/border - dans la card globale
   }
   
   &__photo {
     margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
     
     img {
-      width: 100%;
-      max-width: 200px;
+      width: 200px;
+      height: 200px;
       border-radius: 16px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       transition: transform 0.3s ease;
-      aspect-ratio: 1;
       object-fit: cover;
       
       &:hover {
         transform: scale(1.02);
       }
     }
+  }
+  
+  &__basic-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   &__name {
@@ -89,7 +100,6 @@
   
   // 📝 DETAILS SECTION (DROITE)
   &__details {
-    // Plus de background/padding/border - dans la card globale
   }
   
   &__section-title {
