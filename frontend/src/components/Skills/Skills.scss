@@ -20,8 +20,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem; // ← Réduit gap
-    align-items: flex-start;
-    justify-content: flex-start; // ← Important pour l'alignement
+    align-items: center;
+    justify-content: center; // ← Important pour l'alignement
     
     // 🎯 FORCER L'ORGANISATION EN 3 LIGNES MAX
     max-width: 100%;
