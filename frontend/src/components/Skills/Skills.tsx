@@ -56,23 +56,14 @@ const Skills: React.FC = () => {
     setSelectedCategories([]);
   };
 
-  // 🚀 CORRECTION 1 : TOOLTIP AVEC pageX/pageY (suit le scroll)
+  // 🎯 TOOLTIP CORRIGÉ : getBoundingClientRect + position fixed
   const showTooltip = (skill: Skill, event: React.MouseEvent) => {
+    const rect = event.currentTarget.getBoundingClientRect();
     setTooltip({
       skill,
-      x: event.pageX, // ← pageX au lieu de clientX
-      y: event.pageY  // ← pageY au lieu de clientY
+      x: event.clientX,
+      y: event.clientY
     });
-  };
-
-  const updateTooltip = (event: React.MouseEvent) => {
-    if (tooltip) {
-      setTooltip(prev => prev ? {
-        ...prev,
-        x: event.pageX, // ← pageX inclut le scroll
-        y: event.pageY  // ← pageY inclut le scroll
-      } : null);
-    }
   };
 
   const hideTooltip = () => {
@@ -87,75 +78,82 @@ const Skills: React.FC = () => {
           {allCategories.map((category) => (
             <button
               key={category}
+              onClick={() => toggleCategory(category)}
               className={`skills__category-btn ${
                 selectedCategories.includes(category) ? 'active' : ''
               }`}
-              onClick={() => toggleCategory(category)}
             >
               {category}
             </button>
           ))}
         </div>
+
         
-        {/* Reset button - apparaît seulement si filtres actifs */}
         {selectedCategories.length > 0 && (
-          <button 
-            className="skills__reset-btn"
-            onClick={resetFilters}
-          >
-            ✕ Reset
+          <button className="skills__reset-btn" onClick={resetFilters}>
+            <i className="fas fa-times"></i>
+            Réinitialiser
           </button>
         )}
       </div>
 
-      {/* 🎯 GRILLE DES SKILLS */}
+      {/* 🎯 GRILLE SKILLS ULTRA-DENSE */}
       <div className="skills__grid">
         {filteredSkills.map((skill) => (
           <div
             key={skill.id}
             className="skills__card"
             onMouseEnter={(e) => showTooltip(skill, e)}
-            onMouseMove={updateTooltip}
             onMouseLeave={hideTooltip}
           >
             <div className="skills__card-header">
               <img 
-                src={skill.icon} 
+                src={skill.icon}
                 alt={skill.name}
-                className="skills__icon"
-                loading="lazy" // ← Optimisation performance
+                className="skills__card-icon"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const fallback = target.parentElement?.querySelector('.skills__fallback-icon');
+                  if (fallback) {
+                    (fallback as HTMLElement).style.display = 'flex';
+                  }
+                }}
               />
-              <h3 className="skills__name">{skill.name}</h3>
-            </div>
-            
-            <div className="skills__progress-container">
-              <div className="skills__progress-bar">
-                <div
-                  className="skills__progress-fill"
-                  style={{ width: `${skill.level}%` }}
-                />
+              <div className="skills__fallback-icon">
+                <i className={`fab fa-${skill.icon}`}></i>
               </div>
-              <span className="skills__level">{skill.level}%</span>
+              <h3 className="skills__card-title">{skill.name}</h3>
             </div>
             
-            <div className="skills__categories-tags">
-              {skill.categories.map((category) => (
-                <span key={category} className="skills__category-tag">
-                  {category}
-                </span>
-              ))}
+            <div className="skills__card-body">
+              <div className="skills__progress">
+                <div 
+                  className="skills__progress-bar"
+                  style={{ 
+                    '--target-width': `${skill.level}%`,
+                    width: `${skill.level}%`
+                  } as React.CSSProperties}
+                ></div>
+              </div>
+              <div className="skills__level">
+                <span>{skill.level}%</span>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* 🎯 TOOLTIP SUIVEUR DE CURSEUR CORRIGÉ */}
+      {/* 🎯 TOOLTIP CORRIGÉ */}
       {tooltip && (
-        <div
+        <div 
           className="skills__tooltip"
           style={{
-            left: tooltip.x + 15,
-            top: tooltip.y - 10,
+            position: 'fixed',           // ← FIXED obligatoire
+            left: tooltip.x,
+            top: tooltip.y,
+            transform: 'translateX(-50%) translateY(-100%)',
+            zIndex: 1000
           }}
         >
           <div className="skills__tooltip-header">
@@ -163,25 +161,21 @@ const Skills: React.FC = () => {
               src={tooltip.skill.icon} 
               alt={tooltip.skill.name}
               className="skills__tooltip-icon"
-              loading="lazy"
             />
             <h4 className="skills__tooltip-title">{tooltip.skill.name}</h4>
           </div>
-          
           <p className="skills__tooltip-description">
             {tooltip.skill.description}
           </p>
-          
           <div className="skills__tooltip-categories">
-            {tooltip.skill.categories.map((category) => (
-              <span key={category} className="skills__tooltip-category">
-                {category}
+            {tooltip.skill.categories.map(cat => (
+              <span key={cat} className="skills__tooltip-category">
+                {cat}
               </span>
             ))}
           </div>
-          
           <div className="skills__tooltip-level">
-            Niveau : <strong>{tooltip.skill.level}%</strong>
+            Niveau de maîtrise : <strong>{tooltip.skill.level}%</strong>
           </div>
         </div>
       )}

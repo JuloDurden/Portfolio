@@ -56,10 +56,18 @@
     }
 
     &.active {
-      background: var(--color-primary);
-      color: var(--color-white);
-      border-color: var(--color-primary);
+      background: var(--color-primary) !important;
+      color: var(--color-white) !important;
+      border-color: var(--color-primary) !important;
       box-shadow: 0 2px 8px rgba(var(--color-primary-rgb), 0.3);
+      transform: translateY(-1px);
+      font-weight: 600;
+
+      &:hover {
+        background: var(--color-primary-dark) !important;
+        border-color: var(--color-primary-dark) !important;
+        box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.4);
+      }
     }
   }
 
@@ -73,7 +81,7 @@
     border-radius: 16px; // ← Plus petit radius
     cursor: pointer;
     transition: all 0.2s ease;
-    align-self: flex-start;
+    align-self: center;
     width: auto; // ← Largeur auto
 
     &:hover {
@@ -114,40 +122,54 @@
   }
 
   // 🎯 ICÔNES SVG OPTIMISÉES
-  &__icon {
+  &__card-icon {
     width: 32px;
     height: 32px;
     object-fit: contain;
     flex-shrink: 0;
   }
 
-  &__name {
+  &__fallback-icon {
+    display: none;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+  }
+
+  &__card-title {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--color-text-primary);
     margin: 0;
   }
 
-  &__progress-container {
+  &__card-body {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  &__progress-bar {
-    flex: 1;
+  // 🚀 STRUCTURE CORRIGÉE DES JAUGES
+  &__progress {
     height: 8px;
     background: var(--color-gray-200);
     border-radius: 4px;
     overflow: hidden;
+    margin-bottom: 0.5rem;
   }
 
-  &__progress-fill {
+  &__progress-bar {
     height: 100%;
     background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
     border-radius: 4px;
-    animation: progressSlide 0.8s ease-out;
+    animation: progressSlide 0.8s ease-out forwards;
+    width: 0%;
+    transition: width 0.8s ease-out;
   }
 
   &__level {
@@ -155,6 +177,7 @@
     font-weight: 600;
     color: var(--color-primary);
     min-width: 35px;
+    text-align: right;
   }
 
   &__categories-tags {
@@ -191,9 +214,6 @@
     
     // 🎯 POSITION AU-DESSUS DU CURSEUR
     transform: translate(-10px, -100%);
-    
-    // 🎯 ANIMATION SIMPLE SANS CONFLIT
-    animation: tooltipAppear 0.2s ease-out;
   }
 
   &__tooltip-header {
@@ -250,9 +270,14 @@
     }
   }
 
-  // ✅ ANIMATIONS CORRIGÉES
+  // 🚀 ANIMATIONS
   @keyframes progressSlide {
-    from { width: 0% }
+    from { 
+      width: 0% !important;
+    }
+    to { 
+      width: var(--target-width, 100%);
+    }
   }
 
   @keyframes tooltipAppear {
