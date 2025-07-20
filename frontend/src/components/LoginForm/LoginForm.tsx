@@ -55,7 +55,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         <div className="login-form__icon">🚀</div>
         <h2 className="login-form__title">Connexion Admin</h2>
         <p className="login-form__subtitle">
-          Accédez à votre espace Goldorak
+          Accédez à votre espace de gestion
         </p>
       </div>
 
@@ -161,7 +161,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       {/* Footer */}
       <div className="login-form__footer">
         <p>
-          Par l'astro-hache, seuls les vrais pilotes passent ! 🤖
+          Why so serious ! 🃏
         </p>
       </div>
     </div>
