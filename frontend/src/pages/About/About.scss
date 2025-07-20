@@ -4,7 +4,6 @@
 
 .about {
   min-height: 100vh;
-  // padding-top: 60px; // Offset pour la navigation fixe
 
   // ====================================
   // 🏗️ STRUCTURE GÉNÉRALE
@@ -29,7 +28,7 @@
     }
 
     @media (max-width: 768px) {
-      padding: 2.5rem 0;
+      padding: 1.5rem 0;
     }
   }
 
@@ -285,8 +284,6 @@
 
 @media (max-width: 768px) {
   .about {
-    padding-top: 80px;
-    
     &__section {
       padding: 2rem 0;
     }

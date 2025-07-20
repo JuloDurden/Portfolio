@@ -13,7 +13,7 @@
     align-items: start;
     position: relative;
     
-    // 📏 SÉPARATEUR VERTICAL
+    // 📏 SÉPARATEUR VERTICAL - DESKTOP UNIQUEMENT
     &::before {
       content: '';
       position: absolute;
@@ -22,6 +22,11 @@
       bottom: 2rem;
       width: 1px;
       background: var(--color-border);
+      
+      // 🚀 MASQUÉ DÈS 1024px (TABLETTE)
+      @media (max-width: 1024px) {
+        display: none;
+      }
     }
     
     &:hover {
@@ -29,14 +34,17 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     }
     
-    @media (max-width: 768px) {
+    // 📱 TABLETTE (1024px et moins)
+    @media (max-width: 1024px) {
       grid-template-columns: 1fr;
       gap: 2rem;
-      padding: 2rem;
-      
-      &::before {
-        display: none;
-      }
+      padding: 2rem 2rem 2rem 0;
+    }
+    
+    // 📱 MOBILE (768px et moins)
+    @media (max-width: 768px) {
+      padding: 1.5rem;
+      gap: 1.5rem;
     }
   }
   
@@ -65,6 +73,12 @@
       &:hover {
         transform: scale(1.02);
       }
+      
+      // 📱 PHOTO PLUS PETITE SUR MOBILE
+      @media (max-width: 768px) {
+        width: 150px;
+        height: 150px;
+      }
     }
   }
   
@@ -73,6 +87,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 2rem;
   }
   
   &__name {
@@ -97,6 +112,76 @@
     color: var(--color-primary);
     font-weight: 500;
   }
+
+  // 🎯 SECTION HOBBIES - VERSION DISCRÈTE
+  &__hobbies {
+    width: 100%;
+    // margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    padding-left: 1.5rem;
+    
+    // 📱 RESPONSIVE HOBBIES - SUPPRESSION PADDING LEFT
+    @media (max-width: 1024px) {
+      padding-left: 0;
+      text-align: center;
+    }
+  }
+
+  &__hobbies-title {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    text-align: left;
+    opacity: 0.8;
+    
+    // 📱 CENTRÉ SUR TABLETTE/MOBILE
+    @media (max-width: 1024px) {
+      text-align: center;
+    }
+  }
+
+  &__hobbies-list {
+    display: flex;
+    flex-direction: column; // 🖥️ VERTICAL EN DESKTOP
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    
+    // 📱 HORIZONTAL DÈS TABLETTE
+    @media (max-width: 1024px) {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__hobby {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    border-radius: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__hobby-icon {
+    font-size: 0.9rem;
+  }
+
+  &__hobby-text {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+  }
   
   // 📝 DETAILS SECTION (DROITE)
   &__details {
@@ -118,6 +203,17 @@
       height: 3px;
       background: var(--color-primary);
       border-radius: 2px;
+      
+      // 🚀 CENTRÉ SUR TABLETTE/MOBILE
+      @media (max-width: 1024px) {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+    
+    // 📱 TITRE CENTRÉ SUR TABLETTE/MOBILE
+    @media (max-width: 1024px) {
+      text-align: center;
     }
   }
   
@@ -129,6 +225,12 @@
     
     &:last-child {
       margin-bottom: 0;
+    }
+    
+    // 📱 TEXTE CENTRÉ SUR MOBILE
+    @media (max-width: 768px) {
+      text-align: center;
+      font-size: 1rem;
     }
   }
 }

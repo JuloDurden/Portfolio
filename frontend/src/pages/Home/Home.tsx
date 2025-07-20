@@ -12,10 +12,11 @@ const ProjectCard = lazy(() => import('../../components/ProjectCard/ProjectCard'
 const BackgroundGradient = lazy(() => import('../../components/BackgroundGradient/BackgroundGradient'));
 const ScrollTimeline = lazy(() => import('../../components/ScrollTimeline/ScrollTimeline'));
 
+// 🎯 SÉLECTEURS CORRIGÉS POUR CORRESPONDRE AU DOM
 const homeNavigationItems = [
   { id: 'me-choisir', label: 'Me choisir', selector: '.home__section--alt' },
   { id: 'methode', label: 'Méthode', selector: '.home__section--methodology' },
-  { id: 'portfolio', label: 'Portfolio', selector: '.home__projects-grid' },
+  { id: 'portfolio', label: 'Portfolio', selector: '.home__section--portfolio' },
   { id: 'contact', label: 'Contact', selector: '.home__section--cta' }
 ];
 
@@ -91,8 +92,26 @@ function Home() {
                     <div className="home__feature">
                       <span className="home__feature-icon">🎯</span>
                       <h3>Performance & SEO</h3>
-                      <p>Mon code est propre, rapide à charger et facilement maintenable.</p>
-                      <p>Mes sites sont parfaitement optimisés pour le référencement.</p>
+                      <p>Vos sites seront rapides, optimisés et bien référencés.</p>
+                      <p>Je maîtrise les bonnes pratiques pour un web performant.</p>
+                    </div>
+                    <div className="home__feature">
+                      <span className="home__feature-icon">⚡</span>
+                      <h3>Technologies Modernes</h3>
+                      <p>React, TypeScript, Node.js... J'utilise les technologies actuelles.</p>
+                      <p>Vos projets bénéficient des dernières innovations.</p>
+                    </div>
+                    <div className="home__feature">
+                      <span className="home__feature-icon">🔒</span>
+                      <h3>Sécurité & Qualité</h3>
+                      <p>Code propre, sécurisé et maintenable sur le long terme.</p>
+                      <p>Tests, documentation et bonnes pratiques incluses.</p>
+                    </div>
+                    <div className="home__feature">
+                      <span className="home__feature-icon">🚀</span>
+                      <h3>Livraison Rapide</h3>
+                      <p>Méthodologie agile pour des livraisons efficaces et régulières.</p>
+                      <p>Vous suivez l'avancement en temps réel.</p>
                     </div>
                     <div className="home__feature">
                       <span className="home__feature-icon">🤝</span>
@@ -126,7 +145,7 @@ function Home() {
               </section>
 
               {/* 🎯 SECTION 3 - PORTFOLIO */}
-              <section className="home__section">
+              <section className="home__section home__section--portfolio">
                 <div className="home__container">
                   <h2 className="home__section-title">Mes derniers projets</h2>
                   

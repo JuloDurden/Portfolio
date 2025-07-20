@@ -93,6 +93,22 @@
       }
     }
 
+    // 🎯 SECTION PORTFOLIO SPÉCIFIQUE
+    &--portfolio {
+      background: var(--color-bg);
+      
+      // Style cohérent avec les autres sections
+      .home__container {
+        max-width: 1200px;
+      }
+      
+      // Animation
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.6s ease forwards;
+      animation-delay: 0.4s;
+    }
+
     @media (max-width: 768px) {
       padding: 2.5rem 0;
     }
@@ -262,9 +278,14 @@
     }
   }
 
-  &__projects-cta {
+  // 🎯 CONTENEUR LIEN PROJETS
+  &__projects-link-container {
     text-align: center;
     margin-top: 3rem;
+
+    @media (max-width: 768px) {
+      margin-top: 2rem;
+    }
   }
 
   // ====================================

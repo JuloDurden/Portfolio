@@ -38,7 +38,27 @@ const Biography: React.FC = () => {
             <p className="biography__age">{age} ans</p>
             <p className="biography__role">Développeur Web</p>
           </div>
+
+          {/* 🎯 NOUVELLE SECTION HOBBIES */}
+          <div className="biography__hobbies">
+            <h4 className="biography__hobbies-title">🎯 Mes passions</h4>
+            <div className="biography__hobbies-list">
+              <div className="biography__hobby">
+                <span className="biography__hobby-icon">🏉</span>
+                <span className="biography__hobby-text">Sports (CrossFit, Running,...)</span>
+              </div>
+              <div className="biography__hobby">
+                <span className="biography__hobby-icon">🎬</span>
+                <span className="biography__hobby-text">Cinéma</span>
+              </div>
+              <div className="biography__hobby">
+                <span className="biography__hobby-icon">🕹️</span>
+                <span className="biography__hobby-text">Jeux vidéo</span>
+              </div>
+            </div>
+          </div>
         </div>
+
         
         {/* 📝 BIOGRAPHIE DÉTAILLÉE (DROITE) - CADRE UNIQUE */}
         <div className="biography__details">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './SectionNavigation.scss';
 
 interface NavigationItem {
@@ -22,55 +22,67 @@ const SectionNavigation: React.FC<SectionNavigationProps> = ({
     defaultActiveSection || navigationItems[0]?.id || ''
   );
 
-  // 🎯 DÉTECTION DE LA SECTION ACTIVE
+  // 🎯 DÉTECTION SECTION ACTIVE OPTIMISÉE
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-20% 0px -50% 0px',
-      threshold: 0.2
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      let mostVisibleEntry = null;
-      let maxRatio = 0;
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-          maxRatio = entry.intersectionRatio;
-          mostVisibleEntry = entry;
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + offsetTop + 50;
+      
+      // Parcourir toutes les sections et trouver la plus proche
+      let currentSection = navigationItems[0]?.id || '';
+      
+      navigationItems.forEach((item) => {
+        const element = document.querySelector(item.selector);
+        if (element) {
+          const elementTop = element.offsetTop;
+          const elementHeight = element.offsetHeight;
+          
+          // Si on est dans cette section
+          if (scrollPosition >= elementTop && 
+              scrollPosition < elementTop + elementHeight) {
+            currentSection = item.id;
+          }
+          // Si on dépasse toutes les sections, prendre la dernière
+          else if (scrollPosition >= elementTop) {
+            currentSection = item.id;
+          }
         }
       });
-
-      if (mostVisibleEntry) {
-        const element = mostVisibleEntry.target;
-        
-        // Trouver l'ID de section correspondant
-        navigationItems.forEach((item) => {
-          if (element.matches(item.selector) || element.querySelector(item.selector)) {
-            if (item.id !== activeSection) {
-              setActiveSection(item.id);
-            }
-          }
-        });
+      
+      // Mettre à jour seulement si différent
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection);
       }
-    }, observerOptions);
+    };
 
-    // Observer toutes les sections définies
-    navigationItems.forEach((item) => {
-      const elements = document.querySelectorAll(item.selector);
-      elements.forEach(element => observer.observe(element));
-    });
+    // 🚀 THROTTLE SCROLL POUR PERFORMANCE
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    return () => observer.disconnect();
-  }, [activeSection, navigationItems]);
+    // Écouter le scroll
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+    
+    // Vérification initiale
+    handleScroll();
 
-  // 🎯 NAVIGATION SMOOTH
-  const scrollToSection = (sectionId: string, selector: string) => {
+    return () => window.removeEventListener('scroll', throttledScroll);
+  }, [navigationItems, offsetTop, activeSection]);
+
+  // 🎯 NAVIGATION SMOOTH OPTIMISÉE
+  const scrollToSection = useCallback((sectionId: string, selector: string) => {
+    // Mettre à jour immédiatement l'état
     setActiveSection(sectionId);
     
     const element = document.querySelector(selector);
     if (element) {
-      const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+      const elementTop = element.offsetTop;
       const finalOffsetTop = elementTop - offsetTop;
 
       window.scrollTo({
@@ -78,7 +90,7 @@ const SectionNavigation: React.FC<SectionNavigationProps> = ({
         behavior: 'smooth'
       });
     }
-  };
+  }, [offsetTop]);
 
   return (
     <div className="section-navigation">
@@ -90,6 +102,7 @@ const SectionNavigation: React.FC<SectionNavigationProps> = ({
             className={`section-navigation__nav-item ${
               activeSection === item.id ? 'section-navigation__nav-item--active' : ''
             }`}
+            aria-current={activeSection === item.id ? 'page' : undefined}
           >
             <span className="section-navigation__label">{item.label}</span>
           </button>
