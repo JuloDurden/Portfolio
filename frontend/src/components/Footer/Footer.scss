@@ -158,6 +158,149 @@
   }
 
   // ====================================
+  // 👨‍💻 STYLES POUR L'ÉTAT ADMIN CONNECTÉ
+  // ====================================
+
+  // État admin (quand connecté)
+  &__heart--admin {
+    color: var(--color-accent);
+    box-shadow: 0 0 12px rgba(0, 212, 170, 0.3);
+    
+    &:hover {
+      color: var(--color-accent);
+      transform: scale(1.2);
+      background: rgba(0, 212, 170, 0.15);
+      box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+      animation: adminGlow 1s ease-in-out infinite;
+    }
+  }
+
+  // Section admin complète  
+  &__admin-section {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  // Menu utilisateur
+  &__user-menu {
+    position: relative;
+  }
+
+  &__user-toggle {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+    
+    &:hover {
+      background-color: rgba(0, 212, 170, 0.2);
+      transform: rotate(90deg);
+      color: var(--color-accent);
+      box-shadow: 0 0 10px rgba(0, 212, 170, 0.3);
+    }
+    
+    &:focus {
+      outline: none;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &__user-dropdown {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-md);
+    min-width: 220px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: dropdownFadeIn 0.2s ease-out;
+    
+    // Flèche pointant vers le toggle
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      right: 20px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid var(--color-background);
+    }
+    
+    button {
+      width: 100%;
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: none;
+      border: none;
+      text-align: left;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: var(--font-size-sm);
+      color: var(--color-text);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      
+      &:hover {
+        background-color: var(--color-primary-light);
+        transform: translateX(2px);
+      }
+    }
+    
+    hr {
+      border: none;
+      height: 1px;
+      background: var(--color-border);
+      margin: var(--spacing-sm) 0;
+    }
+  }
+
+  &__user-info {
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: rgba(0, 212, 170, 0.05);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--color-accent);
+    
+    strong {
+      display: block;
+      color: var(--color-accent);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: 2px;
+    }
+    
+    small {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-xs);
+    }
+  }
+
+  &__logout {
+    color: #ff4757 !important;
+    
+    &:hover {
+      background-color: rgba(255, 71, 87, 0.1) !important;
+      color: #ff3742 !important;
+    }
+  }
+
+
+  // ====================================
   // 🎨 ANIMATIONS
   // ====================================
   animation: fadeInUp 0.8s ease-out 0.5s both;
@@ -187,6 +330,31 @@
 }
 
 // ====================================
+// 🎬 KEYFRAMES POUR L'ADMIN
+// ====================================
+
+@keyframes adminGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(0, 212, 170, 0.8);
+  }
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+// ====================================
 // 📱 RESPONSIVE DESIGN
 // ====================================
 @media (max-width: $desktop) {
@@ -212,6 +380,20 @@
         transform: scale(1.15);
       }
     }
+
+    &__user-dropdown {
+      min-width: 200px;
+      right: -10px;
+      left: auto;
+      
+      &::after {
+        right: 30px;
+      }
+    }
+
+    &__admin-section {
+      gap: 6px;
+    }
   }
 }
 
@@ -232,6 +414,29 @@
         background: rgba(255, 107, 107, 0.2);
       }
     }
+
+    &__heart--admin {
+      &:hover {
+        box-shadow: 0 0 25px rgba(0, 212, 170, 0.7);
+        background: rgba(0, 212, 170, 0.25);
+      }
+    }
+
+    &__user-dropdown {
+      background: var(--color-surface);
+      border-color: var(--color-border-dark);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      
+      &::after {
+        border-top-color: var(--color-surface);
+      }
+    }
+
+    &__user-toggle {
+      &:hover {
+        background-color: rgba(0, 212, 170, 0.3);
+      }
+    }
   }
 }
 
@@ -247,6 +452,17 @@
         animation: none;
         transform: scale(1.1);
       }
+    }
+
+    &__heart--admin {
+      &:hover {
+        animation: none;
+        transform: scale(1.1);
+      }
+    }
+    
+    &__user-dropdown {
+      animation: none;
     }
   }
   

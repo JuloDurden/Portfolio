@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './LoginForm.scss';
 
 interface LoginFormProps {
-  onLogin: (email: string, password: string) => void;
+  onLogin: (email: string, password: string) => Promise<void>;
   onClose: () => void;
   isLoading?: boolean;
   error?: string;

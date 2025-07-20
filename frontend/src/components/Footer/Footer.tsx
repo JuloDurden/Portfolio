@@ -1,16 +1,30 @@
+// src/components/Footer/Footer.tsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import Modal from '../Modal/Modal';
 import LoginForm from '../LoginForm/LoginForm';
 import './Footer.scss';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
+  const { isAuthenticated, user, login, logout } = useAuth();
+  const navigate = useNavigate();
+  
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
+  // 💖 Gestion du clic sur le cœur
   const handleHeartClick = () => {
-    setShowLoginModal(true);
+    if (isAuthenticated) {
+      // Si connecté, afficher le menu utilisateur ou rediriger
+      navigate('/dashboard');
+    } else {
+      // Si pas connecté, ouvrir le modal
+      setShowLoginModal(true);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -20,36 +34,43 @@ function Footer() {
     }
   };
 
+  // 🔐 Gestion de la connexion
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
     setLoginError('');
     
     try {
-      // Simulation d'authentification
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const success = await login(email, password);
       
-      // Vérification des identifiants (à remplacer par ta logique)
-      if (email === 'admin@julienclaveldev.com' && password === 'admin123') {
-        // Succès - ici tu peux rediriger vers ton admin
-        console.log('Connexion réussie ! Bienvenue dans l\'espace admin !');
-        alert('Connexion réussie ! Bienvenue dans l\'espace admin !');
+      if (success) {
+        // ✅ Connexion réussie
         setShowLoginModal(false);
+        navigate('/dashboard');
       } else {
         setLoginError('Email ou mot de passe incorrect.');
       }
       
     } catch (error) {
       setLoginError('Erreur de connexion. Veuillez réessayer.');
+      console.error('Erreur de connexion:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // 🚪 Fermeture du modal
   const handleCloseModal = () => {
     if (!isLoading) {
       setShowLoginModal(false);
       setLoginError('');
     }
+  };
+
+  // 📤 Déconnexion
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+    navigate('/');
   };
 
   return (
@@ -63,16 +84,63 @@ function Footer() {
           <div className="footer__bottom">
             <p>
               Développé avec{' '}
-              <span 
-                className="footer__heart"
-                onClick={handleHeartClick}
-                role="button"
-                tabIndex={0}
-                onKeyDown={handleKeyDown}
-                aria-label="Accès administration"
-              >
-                ❤️
-              </span>
+              
+              {/* 💖 Gestion de l'état connecté/déconnecté */}
+              {isAuthenticated ? (
+                <span className="footer__admin-section">
+                  <span 
+                    className="footer__heart footer__heart--admin"
+                    onClick={handleHeartClick}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={handleKeyDown}
+                    aria-label={`Connecté en tant que ${user?.firstName} - Accéder au dashboard`}
+                    title={`Connecté en tant que ${user?.firstName} ${user?.lastName}`}
+                  >
+                    👨‍💻
+                  </span>
+                  
+                  {/* Menu utilisateur */}
+                  <div className="footer__user-menu">
+                    <button
+                      className="footer__user-toggle"
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      aria-label="Menu utilisateur"
+                    >
+                      ⚙️
+                    </button>
+                    
+                    {showUserMenu && (
+                      <div className="footer__user-dropdown">
+                        <div className="footer__user-info">
+                          <strong>{user?.firstName} {user?.lastName}</strong>
+                          <small>{user?.email}</small>
+                        </div>
+                        <hr />
+                        <button onClick={() => navigate('/dashboard')}>
+                          📊 Dashboard
+                        </button>
+                        <button onClick={handleLogout} className="footer__logout">
+                          🚪 Déconnexion
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </span>
+              ) : (
+                <span 
+                  className="footer__heart"
+                  onClick={handleHeartClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={handleKeyDown}
+                  aria-label="Accès administration"
+                  title="Connexion administrateur"
+                >
+                  ❤️
+                </span>
+              )}
+              
               {' '}et React + TypeScript
             </p>
           </div>
@@ -80,7 +148,7 @@ function Footer() {
       </footer>
 
       {/* Modal de connexion */}
-      {showLoginModal && (
+      {showLoginModal && !isAuthenticated && (
         <Modal 
           title=""
           onClose={handleCloseModal}
