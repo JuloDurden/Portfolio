@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import SectionNavigation from '../../components/SectionNavigation/SectionNavigation';
 import PersonalDataSection from './sections/PersonalData/PersonalDataSection';
 import AboutSection from './sections/About/AboutSection';
+import ExperiencesSection from './sections/Experiences/ExperiencesSection';
 import './Dashboard.scss';
 
 // 🎯 Navigation items pour le dashboard
@@ -11,7 +12,7 @@ const DASHBOARD_NAVIGATION = [
   { id: 'overview', label: '📊 Vue d\'ensemble', selector: '#dashboard-overview' },
   { id: 'personal-data', label: '👤 Données personnelles', selector: '#personal-data-section' },
   { id: 'about', label: '📝 Contenu About', selector: '#about-section' },
-  { id: 'experiences', label: '💼 Expériences', selector: '#dashboard-experiences' },
+  { id: 'experiences', label: '💼 Expériences', selector: '#experiences-section' },
   { id: 'skills', label: '🛠️ Compétences', selector: '#dashboard-skills' },
   { id: 'projects', label: '🚀 Projets', selector: '#dashboard-projects' }
 ];
@@ -163,26 +164,8 @@ const Dashboard: React.FC = () => {
           {/* 📝 CONTENU ABOUT */}
           <AboutSection />
 
-          {/* 💼 EXPÉRIENCES */}
-          <section id="dashboard-experiences" className="dashboard__section">
-            <div className="dashboard__section-header">
-              <h2 className="dashboard__section-title">💼 Expériences & Formations</h2>
-              <p className="dashboard__section-subtitle">
-                Gérez votre parcours professionnel et académique
-              </p>
-            </div>
-            
-            <div className="dashboard__placeholder">
-              <div className="dashboard__placeholder-icon">💼</div>
-              <h3>Section en développement</h3>
-              <p>Cette section permettra de gérer vos expériences</p>
-              <ul>
-                <li>✅ Expériences professionnelles</li>
-                <li>✅ Formations</li>
-                <li>✅ CRUD complet</li>
-              </ul>
-            </div>
-          </section>
+          {/* 💼 EXPÉRIENCES & FORMATIONS */}
+          <ExperiencesSection />
 
           {/* 🛠️ COMPÉTENCES */}
           <section id="dashboard-skills" className="dashboard__section">

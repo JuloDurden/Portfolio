@@ -1,0 +1,344 @@
+@import '../../../../styles/globals/variables';
+
+// ====================================
+// 🖼️ EXPERIENCE PHOTO UPLOAD
+// ====================================
+.experience-photo-upload {
+  width: 100%;
+  
+  // ====================================
+  // 🎯 CONTENEUR PRINCIPAL
+  // ====================================
+  &__container {
+    position: relative;
+    width: 100%;
+  }
+
+  // ====================================
+  // 📤 ZONE DE DROP
+  // ====================================
+  &__zone {
+    position: relative;
+    border: 2px dashed var(--color-border);
+    border-radius: var(--border-radius-lg);
+    background: var(--color-gray-50);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+      border-color: var(--color-primary);
+      background: var(--color-white);
+      transform: translateY(-2px);
+      box-shadow: var(--box-shadow);
+    }
+
+    &--dragging {
+      border-color: var(--color-primary);
+      background: rgba(var(--color-primary), 0.05);
+      border-style: solid;
+      
+      .experience-photo-upload__icon {
+        transform: scale(1.2);
+        animation: bounce 0.6s infinite alternate;
+      }
+    }
+
+    &--disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    &--has-photo {
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+  }
+
+  // ====================================
+  // 🌀 ZONE VIDE (upload)
+  // ====================================
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    text-align: center;
+    min-height: 200px;
+
+    @media (max-width: $mobile) {
+      padding: var(--spacing-xl);
+      min-height: 160px;
+    }
+  }
+
+  &__icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+
+    @media (max-width: $mobile) {
+      font-size: 2.5rem;
+    }
+  }
+
+  &__text {
+    .primary {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+      margin: 0 0 var(--spacing-xs) 0;
+    }
+
+    .secondary {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin: 0 0 var(--spacing-sm) 0;
+    }
+
+    .info {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+  }
+
+  // ====================================
+  // 🖼️ PRÉVISUALISATION
+  // ====================================
+  &__preview {
+    position: relative;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background: var(--color-white);
+    box-shadow: var(--box-shadow);
+  }
+
+  &__image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    @media (max-width: $mobile) {
+      height: 160px;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .experience-photo-upload__preview:hover & {
+      opacity: 1;
+    }
+  }
+
+  &__overlay-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &--change {
+      background: var(--color-primary);
+      color: white;
+
+      &:hover {
+        background: var(--color-primary-dark);
+        transform: scale(1.1);
+      }
+    }
+
+    &--remove {
+      background: var(--color-error);
+      color: white;
+
+      &:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  // ====================================
+  // ⚡ ÉTAT DE TRAITEMENT
+  // ====================================
+  &__processing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--color-gray-200);
+      border-top: 3px solid var(--color-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+    }
+  }
+
+  // ====================================
+  // ❌ GESTION D'ERREURS
+  // ====================================
+  &__error {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(var(--color-error), 0.1);
+    border: 1px solid rgba(var(--color-error), 0.3);
+    border-radius: var(--border-radius);
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  // ====================================
+  // 💡 SUGGESTIONS
+  // ====================================
+  &__suggestions {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--color-primary);
+
+    &-title {
+      margin: 0 0 var(--spacing-sm) 0;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-primary);
+    }
+
+    &-list {
+      margin: 0;
+      padding-left: var(--spacing-md);
+      
+      li {
+        margin-bottom: var(--spacing-xs);
+        font-size: var(--font-size-xs);
+        color: var(--color-text-secondary);
+        line-height: 1.4;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    @media (max-width: $mobile) {
+      margin-top: var(--spacing-md);
+      padding: var(--spacing-sm);
+      
+      &-list {
+        padding-left: var(--spacing-sm);
+      }
+    }
+  }
+}
+
+// ====================================
+// 🎭 ANIMATIONS
+// ====================================
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0% { transform: scale(1.2) translateY(0); }
+  100% { transform: scale(1.2) translateY(-5px); }
+}
+
+// ====================================
+// 🌙 MODE SOMBRE
+// ====================================
+[data-theme="dark"] {
+  .experience-photo-upload {
+    &__zone {
+      background: var(--color-surface);
+      border-color: var(--color-border);
+
+      &:hover {
+        background: var(--color-gray-100);
+      }
+
+      &--dragging {
+        background: rgba(77, 182, 172, 0.1);
+      }
+    }
+
+    &__preview {
+      background: var(--color-surface);
+    }
+
+    &__suggestions {
+      background: var(--color-surface);
+    }
+
+    &__processing .spinner {
+      border-color: var(--color-gray-300);
+      border-top-color: var(--color-primary);
+    }
+  }
+}
+
+// ====================================
+// 📱 RESPONSIVE DESIGN
+// ====================================
+@media (max-width: $mobile) {
+  .experience-photo-upload {
+    &__overlay {
+      gap: var(--spacing-sm);
+    }
+
+    &__overlay-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+    }
+
+    &__suggestions {
+      &-title {
+        font-size: var(--font-size-xs);
+      }
+
+      &-list li {
+        font-size: 11px;
+      }
+    }
+  }
+}
