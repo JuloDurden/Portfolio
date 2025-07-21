@@ -1,4 +1,3 @@
-// src/pages/Dashboard/Dashboard.scss
 @import "../../styles/globals/variables";
 
 // ====================================
@@ -218,6 +217,7 @@
   &__container {
     max-width: var(--max-width);
     margin: 0 auto;
+    gap: 2rem;
     padding: 0 var(--spacing-lg);
   }
   

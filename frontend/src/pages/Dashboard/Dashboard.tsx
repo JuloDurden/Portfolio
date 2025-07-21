@@ -1,15 +1,16 @@
-// src/pages/Dashboard/Dashboard.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import SectionNavigation from '../../components/SectionNavigation/SectionNavigation';
+import PersonalDataSection from './sections/PersonalData/PersonalDataSection';
+import AboutSection from './sections/About/AboutSection';
 import './Dashboard.scss';
 
 // 🎯 Navigation items pour le dashboard
 const DASHBOARD_NAVIGATION = [
   { id: 'overview', label: '📊 Vue d\'ensemble', selector: '#dashboard-overview' },
-  { id: 'personal', label: '👤 Données personnelles', selector: '#dashboard-personal' },
-  { id: 'about', label: '📝 Contenu About', selector: '#dashboard-about' },
+  { id: 'personal-data', label: '👤 Données personnelles', selector: '#personal-data-section' },
+  { id: 'about', label: '📝 Contenu About', selector: '#about-section' },
   { id: 'experiences', label: '💼 Expériences', selector: '#dashboard-experiences' },
   { id: 'skills', label: '🛠️ Compétences', selector: '#dashboard-skills' },
   { id: 'projects', label: '🚀 Projets', selector: '#dashboard-projects' }
@@ -156,48 +157,11 @@ const Dashboard: React.FC = () => {
             </div>
           </section>
 
-          {/* 👤 DONNÉES PERSONNELLES */}
-          <section id="dashboard-personal" className="dashboard__section">
-            <div className="dashboard__section-header">
-              <h2 className="dashboard__section-title">👤 Données personnelles</h2>
-              <p className="dashboard__section-subtitle">
-                Gérez vos informations personnelles
-              </p>
-            </div>
-            
-            <div className="dashboard__placeholder">
-              <div className="dashboard__placeholder-icon">👤</div>
-              <h3>Section en développement</h3>
-              <p>Cette section permettra de modifier vos données personnelles</p>
-              <ul>
-                <li>✅ Nom, prénom, email</li>
-                <li>✅ Date de naissance</li>
-                <li>✅ URL GitHub</li>
-                <li>✅ Mot de passe</li>
-              </ul>
-            </div>
-          </section>
+          {/* 👤 DONNÉES PERSONNELLES */}           
+          <PersonalDataSection />
 
           {/* 📝 CONTENU ABOUT */}
-          <section id="dashboard-about" className="dashboard__section">
-            <div className="dashboard__section-header">
-              <h2 className="dashboard__section-title">📝 Contenu About</h2>
-              <p className="dashboard__section-subtitle">
-                Modifiez le contenu de votre page À propos
-              </p>
-            </div>
-            
-            <div className="dashboard__placeholder">
-              <div className="dashboard__placeholder-icon">📝</div>
-              <h3>Section en développement</h3>
-              <p>Cette section permettra de modifier le contenu About</p>
-              <ul>
-                <li>✅ Métier actuel</li>
-                <li>✅ Hobbies</li>
-                <li>✅ Biographie (3 paragraphes)</li>
-              </ul>
-            </div>
-          </section>
+          <AboutSection />
 
           {/* 💼 EXPÉRIENCES */}
           <section id="dashboard-experiences" className="dashboard__section">
