@@ -152,7 +152,7 @@ const SkillsSection: React.FC = () => {
   return (
     <>
       {/* 🛠️ SECTION SKILLS */}
-      <section className="skills-section">
+      <section id="skills-section" className="skills-section">
         {/* HEADER */}
         <div className="skills-section__header">
           <div className="skills-section__title-group">

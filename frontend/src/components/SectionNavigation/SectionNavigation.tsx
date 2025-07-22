@@ -21,37 +21,34 @@ const SectionNavigation: React.FC<SectionNavigationProps> = ({
   const [activeSection, setActiveSection] = useState<string>(
     defaultActiveSection || navigationItems[0]?.id || ''
   );
+  const [isScrolling, setIsScrolling] = useState(false);
 
-  // 🎯 DÉTECTION SECTION ACTIVE OPTIMISÉE
+  // 🎯 DÉTECTION SECTION ACTIVE
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + offsetTop + 50;
+      // Ne pas détecter pendant un scroll programmé
+      if (isScrolling) return;
       
-      // Parcourir toutes les sections et trouver la plus proche
+      const scrollPosition = window.scrollY + offsetTop + 50;
       let currentSection = navigationItems[0]?.id || '';
       
-      navigationItems.forEach((item) => {
+      // Parcourir en ordre inverse pour prendre la section la plus haute visible
+      for (let i = navigationItems.length - 1; i >= 0; i--) {
+        const item = navigationItems[i];
         const element = document.querySelector(item.selector);
+        
         if (element) {
           const elementTop = element.offsetTop;
-          const elementHeight = element.offsetHeight;
           
-          // Si on est dans cette section
-          if (scrollPosition >= elementTop && 
-              scrollPosition < elementTop + elementHeight) {
+          if (scrollPosition >= elementTop) {
             currentSection = item.id;
-          }
-          // Si on dépasse toutes les sections, prendre la dernière
-          else if (scrollPosition >= elementTop) {
-            currentSection = item.id;
+            break; // ✅ Sortir dès qu'on trouve la bonne section
           }
         }
-      });
+      }
       
       // Mettre à jour seulement si différent
-      if (currentSection !== activeSection) {
-        setActiveSection(currentSection);
-      }
+      setActiveSection(prev => prev !== currentSection ? currentSection : prev);
     };
 
     // 🚀 THROTTLE SCROLL POUR PERFORMANCE
@@ -69,27 +66,38 @@ const SectionNavigation: React.FC<SectionNavigationProps> = ({
     // Écouter le scroll
     window.addEventListener('scroll', throttledScroll, { passive: true });
     
-    // Vérification initiale
-    handleScroll();
+    // Vérification initiale (après un petit délai)
+    const timer = setTimeout(handleScroll, 100);
 
-    return () => window.removeEventListener('scroll', throttledScroll);
-  }, [navigationItems, offsetTop, activeSection]);
+    return () => {
+      window.removeEventListener('scroll', throttledScroll);
+      clearTimeout(timer);
+    };
+  }, [navigationItems, offsetTop, isScrolling]);
 
   // 🎯 NAVIGATION SMOOTH OPTIMISÉE
   const scrollToSection = useCallback((sectionId: string, selector: string) => {
-    // Mettre à jour immédiatement l'état
+    const element = document.querySelector(selector);
+    if (!element) return;
+    
+    // Marquer qu'on scroll programmé
+    setIsScrolling(true);
     setActiveSection(sectionId);
     
-    const element = document.querySelector(selector);
-    if (element) {
-      const elementTop = element.offsetTop;
-      const finalOffsetTop = elementTop - offsetTop;
+    const elementTop = element.offsetTop;
+    const finalOffsetTop = elementTop - offsetTop;
 
-      window.scrollTo({
-        top: finalOffsetTop,
-        behavior: 'smooth'
-      });
-    }
+    window.scrollTo({
+      top: finalOffsetTop,
+      behavior: 'smooth'
+    });
+    
+    // Remettre la détection après le scroll
+    const timer = setTimeout(() => {
+      setIsScrolling(false);
+    }, 1000); // Délai pour le smooth scroll
+    
+    return () => clearTimeout(timer);
   }, [offsetTop]);
 
   return (

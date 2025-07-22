@@ -196,16 +196,6 @@ const PersonalDataSection: React.FC = () => {
           />
         )}
       </div>
-
-      {/* 🔒 INFO SÉCURITÉ */}
-      <div className="personal-data-section__security-info">
-        <div className="personal-data-section__security-icon">🔒</div>
-        <div className="personal-data-section__security-text">
-          <strong>Confidentialité assurée</strong>
-          <span>Vos données personnelles sont chiffrées et sécurisées</span>
-        </div>
-      </div>
-
     </section>
   );
 };

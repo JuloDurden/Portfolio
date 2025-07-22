@@ -1,4 +1,3 @@
-// Dashboard.tsx
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +7,10 @@ import AboutSection from './sections/About/AboutSection';
 import ExperiencesSection from './sections/Experiences/ExperiencesSection';
 import SkillsSection from './sections/Skills/SkillsSection';
 import ProjectsList from './sections/Projects/ProjectsList';
+import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
 import './Dashboard.scss';
+
+import projectsData from '../../data/projects.json';
 
 // 🎯 Navigation items pour le dashboard
 const DASHBOARD_NAVIGATION = [
@@ -34,7 +36,7 @@ const Dashboard: React.FC = () => {
 
   // 📊 Stats mockées (en attendant l'API)
   const stats: DashboardStats = {
-    projectsCount: 8,
+    projectsCount: projectsData.length,
     skillsCount: 12,
     experiencesCount: 6,
     lastUpdate: new Date().toLocaleDateString('fr-FR')
@@ -75,6 +77,28 @@ const Dashboard: React.FC = () => {
     }, 500);
   };
 
+  // 🚀 Action rapide pour modifier About
+  const handleEditAbout = () => {
+    document.getElementById('about-section')?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+    setTimeout(() => {
+      const editButton = document.querySelector('.about-section__actions .about-section__btn--primary') as HTMLButtonElement;
+      editButton?.click();
+    }, 500);
+  };
+
+  // 🚀 Action rapide pour modifier profil
+  const handleEditProfile = () => {
+    document.getElementById('personal-data-section')?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+    // Pas de timeout nécessaire car c'est un formulaire direct
+  };
+
+
   return (
     <div className="dashboard">
       {/* 🎯 HEADER DU DASHBOARD */}
@@ -91,6 +115,9 @@ const Dashboard: React.FC = () => {
           </div>
           
           <div className="dashboard__header-actions">
+            <button className='dashboard__btn dashboard__btn--secondary'>
+              <ThemeToggle />
+            </button>
             <button 
               onClick={handleBackToSite}
               className="dashboard__btn dashboard__btn--secondary"
@@ -174,10 +201,15 @@ const Dashboard: React.FC = () => {
                 >
                   🆕 Nouvelle compétence
                 </button>
-                <button className="dashboard__quick-btn">
+                <button className="dashboard__quick-btn"
+                  onClick={handleEditAbout}
+                >
                   📝 Modifier About
                 </button>
-                <button className="dashboard__quick-btn">
+                <button
+                  className="dashboard__quick-btn"
+                  onClick={handleEditProfile}
+                >
                   👤 Modifier profil
                 </button>
               </div>

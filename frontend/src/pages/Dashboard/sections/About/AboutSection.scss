@@ -25,10 +25,10 @@
     justify-content: space-between;
     padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
     border-bottom: 1px solid var(--color-border);
-    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-25) 100%);
+    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
     
     [data-theme="dark"] & {
-      background: linear-gradient(135deg, var(--color-dark-400) 0%, var(--color-dark-300) 100%);
+      background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-gray-100) 100%);
     }
     
     .section-title {
