@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SkillForm from './SkillForm';
 import Modal from '../../../../components/Modal/Modal';
 import { Skill } from './types';
+import './SkillsSection.scss';
 
 const SkillsSection: React.FC = () => {
   // 🎯 États locaux
@@ -278,15 +279,6 @@ const SkillsSection: React.FC = () => {
               </button>
             </div>
           )}
-        </div>
-
-        {/* SECURITY INFO */}
-        <div className="skills-section__security-info">
-          <div className="skills-section__security-icon">🔒</div>
-          <div className="skills-section__security-text">
-            <strong>Données sécurisées</strong>
-            <span>Vos compétences sont stockées en toute sécurité</span>
-          </div>
         </div>
       </section>
 

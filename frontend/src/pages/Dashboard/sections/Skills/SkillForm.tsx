@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Skill } from './types';
+import './SkillForm.scss';
 
 interface SkillFormProps {
   skill?: Skill | null;
@@ -93,7 +94,6 @@ const SkillForm: React.FC<SkillFormProps> = ({
     }
   };
 
-  // 🔧 LIGNE 96 CORRIGÉE - PROTECTION CONTRE UNDEFINED
   const filteredSuggestions = (existingCategories || []).filter(cat =>
     cat.toLowerCase().includes(categoryInput.toLowerCase()) &&
     !formData.categories.includes(cat)
@@ -168,24 +168,39 @@ const SkillForm: React.FC<SkillFormProps> = ({
 
       {/* Niveau */}
       <div className="form-group">
-        <label htmlFor="skill-level">
-          Niveau: {formData.level}% - {getLevelLabel(formData.level)}
-        </label>
-        <input
-          id="skill-level"
-          type="range"
-          min="0"
-          max="100"
-          step="5"
-          value={formData.level}
-          onChange={(e) => handleInputChange('level', parseInt(e.target.value))}
-          className="level-slider"
-        />
-        <div className="level-markers">
-          <span>Débutant</span>
-          <span>Intermédiaire</span>
-          <span>Avancé</span>
-          <span>Expert</span>
+        <div className="level-slider-container">
+          <div className="level-header">
+            <label htmlFor="skill-level">Niveau</label>
+            <div className="level-value">
+              {formData.level}% - {getLevelLabel(formData.level)}
+            </div>
+          </div>
+          
+          <input
+            id="skill-level"
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value={formData.level}
+            onChange={(e) => handleInputChange('level', parseInt(e.target.value))}
+            className="slider"
+          />
+          
+          <div className="level-labels">
+            <span className={`level-label ${formData.level < 40 ? 'active' : ''}`}>
+              Débutant
+            </span>
+            <span className={`level-label ${formData.level >= 40 && formData.level < 60 ? 'active' : ''}`}>
+              Intermédiaire
+            </span>
+            <span className={`level-label ${formData.level >= 60 && formData.level < 80 ? 'active' : ''}`}>
+              Avancé
+            </span>
+            <span className={`level-label ${formData.level >= 80 ? 'active' : ''}`}>
+              Expert
+            </span>
+          </div>
         </div>
         {errors.level && <span className="error-message">{errors.level}</span>}
       </div>
@@ -199,40 +214,35 @@ const SkillForm: React.FC<SkillFormProps> = ({
             {iconPreview ? (
               <img src={iconPreview} alt="Aperçu" />
             ) : (
-              <div className="icon-placeholder">📄</div>
+              <div className="placeholder-icon">📄</div>
             )}
           </div>
 
-          <div className="icon-controls">
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="btn btn-secondary btn-sm"
-            >
-              📁 Uploader un fichier
-            </button>
+          <div className="icon-actions">
+            <label className="upload-button" onClick={() => fileInputRef.current?.click()}>
+              <span className="upload-icon">📁</span>
+              Uploader un fichier
+            </label>
             
             <input
               ref={fileInputRef}
               type="file"
               accept="image/*"
               onChange={handleIconUpload}
-              style={{ display: 'none' }}
             />
 
-            <div className="icon-url-input">
-              <input
-                type="url"
-                value={formData.icon}
-                onChange={(e) => handleIconUrlChange(e.target.value)}
-                placeholder="ou collez une URL d'image..."
-              />
-            </div>
+            <input
+              type="url"
+              value={formData.icon}
+              onChange={(e) => handleIconUrlChange(e.target.value)}
+              placeholder="ou collez une URL d'image..."
+            />
           </div>
         </div>
         
         {errors.icon && <span className="error-message">{errors.icon}</span>}
       </div>
+
 
       {/* Catégories */}
       <div className="form-group">
@@ -241,7 +251,7 @@ const SkillForm: React.FC<SkillFormProps> = ({
         </label>
         
         <div className="categories-input-section">
-          <div className="category-input-wrapper">
+          <div className="category-input-group">
             <input
               ref={categoryInputRef}
               type="text"
@@ -260,7 +270,7 @@ const SkillForm: React.FC<SkillFormProps> = ({
             <button
               type="button"
               onClick={() => categoryInput.trim() && addCategory(categoryInput)}
-              className="btn btn-primary btn-sm"
+              className="btn-add-category"
             >
               Ajouter
             </button>

@@ -201,45 +201,6 @@
     font-family: var(--font-primary);
   }
   
-  // ====================================
-  // 🔒 SECURITY INFO
-  // ====================================
-  
-  &__security-info {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-xl);
-    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-white) 100%);
-    border-top: 1px solid var(--color-border);
-    font-size: var(--font-size-xs);
-    
-    [data-theme="dark"] & {
-      background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-surface) 100%);
-    }
-  }
-  
-  &__security-icon {
-    color: var(--color-success);
-    font-size: var(--font-size-sm);
-  }
-  
-  &__security-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    
-    strong {
-      color: var(--color-text-primary);
-      font-weight: var(--font-weight-semi-bold);
-    }
-    
-    span {
-      color: var(--color-text-secondary);
-    }
-  }
-}
-
 // ====================================
 // 🎯 SKILLS GRID
 // ====================================
@@ -543,10 +504,6 @@
     &__content {
       padding: var(--spacing-lg);
     }
-    
-    &__security-info {
-      padding: var(--spacing-md) var(--spacing-lg);
-    }
   }
   
   .skills-grid {
@@ -559,8 +516,7 @@
   .skills-section {
     &__header,
     &__status,
-    &__content,
-    &__security-info {
+    &__content {
       padding-left: var(--spacing-md);
       padding-right: var(--spacing-md);
     }
@@ -595,4 +551,5 @@
       font-size: var(--font-size-lg);
     }
   }
+}
 }
