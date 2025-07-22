@@ -1,3 +1,4 @@
+// Dashboard.tsx
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +7,7 @@ import PersonalDataSection from './sections/PersonalData/PersonalDataSection';
 import AboutSection from './sections/About/AboutSection';
 import ExperiencesSection from './sections/Experiences/ExperiencesSection';
 import SkillsSection from './sections/Skills/SkillsSection';
+import ProjectsList from './sections/Projects/ProjectsList';
 import './Dashboard.scss';
 
 // 🎯 Navigation items pour le dashboard
@@ -15,7 +17,7 @@ const DASHBOARD_NAVIGATION = [
   { id: 'about', label: '📝 Contenu About', selector: '#about-section' },
   { id: 'experiences', label: '💼 Expériences', selector: '#experiences-section' },
   { id: 'skills', label: '🛠️ Compétences', selector: '#skills-section' },
-  { id: 'projects', label: '🚀 Projets', selector: '#dashboard-projects' }
+  { id: 'projects', label: '🚀 Projets', selector: '#projects-section' }
 ];
 
 // 🎨 Types temporaires (en attendant les vrais)
@@ -55,9 +57,20 @@ const Dashboard: React.FC = () => {
       behavior: 'smooth',
       block: 'start'
     });
-    // Trigger du bouton d'ajout (sera géré par SkillsSection)
     setTimeout(() => {
       const addButton = document.querySelector('.skills-section .btn-add') as HTMLButtonElement;
+      addButton?.click();
+    }, 500);
+  };
+
+  // 🚀 Action rapide pour nouveau projet 
+  const handleNewProject = () => {
+    document.getElementById('projects-section')?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+    setTimeout(() => {
+      const addButton = document.querySelector('.projects-list__btn--primary') as HTMLButtonElement;
       addButton?.click();
     }, 500);
   };
@@ -94,7 +107,7 @@ const Dashboard: React.FC = () => {
         </div>
       </header>
 
-      {/* 🎯 NAVIGATION RAPIDE - AVEC LA BONNE PROP ! */}
+      {/* 🎯 NAVIGATION RAPIDE */}
       <SectionNavigation 
         navigationItems={DASHBOARD_NAVIGATION} 
         defaultActiveSection="overview"
@@ -149,7 +162,10 @@ const Dashboard: React.FC = () => {
             <div className="dashboard__quick-actions">
               <h3>Actions rapides</h3>
               <div className="dashboard__quick-buttons">
-                <button className="dashboard__quick-btn">
+                <button 
+                  className="dashboard__quick-btn"
+                  onClick={handleNewProject} // 🚀 CONNECTÉ !
+                >
                   🚀 Nouveau projet
                 </button>
                 <button 
@@ -181,24 +197,8 @@ const Dashboard: React.FC = () => {
           <SkillsSection />
 
           {/* 🚀 PROJETS */}
-          <section id="dashboard-projects" className="dashboard__section">
-            <div className="dashboard__section-header">
-              <h2 className="dashboard__section-title">🚀 Projets</h2>
-              <p className="dashboard__section-subtitle">
-                Administrez votre portfolio de projets
-              </p>
-            </div>
-            
-            <div className="dashboard__placeholder">
-              <div className="dashboard__placeholder-icon">🚀</div>
-              <h3>Section en développement</h3>
-              <p>Cette section permettra de gérer vos projets</p>
-              <ul>
-                <li>✅ CRUD complet</li>
-                <li>✅ Upload d'images</li>
-                <li>✅ Technologies et liens</li>
-              </ul>
-            </div>
+          <section id="projects-section" className="dashboard__section">
+            <ProjectsList />
           </section>
         </div>
       </main>

@@ -1,0 +1,446 @@
+@import '../../../../styles/globals/variables';
+
+.project-form {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  
+  @media (max-width: $mobile) {
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md);
+  }
+  
+  // ====================================
+  // 📋 SECTIONS DU FORMULAIRE
+  // ====================================
+  &__section {
+    margin-bottom: var(--spacing-2xl);
+    
+    &:last-of-type {
+      margin-bottom: var(--spacing-xl);
+    }
+  }
+  
+  &__section-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semi-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--color-primary);
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--color-accent);
+    }
+  }
+  
+  // ====================================
+  // 📐 LAYOUT DU FORMULAIRE
+  // ====================================
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    
+    @media (max-width: $mobile) {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+  }
+  
+  &__field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  &__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  // ====================================
+  // 🎯 INPUTS & TEXTAREA
+  // ====================================
+  &__input,
+  &__textarea {
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    transition: all 0.2s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(0, 109, 119, 0.1);
+      background: var(--color-white);
+    }
+    
+    &::placeholder {
+      color: var(--color-text-muted);
+    }
+    
+    // État d'erreur
+    &--error {
+      border-color: var(--color-error);
+      background: rgba(248, 113, 113, 0.05);
+      
+      &:focus {
+        border-color: var(--color-error);
+        box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.1);
+      }
+    }
+  }
+  
+  &__textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: var(--font-primary);
+  }
+  
+  // ====================================
+  // 📁 INPUT FILE
+  // ====================================
+  &__file-input {
+    padding: var(--spacing-sm);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-gray-50);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: var(--color-primary);
+      background: rgba(0, 109, 119, 0.05);
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(0, 109, 119, 0.1);
+    }
+  }
+  
+  // ====================================
+  // 🏷️ SYSTÈME DE TAGS
+  // ====================================
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    min-height: 40px;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-gray-50);
+  }
+  
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    animation: tagAppear 0.2s ease;
+  }
+  
+  &__tag-remove {
+    background: none;
+    border: none;
+    color: var(--color-white);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    padding: 0;
+    margin-left: var(--spacing-xs);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+  // ====================================
+  // 🖼️ GESTION DES IMAGES
+  // ====================================
+  &__images-section {
+    margin-top: var(--spacing-lg);
+  }
+  
+  &__images-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  &__images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+    
+    @media (max-width: $mobile) {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: var(--spacing-sm);
+    }
+  }
+  
+  &__image-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    border: 2px solid var(--color-border);
+    background: var(--color-gray-50);
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s ease;
+    }
+    
+    &:hover {
+      border-color: var(--color-primary);
+      
+      img {
+        transform: scale(1.05);
+      }
+      
+      .project-form__image-remove {
+        opacity: 1;
+      }
+    }
+  }
+  
+  &__image-remove {
+    position: absolute;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(248, 113, 113, 0.9);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: var(--color-error);
+      transform: scale(1.1);
+    }
+  }
+  
+  &__cover-badge {
+    position: absolute;
+    bottom: var(--spacing-xs);
+    left: var(--spacing-xs);
+    background: var(--color-accent);
+    color: var(--color-white);
+    padding: 2px var(--spacing-xs);
+    border-radius: var(--border-radius-sm);
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  // ====================================
+  // ℹ️ MESSAGES & HINTS
+  // ====================================
+  &__hint {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(0, 109, 119, 0.05);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+  }
+  
+  &__error {
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    
+    &::before {
+      content: '⚠';
+      font-size: var(--font-size-base);
+    }
+  }
+  
+  // ====================================
+  // 🔄 BOUTONS D'ACTION
+  // ====================================
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+    
+    @media (max-width: $mobile) {
+      flex-direction: column-reverse;
+      gap: var(--spacing-sm);
+    }
+  }
+  
+  &__btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--border-radius);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    min-width: 120px;
+    
+    @media (max-width: $mobile) {
+      width: 100%;
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    // Bouton Annuler
+    &--cancel {
+      background: var(--color-gray-100);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-gray-200);
+        transform: translateY(-1px);
+      }
+    }
+    
+    // Bouton Soumettre
+    &--submit {
+      background: var(--color-primary);
+      color: var(--color-white);
+      box-shadow: var(--shadow);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 109, 119, 0.3);
+      }
+      
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+// ====================================
+// 🎭 ANIMATIONS
+// ====================================
+@keyframes tagAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ====================================
+// 🌙 THÈME SOMBRE - AJUSTEMENTS
+// ====================================
+[data-theme="dark"] .project-form {
+  &__tags {
+    background: var(--color-gray-100);
+  }
+  
+  &__hint {
+    background: rgba(77, 182, 172, 0.1);
+    color: var(--color-text-secondary);
+  }
+  
+  &__file-input {
+    background: var(--color-gray-100);
+    
+    &:hover {
+      background: rgba(77, 182, 172, 0.1);
+    }
+  }
+  
+  &__image-item {
+    background: var(--color-gray-100);
+  }
+  
+  &__btn--cancel {
+    background: var(--color-gray-200);
+    color: var(--color-text-primary);
+    
+    &:hover:not(:disabled) {
+      background: var(--color-gray-300);
+    }
+  }
+}
+
+// ====================================
+// 📱 RESPONSIVE AMÉLIORÉ
+// ====================================
+@media (max-width: $tablet) {
+  .project-form {
+    &__images-grid {
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+    
+    &__cover-badge {
+      font-size: 8px;
+      padding: 1px 4px;
+    }
+  }
+}
+
