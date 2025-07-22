@@ -6,7 +6,7 @@ interface Skill {
   id: string;
   name: string;
   description: string;
-  level: number;
+  level: 'Débutant' | 'Junior' | 'Senior'; // ✅ CHANGÉ
   icon: string;
   categories: string[];
 }
@@ -24,7 +24,7 @@ const Skills: React.FC = () => {
   // Extraire toutes les catégories uniques
   const allCategories = useMemo(() => {
     const categories = new Set<string>();
-    skillsData.skills.forEach(skill => {
+    (skillsData.skills as Skill[]).forEach(skill => {
       skill.categories.forEach(cat => categories.add(cat));
     });
     return Array.from(categories).sort();
@@ -33,9 +33,9 @@ const Skills: React.FC = () => {
   // Filtrer les skills selon les catégories sélectionnées
   const filteredSkills = useMemo(() => {
     if (selectedCategories.length === 0) {
-      return skillsData.skills;
+      return skillsData.skills as Skill[];
     }
-    return skillsData.skills.filter(skill =>
+    return (skillsData.skills as Skill[]).filter(skill =>
       selectedCategories.some(cat => skill.categories.includes(cat))
     );
   }, [selectedCategories]);
@@ -56,7 +56,26 @@ const Skills: React.FC = () => {
     setSelectedCategories([]);
   };
 
-  // 🎯 TOOLTIP CORRIGÉ : getBoundingClientRect + position fixed
+  // 🎨 NOUVELLES FONCTIONS POUR LES NIVEAUX
+  const getLevelClass = (level: string): string => {
+    switch (level) {
+      case 'Débutant': return 'beginner';
+      case 'Junior': return 'junior';
+      case 'Senior': return 'senior';
+      default: return 'beginner';
+    }
+  };
+
+  const getLevelIcon = (level: string): string => {
+    switch (level) {
+      case 'Débutant': return '🌱';
+      case 'Junior': return '⚡';
+      case 'Senior': return '🚀';
+      default: return '🌱';
+    }
+  };
+
+  // Tooltip functions
   const showTooltip = (skill: Skill, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltip({
@@ -88,7 +107,6 @@ const Skills: React.FC = () => {
           ))}
         </div>
 
-        
         {selectedCategories.length > 0 && (
           <button className="skills__reset-btn" onClick={resetFilters}>
             <i className="fas fa-times"></i>
@@ -97,7 +115,7 @@ const Skills: React.FC = () => {
         )}
       </div>
 
-      {/* 🎯 GRILLE SKILLS ULTRA-DENSE */}
+      {/* 🎯 GRILLE SKILLS AVEC NOUVEAUX NIVEAUX */}
       <div className="skills__grid">
         {filteredSkills.map((skill) => (
           <div
@@ -126,30 +144,27 @@ const Skills: React.FC = () => {
               <h3 className="skills__card-title">{skill.name}</h3>
             </div>
             
+            {/* 🎨 NOUVEAU SYSTÈME DE NIVEAU */}
             <div className="skills__card-body">
-              <div className="skills__progress">
-                <div 
-                  className="skills__progress-bar"
-                  style={{ 
-                    '--target-width': `${skill.level}%`,
-                    width: `${skill.level}%`
-                  } as React.CSSProperties}
-                ></div>
-              </div>
-              <div className="skills__level">
-                <span>{skill.level}%</span>
+              <div className={`skills__level-badge ${getLevelClass(skill.level)}`}>
+                <span className="skills__level-icon">
+                  Niveau : {getLevelIcon(skill.level)}
+                </span>
+                <span className="skills__level-text">
+                  {skill.level}
+                </span>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* 🎯 TOOLTIP CORRIGÉ */}
+      {/* 🎯 TOOLTIP MODIFIÉ */}
       {tooltip && (
         <div 
           className="skills__tooltip"
           style={{
-            position: 'fixed',           // ← FIXED obligatoire
+            position: 'fixed',
             left: tooltip.x,
             top: tooltip.y,
             transform: 'translateX(-50%) translateY(-100%)',
@@ -173,9 +188,6 @@ const Skills: React.FC = () => {
                 {cat}
               </span>
             ))}
-          </div>
-          <div className="skills__tooltip-level">
-            Niveau de maîtrise : <strong>{tooltip.skill.level}%</strong>
           </div>
         </div>
       )}

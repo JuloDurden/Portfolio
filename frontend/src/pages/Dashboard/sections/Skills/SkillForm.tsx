@@ -2,23 +2,30 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Skill } from './types';
 import './SkillForm.scss';
 
+// 🎯 TYPE MODIFIÉ POUR LES 3 NIVEAUX
+type SkillLevel = 'Débutant' | 'Junior' | 'Senior';
+
+interface ModifiedSkill extends Omit<Skill, 'level'> {
+  level: SkillLevel;
+}
+
 interface SkillFormProps {
-  skill?: Skill | null;
-  existingCategories?: string[]; // ← OPTIONNEL maintenant
-  onSubmit: (skillData: Omit<Skill, 'id'>) => void;
+  skill?: ModifiedSkill | null;
+  existingCategories?: string[];
+  onSubmit: (skillData: Omit<ModifiedSkill, 'id'>) => void;
   onCancel: () => void;
 }
 
 const SkillForm: React.FC<SkillFormProps> = ({
   skill,
-  existingCategories = [], // ← VALEUR PAR DÉFAUT
+  existingCategories = [],
   onSubmit,
   onCancel
 }) => {
   const [formData, setFormData] = useState({
     name: skill?.name || '',
     description: skill?.description || '',
-    level: skill?.level || 50,
+    level: skill?.level || 'Débutant' as SkillLevel,
     icon: skill?.icon || '',
     categories: skill?.categories || []
   });
@@ -38,11 +45,36 @@ const SkillForm: React.FC<SkillFormProps> = ({
         description: skill.description || '',
         level: skill.level,
         icon: skill.icon,
-        categories: skill.categories || [] // ← SÉCURITÉ
+        categories: skill.categories || []
       });
-      setIconPreview(skill.icon || ''); // ← SÉCURITÉ
+      setIconPreview(skill.icon || '');
     }
   }, [skill]);
+
+  // 🎨 FONCTION POUR LES INFOS DE NIVEAU
+  const getLevelInfo = (level: SkillLevel) => {
+    const levels = {
+      'Débutant': { 
+        icon: '🌱', 
+        color: '#ef4444', 
+        bgColor: 'rgba(239, 68, 68, 0.1)',
+        description: 'Apprentissage des bases'
+      },
+      'Junior': { 
+        icon: '⚡', 
+        color: '#22c55e', 
+        bgColor: 'rgba(34, 197, 94, 0.1)',
+        description: 'Compétences solides'
+      },
+      'Senior': { 
+        icon: '🚀', 
+        color: '#3b82f6', 
+        bgColor: 'rgba(59, 130, 246, 0.1)',
+        description: 'Expertise avancée'
+      }
+    };
+    return levels[level];
+  };
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -114,10 +146,6 @@ const SkillForm: React.FC<SkillFormProps> = ({
       newErrors.categories = 'Au moins une catégorie est requise';
     }
 
-    if (formData.level < 0 || formData.level > 100) {
-      newErrors.level = 'Le niveau doit être entre 0 et 100';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -127,13 +155,6 @@ const SkillForm: React.FC<SkillFormProps> = ({
     if (validateForm()) {
       onSubmit(formData);
     }
-  };
-
-  const getLevelLabel = (level: number): string => {
-    if (level >= 80) return 'Expert';
-    if (level >= 60) return 'Avancé';
-    if (level >= 40) return 'Intermédiaire';
-    return 'Débutant';
   };
 
   return (
@@ -166,43 +187,51 @@ const SkillForm: React.FC<SkillFormProps> = ({
         />
       </div>
 
-      {/* Niveau */}
+      {/* 🎯 NOUVEAU SYSTÈME DE NIVEAU - 3 BOUTONS */}
       <div className="form-group">
-        <div className="level-slider-container">
-          <div className="level-header">
-            <label htmlFor="skill-level">Niveau</label>
-            <div className="level-value">
-              {formData.level}% - {getLevelLabel(formData.level)}
-            </div>
-          </div>
-          
-          <input
-            id="skill-level"
-            type="range"
-            min="0"
-            max="100"
-            step="5"
-            value={formData.level}
-            onChange={(e) => handleInputChange('level', parseInt(e.target.value))}
-            className="slider"
-          />
-          
-          <div className="level-labels">
-            <span className={`level-label ${formData.level < 40 ? 'active' : ''}`}>
-              Débutant
-            </span>
-            <span className={`level-label ${formData.level >= 40 && formData.level < 60 ? 'active' : ''}`}>
-              Intermédiaire
-            </span>
-            <span className={`level-label ${formData.level >= 60 && formData.level < 80 ? 'active' : ''}`}>
-              Avancé
-            </span>
-            <span className={`level-label ${formData.level >= 80 ? 'active' : ''}`}>
-              Expert
-            </span>
+        <label>Niveau de maîtrise</label>
+        
+        <div className="level-selector">
+          {(Object.keys(getLevelInfo('Débutant')) ? ['Débutant', 'Junior', 'Senior'] : []).map((level) => {
+            const levelInfo = getLevelInfo(level as SkillLevel);
+            const isSelected = formData.level === level;
+            
+            return (
+              <button
+                key={level}
+                type="button"
+                onClick={() => handleInputChange('level', level)}
+                className={`level-option ${isSelected ? 'selected' : ''}`}
+                style={{
+                  borderColor: levelInfo.color,
+                  backgroundColor: isSelected ? levelInfo.bgColor : 'transparent',
+                  color: isSelected ? levelInfo.color : 'var(--color-text-secondary)'
+                }}
+              >
+                <span className="level-icon">{levelInfo.icon}</span>
+                <div className="level-content">
+                  <span className="level-name">{level}</span>
+                  <span className="level-desc">{levelInfo.description}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Aperçu du niveau sélectionné */}
+        <div className="level-preview">
+          <div 
+            className="level-badge-preview"
+            style={{
+              backgroundColor: getLevelInfo(formData.level).bgColor,
+              borderColor: getLevelInfo(formData.level).color,
+              color: getLevelInfo(formData.level).color
+            }}
+          >
+            <span className="level-icon">{getLevelInfo(formData.level).icon}</span>
+            <span className="level-text">{formData.level}</span>
           </div>
         </div>
-        {errors.level && <span className="error-message">{errors.level}</span>}
       </div>
 
       {/* Icône */}
@@ -242,7 +271,6 @@ const SkillForm: React.FC<SkillFormProps> = ({
         
         {errors.icon && <span className="error-message">{errors.icon}</span>}
       </div>
-
 
       {/* Catégories */}
       <div className="form-group">
