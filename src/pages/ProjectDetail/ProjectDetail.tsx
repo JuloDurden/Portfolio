@@ -200,7 +200,7 @@ const ProjectDetail: React.FC = () => {
                       rel="noopener noreferrer"
                       className="project-detail__link project-detail__link--secondary"
                     >
-                      📝 Voir le code source
+                      📝 Voir le dépot GitHub
                     </a>
                   </div>
 
