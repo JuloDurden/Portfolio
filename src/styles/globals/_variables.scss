@@ -107,6 +107,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   // Couleurs texte
   --color-text-primary: #{$text-color};
   --color-text-secondary: #666666;
+  --color-text-black: #000000;
   --color-text-aria: #F7F7F7;
   --color-text-muted: #999999;
   
@@ -194,7 +195,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 // ====================================
 [data-theme="dark"] {
   --color-primary: #4db6ac;
-  --color-secondary: #26a69a;
+  --color-secondary: #218379;
   --color-accent: #ff8a65;
   --color-text-primary: #e0e0e0;
   --color-text-secondary: #b0b0b0;
