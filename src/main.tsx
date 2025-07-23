@@ -18,6 +18,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import BackToTop from './components/BackToTop/BackToTop'
+import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
 // Context d'authentification
 import { AuthProvider } from './contexts/AuthContext';
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')!).render(
     <ThemeProvider>
       <AuthProvider>
         <Router>
+          <ScrollToTop />
           <Header />
           <Routes>
             <Route path='/' element={<Home />} />
