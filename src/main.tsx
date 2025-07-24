@@ -24,6 +24,9 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
+// Importation des Performance Metrics
+import { SpeedInsights } from "@vercel/speed-insights/react";
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
