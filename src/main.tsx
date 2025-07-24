@@ -24,8 +24,9 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
-// Importation des Performance Metrics
+// Importation des Metrics et Analytics Vercel
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
