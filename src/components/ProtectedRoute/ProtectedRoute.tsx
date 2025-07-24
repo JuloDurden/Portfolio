@@ -7,8 +7,11 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isLoading } = useAuth(); // ← CHANGER isAuthenticated en user
   const location = useLocation();
+
+  console.log('🔐 ProtectedRoute - USER:', user); // ← DEBUG
+  console.log('⏳ ProtectedRoute - LOADING:', isLoading); // ← DEBUG
 
   // ⏳ Chargement en cours
   if (isLoading) {
@@ -20,10 +23,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   // 🔐 Pas connecté → redirection vers l'accueil
-  if (!isAuthenticated) {
+  if (!user) { // ← CHANGER !isAuthenticated en !user
+    console.log('❌ ProtectedRoute - PAS CONNECTÉ, REDIRECTION VERS /'); // ← DEBUG
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
+  console.log('✅ ProtectedRoute - CONNECTÉ, AFFICHAGE DASHBOARD'); // ← DEBUG
   // ✅ Connecté → affichage du contenu
   return <>{children}</>;
 };

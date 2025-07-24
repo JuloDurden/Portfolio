@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom'; // ← AJOUTER
 import './LoginForm.scss';
 
 interface LoginFormProps {
-  onLogin: (email: string, password: string) => Promise<void>;
   onClose: () => void;
-  isLoading?: boolean;
-  error?: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ 
-  onLogin, 
-  onClose, 
-  isLoading = false, 
-  error 
-}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -21,6 +15,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
   
   const [showPassword, setShowPassword] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 🔐 HOOKS
+  const { login } = useAuth();
+  const navigate = useNavigate(); // ← AJOUTER
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,11 +30,25 @@ const LoginForm: React.FC<LoginFormProps> = ({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.email || !formData.password) return;
+    console.log('🚀 TENTATIVE LOGIN:', formData);
     
-    onLogin(formData.email, formData.password);
+    setIsLoading(true);
+    setError('');
+
+    try {
+      await login(formData.email, formData.password);
+      console.log('✅ LOGIN RÉUSSI');
+      onClose(); // Fermer la modal
+      console.log('🚀 REDIRECTION VERS /dashboard'); // ← AJOUTER LOG
+      navigate('/dashboard'); // ← AJOUTER REDIRECTION
+    } catch (error) {
+      console.error('❌ ERREUR LOGIN:', error);
+      setError('Email ou mot de passe incorrect');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const togglePasswordVisibility = () => {

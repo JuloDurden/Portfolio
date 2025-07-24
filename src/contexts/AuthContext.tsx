@@ -1,6 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import type { ReactNode } from 'react';
 
-// 🏷️ Types
+// 🌐 Configuration API
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// 🔐 Types TypeScript
 interface User {
   id: string;
   firstName: string;
@@ -10,147 +14,119 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
-// 🎯 Création du contexte
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+// 🎯 Création du Context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// 🔧 Provider
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+// 🚀 Provider Component
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 🚀 Vérifier si un token existe au démarrage
-  useEffect(() => {
-    const savedToken = localStorage.getItem('authToken');
-    if (savedToken) {
-      // Vérifier la validité du token auprès du serveur
-      validateToken(savedToken);
-    } else {
+  // 🔐 Fonction de connexion
+  const login = useCallback(async (email: string, password: string): Promise<void> => {
+    console.log('🎯 LOGIN APPELÉ:', { email, password }); // ← AJOUTER
+    
+    try {
+      console.log('📡 REQUÊTE VERS:', `${API_BASE_URL}/api/auth/login`); // ← AJOUTER
+      
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      console.log('📥 RÉPONSE STATUS:', response.status); // ← AJOUTER
+      console.log('📥 RÉPONSE OK:', response.ok); // ← AJOUTER
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ DONNÉES REÇUES:', result); // ← AJOUTER
+        const { user, token } = result.data;
+        
+        localStorage.setItem('token', token);
+        setUser(user);
+        console.log('🎉 USER SET:', user); // ← AJOUTER
+      } else {
+        const errorData = await response.json();
+        console.error('❌ ERREUR RESPONSE:', errorData); // ← AJOUTER
+        throw new Error(errorData.message || 'Erreur de connexion');
+      }
+    } catch (error) {
+      console.error('💥 ERREUR CATCH:', error); // ← AJOUTER
+      throw error;
+    }
+  }, []);
+
+
+  // 🚪 Fonction de déconnexion
+  const logout = useCallback(() => {
+    localStorage.removeItem('token');
+    setUser(null);
+  }, []);
+
+  // 🔍 Validation du token au chargement
+  const validateToken = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setUser(result.data.user); // ← CORRECTION : ajouter .data
+      } else {
+        localStorage.removeItem('token');
+        setUser(null);
+      }
+    } catch (error) {
+      console.error('Erreur validation token:', error);
+      localStorage.removeItem('token');
+      setUser(null);
+    } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // ✅ Valider le token
-  const validateToken = async (token: string) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/auth/validate', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+  // 🎯 Effect pour valider le token au montage
+  useEffect(() => {
+    validateToken();
+  }, [validateToken]);
 
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData.user);
-        setToken(token);
-      } else {
-        // Token invalide, on le supprime
-        localStorage.removeItem('authToken');
-      }
-    } catch (error) {
-      console.error('Erreur validation token:', error);
-      localStorage.removeItem('authToken');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 🔐 Connexion
-  // const login = async (email: string, password: string): Promise<boolean> => {
-  //   try {
-  //     setIsLoading(true);
-      
-  //     const response = await fetch('http://localhost:5000/api/auth/login', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({ email, password })
-  //     });
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-        
-  //       // Sauvegarder le token et les infos utilisateur
-  //       setToken(data.token);
-  //       setUser(data.user);
-  //       localStorage.setItem('authToken', data.token);
-        
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } catch (error) {
-  //     console.error('Erreur lors de la connexion:', error);
-  //     return false;
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-  const login = async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
-    try {
-      // Mock temporaire avec tes identifiants
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      if (email === 'admin@julienclaveldev.com' && password === 'admin123') {
-        const userData = {
-          id: '1',
-          firstName: 'Julien',
-          lastName: 'Clavel',
-          email: 'admin@julienclaveldev.com'
-        };
-        
-        const mockToken = 'mock-jwt-token-julien-clavel';
-        
-        setUser(userData);
-        setToken(mockToken);
-        localStorage.setItem('authToken', mockToken);
-        
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 🚪 Déconnexion
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('authToken');
-  };
-
-  const value: AuthContextType = {
+  // 📦 Valeur du contexte
+  const contextValue: AuthContextType = {
     user,
-    token,
-    isLoading,
     login,
     logout,
-    isAuthenticated: !!user && !!token
+    isLoading,
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// 🎣 Hook personnalisé pour utiliser le contexte
+// 🎪 Hook personnalisé
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
