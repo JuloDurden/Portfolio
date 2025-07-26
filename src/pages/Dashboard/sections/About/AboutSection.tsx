@@ -1,164 +1,204 @@
-import React, { useState, useEffect } from 'react';
-import { AboutData, AboutFormState, AboutValidationErrors } from './types';
+import React, { useState, useEffect, useRef } from 'react';
+import { AboutData, AboutValidationErrors } from './types';
 import AboutForm from './AboutForm';
+import userService from '../../../../userService';
 import './AboutSection.scss';
 
 const AboutSection: React.FC = () => {
-  // Données mockées - sera remplacé par l'API
-  const mockData: AboutData = {
-    currentJob: 'Développeur Full-Stack',
-    introductionParagraph: 'Passionné par le développement web et les nouvelles technologies, je créé des applications modernes et performantes.',
-    journeyParagraph: 'Après mes études en informatique, j\'ai travaillé sur de nombreux projets alliant créativité et technique.',
-    goalsParagraph: 'Mon objectif est de continuer à apprendre et à créer des solutions innovantes qui apportent une vraie valeur ajoutée.',
-    hobbies: ['Photographie', 'Gaming', 'Randonnée'],
-    lastUpdated: new Date('2024-01-15')
-  };
-
-  const [originalData, setOriginalData] = useState<AboutData>(mockData);
-  const [formData, setFormData] = useState<AboutFormState>({
-    ...mockData,
-    isModified: false,
-    validationErrors: {}
+  const [aboutData, setAboutData] = useState<AboutData>({
+    currentJob: '',
+    introductionParagraph: '',
+    journeyParagraph: '',
+    goalsParagraph: '',
+    hobbies: []
   });
-  const [isLoading, setIsLoading] = useState(false);
+  
+  const [validationErrors, setValidationErrors] = useState<AboutValidationErrors>({});
+  const [loadingFields, setLoadingFields] = useState<Set<string>>(new Set());
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
 
-  // Validation
-  const validateForm = (data: AboutFormState): AboutValidationErrors => {
-    const errors: AboutValidationErrors = {};
+  // 🔥 REF POUR DEBOUNCE
+  const debounceTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
-    if (!data.currentJob.trim()) {
-      errors.currentJob = 'Le métier actuel est requis';
-    } else if (data.currentJob.length > 100) {
-      errors.currentJob = 'Maximum 100 caractères';
-    }
+  // 🔥 CHARGEMENT INITIAL
+  useEffect(() => {
+    const loadAboutData = async () => {
+      try {
+        const userData = await userService.getUserData();
+        if (userData?.about) {
+          setAboutData({
+            currentJob: userData.about.currentJob || '',
+            introductionParagraph: userData.about.introductionParagraph || '',
+            journeyParagraph: userData.about.journeyParagraph || '',
+            goalsParagraph: userData.about.goalsParagraph || '',
+            hobbies: userData.about.hobbies || []
+          });
+        }
+      } catch (error) {
+        console.error('Erreur chargement About:', error);
+        setFeedback({
+          type: 'error',
+          message: 'Erreur lors du chargement des données'
+        });
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
 
-    if (!data.introductionParagraph.trim()) {
-      errors.introductionParagraph = 'L\'introduction est requise';
-    } else if (data.introductionParagraph.length > 500) {
-      errors.introductionParagraph = 'Maximum 500 caractères';
-    }
+    loadAboutData();
+  }, []);
 
-    if (!data.journeyParagraph.trim()) {
-      errors.journeyParagraph = 'Le parcours est requis';
-    } else if (data.journeyParagraph.length > 500) {
-      errors.journeyParagraph = 'Maximum 500 caractères';
-    }
-
-    if (!data.goalsParagraph.trim()) {
-      errors.goalsParagraph = 'Les objectifs sont requis';
-    } else if (data.goalsParagraph.length > 500) {
-      errors.goalsParagraph = 'Maximum 500 caractères';
-    }
-
-    if (data.hobbies.length === 0) {
-      errors.hobbies = 'Ajoutez au moins un hobby';
-    }
-
-    return errors;
-  };
-
-  // Vérifier les modifications
-  const checkModifications = (newData: Partial<AboutFormState>) => {
-    const currentData = { ...formData, ...newData };
-    const hasChanges = (
-      currentData.currentJob !== originalData.currentJob ||
-      currentData.introductionParagraph !== originalData.introductionParagraph ||
-      currentData.journeyParagraph !== originalData.journeyParagraph ||
-      currentData.goalsParagraph !== originalData.goalsParagraph ||
-      JSON.stringify(currentData.hobbies) !== JSON.stringify(originalData.hobbies)
-    );
-
-    return { ...currentData, isModified: hasChanges };
-  };
-
-  // Gérer les changements
-  const handleChange = (field: keyof AboutFormState, value: any) => {
-    const newData = { [field]: value };
-    const updatedData = checkModifications(newData);
-    
-    // Nettoyer les erreurs du champ modifié
-    if (updatedData.validationErrors[field as keyof AboutValidationErrors]) {
-      updatedData.validationErrors = { 
-        ...updatedData.validationErrors,
-        [field]: undefined 
-      };
-    }
-
-    setFormData(updatedData);
-  };
-
-  // Sauvegarder
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const errors = validateForm(formData);
-    if (Object.keys(errors).length > 0) {
-      setFormData(prev => ({ ...prev, validationErrors: errors }));
-      setFeedback({ type: 'error', message: 'Veuillez corriger les erreurs' });
-      return;
-    }
-
-    setIsLoading(true);
-    setFeedback({ type: null, message: '' });
-
-    try {
-      // TODO: Remplacer par l'appel API réel
-      await new Promise(resolve => setTimeout(resolve, 1500));
+  // 🔥 VALIDATION
+  const validateField = (field: keyof AboutData, value: any): string | undefined => {
+    switch (field) {
+      case 'currentJob':
+        if (!value.trim()) return 'Le métier actuel est requis';
+        if (value.length > 100) return 'Maximum 100 caractères';
+        break;
       
-      const savedData: AboutData = {
-        currentJob: formData.currentJob,
-        introductionParagraph: formData.introductionParagraph,
-        journeyParagraph: formData.journeyParagraph,
-        goalsParagraph: formData.goalsParagraph,
-        hobbies: formData.hobbies,
-        lastUpdated: new Date()
-      };
-
-      setOriginalData(savedData);
-      setFormData(prev => ({ 
-        ...prev, 
-        ...savedData,
-        isModified: false,
-        validationErrors: {}
-      }));
-
-      setFeedback({ 
-        type: 'success', 
-        message: 'Contenu About sauvegardé avec succès !' 
-      });
-    } catch (error) {
-      setFeedback({ 
-        type: 'error', 
-        message: 'Erreur lors de la sauvegarde' 
-      });
-    } finally {
-      setIsLoading(false);
+      case 'introductionParagraph':
+      case 'journeyParagraph':
+      case 'goalsParagraph':
+        if (!value.trim()) return 'Ce champ est requis';
+        if (value.length > 500) return 'Maximum 500 caractères';
+        break;
+      
+      case 'hobbies':
+        if (!Array.isArray(value) || value.length === 0) {
+          return 'Ajoutez au moins un hobby';
+        }
+        break;
     }
+    return undefined;
   };
 
-  // Annuler
-  const handleCancel = () => {
-    setFormData({
-      ...originalData,
-      isModified: false,
-      validationErrors: {}
+  // 🔥 GESTION LOADING PAR CHAMP
+  const setFieldLoading = (field: string, isLoading: boolean) => {
+    setLoadingFields(prev => {
+      const newSet = new Set(prev);
+      if (isLoading) {
+        newSet.add(field);
+      } else {
+        newSet.delete(field);
+      }
+      return newSet;
     });
+  };
+
+  // 🔥 CLEAR ERRORS
+  const clearErrors = () => {
     setFeedback({ type: null, message: '' });
   };
+
+  // 🔥 SAUVEGARDE AUTO AVEC DEBOUNCE CORRECT
+  const handleFieldChange = async (field: keyof AboutData, value: any) => {
+    // Mise à jour immédiate UI
+    setAboutData(prev => ({ ...prev, [field]: value }));
+    clearErrors();
+
+    // Validation temps réel
+    const fieldError = validateField(field, value);
+    setValidationErrors(prev => ({
+      ...prev,
+      [field]: fieldError
+    }));
+
+    // Annuler le timeout précédent pour ce champ
+    if (debounceTimeouts.current[field]) {
+      clearTimeout(debounceTimeouts.current[field]);
+    }
+
+    // Si erreur de validation, pas de sauvegarde
+    if (fieldError) return;
+
+    // Démarrer le loading pour ce champ
+    setFieldLoading(field, true);
+
+    // Nouveau timeout debounce
+    debounceTimeouts.current[field] = setTimeout(async () => {
+      try {
+        // Créer les données mises à jour
+        const updatedData = { ...aboutData, [field]: value };
+        console.log('🚀 ENVOI API:', { [field]: value });
+        
+        // Appel API
+        const response = await userService.updateAboutData(updatedData);
+
+        console.log('✅ RÉPONSE API:', response);
+        
+        if (response.success) {
+          setFeedback({
+            type: 'success',
+            message: `${getFieldLabel(field)} sauvegardé`
+          });
+        } else {
+          throw new Error(response.message || 'Erreur de sauvegarde');
+        }
+
+      } catch (error) {
+        console.error(`Erreur sauvegarde ${field}:`, error);
+        setFeedback({
+          type: 'error',
+          message: `Erreur sauvegarde ${getFieldLabel(field)}`
+        });
+        
+        // Remettre l'ancienne valeur en cas d'erreur
+        setAboutData(prev => ({ ...prev, [field]: aboutData[field] }));
+
+        console.log('💾 STATE LOCAL MIS À JOUR:', { [field]: value });
+        
+      } finally {
+        // Arrêter le loading
+        setFieldLoading(field, false);
+      }
+    }, 1000); // Debounce 1 seconde
+  };
+
+  // 🔥 LABELS CHAMPS
+  const getFieldLabel = (field: keyof AboutData): string => {
+    const labels = {
+      currentJob: 'Métier',
+      introductionParagraph: 'Introduction',
+      journeyParagraph: 'Parcours',
+      goalsParagraph: 'Objectifs',
+      hobbies: 'Hobbies'
+    };
+    return labels[field];
+  };
+
+  // 🔥 CLEANUP TIMEOUTS
+  useEffect(() => {
+    return () => {
+      Object.values(debounceTimeouts.current).forEach(timeout => {
+        clearTimeout(timeout);
+      });
+    };
+  }, []);
 
   // Auto-clear feedback
   useEffect(() => {
     if (feedback.type) {
       const timer = setTimeout(() => {
         setFeedback({ type: null, message: '' });
-      }, 5000);
+      }, 4000);
       return () => clearTimeout(timer);
     }
   }, [feedback]);
+
+  if (isInitialLoading) {
+    return (
+      <div className="about-section">
+        <div className="loading-message">
+          <span className="loading-spinner"></span>
+          Chargement des données About...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section id="about-section" className="about-section">
@@ -168,11 +208,6 @@ const AboutSection: React.FC = () => {
             <span className="title-icon">👤</span>
             Contenu About
           </h2>
-          {originalData.lastUpdated && (
-            <span className="last-updated">
-              📊 Dernière mise à jour: {originalData.lastUpdated.toLocaleDateString('fr-FR')}
-            </span>
-          )}
         </div>
 
         {feedback.type && (
@@ -187,12 +222,10 @@ const AboutSection: React.FC = () => {
 
       <div className="section-content">
         <AboutForm
-          formData={formData}
-          onChange={handleChange}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-          isLoading={isLoading}
-          disabled={isLoading}
+          aboutData={aboutData}
+          validationErrors={validationErrors}
+          loadingFields={loadingFields}
+          onChange={handleFieldChange}
         />
       </div>
     </section>

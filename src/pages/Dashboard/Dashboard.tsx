@@ -115,9 +115,9 @@ const Dashboard: React.FC = () => {
           </div>
           
           <div className="dashboard__header-actions">
-            <button className='dashboard__btn dashboard__btn--secondary'>
+            <div className='dashboard__btn dashboard__btn--secondary'>
               <ThemeToggle />
-            </button>
+            </div>
             <button 
               onClick={handleBackToSite}
               className="dashboard__btn dashboard__btn--secondary"

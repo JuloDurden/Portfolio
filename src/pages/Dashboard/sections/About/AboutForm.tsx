@@ -1,23 +1,19 @@
 import React from 'react';
-import { AboutFormState, AboutValidationErrors } from './types';
+import { AboutData, AboutValidationErrors } from './types';
 import HobbiesInput from './HobbiesInput';
 
 interface AboutFormProps {
-  formData: AboutFormState;
-  onChange: (field: keyof AboutFormState, value: any) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  onCancel: () => void;
-  isLoading: boolean;
-  disabled: boolean;
+  aboutData: AboutData;
+  validationErrors: AboutValidationErrors;
+  loadingFields: Set<string>;
+  onChange: (field: keyof AboutData, value: any) => void;
 }
 
 const AboutForm: React.FC<AboutFormProps> = ({
-  formData,
-  onChange,
-  onSubmit,
-  onCancel,
-  isLoading,
-  disabled
+  aboutData,
+  validationErrors,
+  loadingFields,
+  onChange
 }) => {
   const MAX_PARAGRAPH_LENGTH = 500;
   const MAX_JOB_LENGTH = 100;
@@ -28,170 +24,176 @@ const AboutForm: React.FC<AboutFormProps> = ({
     isOverLimit: text.length > max
   });
 
+  const isFieldLoading = (field: string) => loadingFields.has(field);
+
   return (
-    <form onSubmit={onSubmit} className="about-form">
-      {/* Métier actuel */}
+    <div className="about-form">
+      {/* 🔥 MÉTIER ACTUEL */}
       <div className="form-group">
         <label htmlFor="currentJob" className="form-label">
           <span className="label-icon">👔</span>
           Métier actuel
+          {isFieldLoading('currentJob') && (
+            <span className="field-loading">
+              <span className="loading-spinner"></span>
+              Sauvegarde...
+            </span>
+          )}
         </label>
         <input
           type="text"
           id="currentJob"
-          value={formData.currentJob}
+          value={aboutData.currentJob}
           onChange={(e) => onChange('currentJob', e.target.value)}
-          disabled={disabled}
-          className={`form-input ${formData.validationErrors.currentJob ? 'error' : ''}`}
+          className={`form-input ${validationErrors.currentJob ? 'error' : ''} ${isFieldLoading('currentJob') ? 'loading' : ''}`}
           placeholder="Ex: Développeur Full-Stack"
           maxLength={MAX_JOB_LENGTH}
         />
-        {formData.validationErrors.currentJob && (
-          <span className="error-message">{formData.validationErrors.currentJob}</span>
+        <div className="field-info">
+          <span className="character-count">
+            {aboutData.currentJob.length}/{MAX_JOB_LENGTH} caractères
+          </span>
+        </div>
+        {validationErrors.currentJob && (
+          <span className="error-message">❌ {validationErrors.currentJob}</span>
         )}
       </div>
 
-      {/* Introduction */}
+      {/* 🔥 INTRODUCTION */}
       <div className="form-group">
         <label htmlFor="introductionParagraph" className="form-label">
           <span className="label-icon">📝</span>
           Introduction
+          {isFieldLoading('introductionParagraph') && (
+            <span className="field-loading">
+              <span className="loading-spinner"></span>
+              Sauvegarde...
+            </span>
+          )}
         </label>
         <textarea
           id="introductionParagraph"
-          value={formData.introductionParagraph}
+          value={aboutData.introductionParagraph}
           onChange={(e) => onChange('introductionParagraph', e.target.value)}
-          disabled={disabled}
-          className={`form-textarea ${formData.validationErrors.introductionParagraph ? 'error' : ''}`}
+          className={`form-textarea ${validationErrors.introductionParagraph ? 'error' : ''} ${isFieldLoading('introductionParagraph') ? 'loading' : ''}`}
           placeholder="Présentez-vous en quelques mots..."
           rows={4}
         />
-        <div className="character-count">
+        <div className="field-info">
           {(() => {
             const { current, max, isOverLimit } = getCharacterCount(
-              formData.introductionParagraph, 
+              aboutData.introductionParagraph, 
               MAX_PARAGRAPH_LENGTH
             );
             return (
-              <span className={isOverLimit ? 'over-limit' : ''}>
+              <span className={`character-count ${isOverLimit ? 'over-limit' : ''}`}>
                 {current}/{max} caractères
               </span>
             );
           })()}
         </div>
-        {formData.validationErrors.introductionParagraph && (
-          <span className="error-message">{formData.validationErrors.introductionParagraph}</span>
+        {validationErrors.introductionParagraph && (
+          <span className="error-message">❌ {validationErrors.introductionParagraph}</span>
         )}
       </div>
 
-      {/* Parcours */}
+      {/* 🔥 PARCOURS */}
       <div className="form-group">
         <label htmlFor="journeyParagraph" className="form-label">
-          <span className="label-icon">📝</span>
-          Parcours
+          <span className="label-icon">🚀</span>
+          Mon parcours
+          {isFieldLoading('journeyParagraph') && (
+            <span className="field-loading">
+              <span className="loading-spinner"></span>
+              Sauvegarde...
+            </span>
+          )}
         </label>
         <textarea
           id="journeyParagraph"
-          value={formData.journeyParagraph}
+          value={aboutData.journeyParagraph}
           onChange={(e) => onChange('journeyParagraph', e.target.value)}
-          disabled={disabled}
-          className={`form-textarea ${formData.validationErrors.journeyParagraph ? 'error' : ''}`}
-          placeholder="Décrivez votre parcours professionnel..."
+          className={`form-textarea ${validationErrors.journeyParagraph ? 'error' : ''} ${isFieldLoading('journeyParagraph') ? 'loading' : ''}`}
+          placeholder="Racontez votre parcours professionnel..."
           rows={4}
         />
-        <div className="character-count">
+        <div className="field-info">
           {(() => {
             const { current, max, isOverLimit } = getCharacterCount(
-              formData.journeyParagraph, 
+              aboutData.journeyParagraph, 
               MAX_PARAGRAPH_LENGTH
             );
             return (
-              <span className={isOverLimit ? 'over-limit' : ''}>
+              <span className={`character-count ${isOverLimit ? 'over-limit' : ''}`}>
                 {current}/{max} caractères
               </span>
             );
           })()}
         </div>
-        {formData.validationErrors.journeyParagraph && (
-          <span className="error-message">{formData.validationErrors.journeyParagraph}</span>
+        {validationErrors.journeyParagraph && (
+          <span className="error-message">❌ {validationErrors.journeyParagraph}</span>
         )}
       </div>
 
-      {/* Objectifs */}
+      {/* 🔥 OBJECTIFS */}
       <div className="form-group">
         <label htmlFor="goalsParagraph" className="form-label">
-          <span className="label-icon">📝</span>
-          Objectifs
+          <span className="label-icon">🎯</span>
+          Mes objectifs
+          {isFieldLoading('goalsParagraph') && (
+            <span className="field-loading">
+              <span className="loading-spinner"></span>
+              Sauvegarde...
+            </span>
+          )}
         </label>
         <textarea
           id="goalsParagraph"
-          value={formData.goalsParagraph}
+          value={aboutData.goalsParagraph}
           onChange={(e) => onChange('goalsParagraph', e.target.value)}
-          disabled={disabled}
-          className={`form-textarea ${formData.validationErrors.goalsParagraph ? 'error' : ''}`}
+          className={`form-textarea ${validationErrors.goalsParagraph ? 'error' : ''} ${isFieldLoading('goalsParagraph') ? 'loading' : ''}`}
           placeholder="Quels sont vos objectifs professionnels..."
           rows={4}
         />
-        <div className="character-count">
+        <div className="field-info">
           {(() => {
             const { current, max, isOverLimit } = getCharacterCount(
-              formData.goalsParagraph, 
+              aboutData.goalsParagraph, 
               MAX_PARAGRAPH_LENGTH
             );
             return (
-              <span className={isOverLimit ? 'over-limit' : ''}>
+              <span className={`character-count ${isOverLimit ? 'over-limit' : ''}`}>
                 {current}/{max} caractères
               </span>
             );
           })()}
         </div>
-        {formData.validationErrors.goalsParagraph && (
-          <span className="error-message">{formData.validationErrors.goalsParagraph}</span>
+        {validationErrors.goalsParagraph && (
+          <span className="error-message">❌ {validationErrors.goalsParagraph}</span>
         )}
       </div>
 
-      {/* Hobbies */}
+      {/* 🔥 HOBBIES */}
       <div className="form-group">
         <label className="form-label">
-          <span className="label-icon">🎯</span>
-          Hobbies
-        </label>
-        <HobbiesInput
-          hobbies={formData.hobbies}
-          onHobbiesChange={(hobbies) => onChange('hobbies', hobbies)}
-          error={formData.validationErrors.hobbies}
-          disabled={disabled}
-        />
-      </div>
-
-      {/* Actions */}
-      <div className="form-actions">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={isLoading}
-          className="cancel-btn"
-        >
-          Annuler
-        </button>
-        <button
-          type="submit"
-          disabled={isLoading || !formData.isModified}
-          className="save-btn"
-        >
-          {isLoading ? (
-            <>
+          <span className="label-icon">🎨</span>
+          Mes hobbies
+          {isFieldLoading('hobbies') && (
+            <span className="field-loading">
               <span className="loading-spinner"></span>
               Sauvegarde...
-            </>
-          ) : (
-            <>
-              💾 Sauvegarder
-            </>
+            </span>
           )}
-        </button>
+        </label>
+        <div className={isFieldLoading('hobbies') ? 'loading' : ''}>
+          <HobbiesInput
+            hobbies={aboutData.hobbies}
+            onHobbiesChange={(hobbies) => onChange('hobbies', hobbies)}
+            error={validationErrors.hobbies}
+          />
+        </div>
       </div>
-    </form>
+    </div>
   );
 };
 

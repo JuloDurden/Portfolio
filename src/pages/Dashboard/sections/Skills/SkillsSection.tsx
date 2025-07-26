@@ -1,72 +1,101 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SkillForm from './SkillForm';
 import Modal from '../../../../components/Modal/Modal';
-import { Skill } from './types';
+import { Skill, SkillsApiResponse, SkillApiResponse, SkillFormData } from './types';
 import './SkillsSection.scss';
-
-// 🎯 TYPE MODIFIÉ POUR LES 3 NIVEAUX
-type SkillLevel = 'Débutant' | 'Junior' | 'Senior';
-
-interface ModifiedSkill extends Omit<Skill, 'level'> {
-  level: SkillLevel;
-}
+import { API_BASE_URL, getAuthHeaders, getAuthHeadersForFormData } from '../../../../config/api';
 
 const SkillsSection: React.FC = () => {
   // 🎯 États locaux
-  const [skills, setSkills] = useState<ModifiedSkill[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingSkill, setEditingSkill] = useState<ModifiedSkill | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const [editingSkill, setEditingSkill] = useState<Skill | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // 🔄 Ref pour éviter les problèmes de démontage
+  const mountedRef = useRef(true);
+  const imageErrorRef = useRef(new Set<string>());
 
-  // 🔄 Chargement initial des compétences
+  // 🔄 Chargement initial - VERSION ULTRA SIMPLE
   useEffect(() => {
-    loadSkills();
+    let mounted = true;
+    
+    const load = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await fetch(`${API_BASE_URL}/api/skills?isVisible=true`, {
+          headers: getAuthHeaders()
+        });
+        
+        const data = await response.json();
+        
+        if (mounted && data.success) {
+          setSkills(data.data || []);
+        } else if (mounted) {
+          setError(data.message || 'Erreur de chargement');
+        }
+      } catch (error) {
+        if (mounted) {
+          setError(error.message);
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    load();
+    
+    return () => {
+      mounted = false;
+      mountedRef.current = false;
+    };
   }, []);
 
-  // 📂 Charger les compétences
+  // 🖼️ Construire l'URL complète pour les images - VERSION FINALE
+  const getImageUrl = (iconPath: string): string => {
+    console.log('🖼️ getImageUrl INPUT:', iconPath);
+    
+    if (!iconPath) return '/icons/default.svg';
+    if (iconPath.startsWith('http')) return iconPath;
+    
+    // 🔥 CORRECTION : Force HTTPS et bon format
+    let cleanPath = iconPath;
+    
+    // Nettoie le path - enlève "uploads/skills/" si présent
+    if (cleanPath.includes('uploads/skills/')) {
+      cleanPath = cleanPath.replace('uploads/skills/', '');
+    }
+    
+    // 🚀 Force le bon format d'URL
+    const finalUrl = `${API_BASE_URL}/uploads/skills/${cleanPath}`;
+    console.log('🖼️ getImageUrl OUTPUT:', finalUrl);
+    return finalUrl;
+  };
+
+  // 📂 Charger les compétences - VERSION SIMPLE
   const loadSkills = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       
-      // 🎭 MOCK temporaire avec nouveaux niveaux
-      const mockSkills: ModifiedSkill[] = [
-        {
-          id: '1',
-          name: 'React',
-          description: 'Bibliothèque JavaScript pour créer des interfaces utilisateur',
-          level: 'Senior',
-          icon: '/icons/react.svg',
-          categories: ['Frontend', 'JavaScript']
-        },
-        {
-          id: '2',
-          name: 'TypeScript',
-          description: 'Superset typé de JavaScript',
-          level: 'Senior',
-          icon: '/icons/typescript.svg',
-          categories: ['Frontend', 'Backend', 'JavaScript']
-        },
-        {
-          id: '3',
-          name: 'Node.js',
-          description: 'Runtime JavaScript côté serveur',
-          level: 'Junior',
-          icon: '/icons/nodejs.svg',
-          categories: ['Backend', 'JavaScript']
-        },
-        {
-          id: '4',
-          name: 'Python',
-          description: 'Langage de programmation polyvalent',
-          level: 'Débutant',
-          icon: '/icons/python.svg',
-          categories: ['Backend', 'Data Science']
-        }
-      ];
+      const response = await fetch(`${API_BASE_URL}/api/skills?isVisible=true`, {
+        headers: getAuthHeaders()
+      });
       
-      setSkills(mockSkills);
+      const data = await response.json();
+      
+      if (data.success) {
+        setSkills(data.data || []);
+      } else {
+        setError(data.message || 'Erreur de chargement');
+      }
     } catch (error) {
-      console.error('Erreur lors du chargement des compétences:', error);
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -75,206 +104,297 @@ const SkillsSection: React.FC = () => {
   // 📂 Obtenir les catégories existantes
   const getExistingCategories = (): string[] => {
     const categories = skills.flatMap(skill => skill.categories || []);
-    return Array.from(new Set(categories));
+    const uniqueCategories = [...new Set(categories)].sort();
+    return uniqueCategories;
   };
 
-  // ➕ Ouvrir la modale d'ajout
+  // 📊 Calculer les statistiques
+  const getSkillStats = () => {
+    const total = skills.length;
+    const byLevel = {
+      'Débutant': skills.filter(s => s.level === 'Débutant').length,
+      'Junior': skills.filter(s => s.level === 'Junior').length,
+      'Senior': skills.filter(s => s.level === 'Senior').length
+    };
+    const featured = skills.filter(s => s.featured).length;
+
+    return { total, byLevel, featured };
+  };
+
+  // 🎨 Obtenir les infos de niveau avec couleurs
+  const getLevelInfo = (level: string) => {
+    const levels = {
+      'Débutant': { 
+        icon: '🌱', 
+        className: 'level-beginner',
+        color: '#ef4444', 
+        bgColor: 'rgba(239, 68, 68, 0.1)',
+        borderColor: 'rgba(239, 68, 68, 0.3)'
+      },
+      'Junior': { 
+        icon: '⚡', 
+        className: 'level-junior',
+        color: '#22c55e', 
+        bgColor: 'rgba(34, 197, 94, 0.1)',
+        borderColor: 'rgba(34, 197, 94, 0.3)'
+      },
+      'Senior': { 
+        icon: '🚀', 
+        className: 'level-senior',
+        color: '#3b82f6', 
+        bgColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: 'rgba(59, 130, 246, 0.3)'
+      }
+    };
+    return levels[level as keyof typeof levels] || levels['Débutant'];
+  };
+
+  // ➕ Ajouter une compétence
   const handleAddSkill = () => {
-    console.log('🚀 Ouverture modal ajout');
     setEditingSkill(undefined);
     setIsModalOpen(true);
   };
 
-  // ✏️ Ouvrir la modale d'édition
-  const handleEditSkill = (skill: ModifiedSkill) => {
-    console.log('✏️ Ouverture modal édition:', skill.name);
+  // ✏️ Modifier une compétence - VERSION DEBUG
+  const handleEditSkill = (skill: Skill) => {
+    console.log('🔧 EDIT SKILL:', { 
+      id: skill._id, 
+      name: skill.name,
+      fullSkill: skill 
+    });
     setEditingSkill(skill);
     setIsModalOpen(true);
   };
 
-  // 🚪 Fermer la modale
+  // 🗑️ Supprimer une compétence - VERSION DEBUG
+  const handleDeleteSkill = async (skill: Skill) => {
+    console.log('🗑️ DELETE SKILL:', { 
+      id: skill._id, 
+      name: skill.name,
+      fullSkill: skill 
+    });
+    
+    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer "${skill.name}" ?`)) {
+      return;
+    }
+
+    try {
+      const url = `${API_BASE_URL}/api/skills/${skill._id}`;
+      console.log('🔗 DELETE URL:', url);
+      
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      const data: SkillApiResponse = await response.json();
+
+      if (data.success) {
+        await loadSkills();
+      } else {
+        alert(`Erreur: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('❌ Erreur suppression:', error);
+      alert(`Erreur lors de la suppression: ${error.message}`);
+    }
+  };
+
+  // 💾 Sauvegarder une compétence - VERSION DEBUG
+  const handleSaveSkill = async (skillData: SkillFormData) => {
+    console.log('💾 SAVE SKILL DATA:', skillData);
+    console.log('📝 EDITING SKILL:', editingSkill);
+    console.log('💾 SAVE SKILL - ID:', skill._id, 'TYPE:', typeof skill._id);
+    console.log('🌐 REQUEST URL:', `${API_BASE_URL}/api/skills/${skill._id}`);
+
+    
+    try {
+      const formData = new FormData();
+      
+      const skillId = editingSkill?.id || `skill-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      formData.append('id', skillId);
+      
+      formData.append('name', skillData.name.trim());
+      formData.append('level', skillData.level);
+      formData.append('featured', String(skillData.featured || false));
+      formData.append('isVisible', String(skillData.isVisible ?? true));
+      formData.append('order', String(skillData.order || 0));
+      
+      if (skillData.description?.trim()) {
+        formData.append('description', skillData.description.trim());
+      }
+      
+      skillData.categories.forEach((category, index) => {
+        if (category.trim()) {
+          formData.append(`categories[${index}]`, category.trim());
+        }
+      });
+      
+      if (skillData.icon instanceof File) {
+        formData.append('icon', skillData.icon);
+      } else if (typeof skillData.icon === 'string' && skillData.icon.trim()) {
+        formData.append('icon', skillData.icon.trim());
+      }
+
+      const url = editingSkill 
+        ? `${API_BASE_URL}/api/skills/${editingSkill._id}` 
+        : `${API_BASE_URL}/api/skills`;
+      const method = editingSkill ? 'PUT' : 'POST';
+
+      console.log('🌐 REQUEST URL:', url);
+      console.log('📡 REQUEST METHOD:', method);
+
+      const response = await fetch(url, {
+        method,
+        headers: getAuthHeadersForFormData(),
+        body: formData
+      });
+
+      const responseText = await response.text();
+      let data: SkillApiResponse;
+      
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        throw new Error(`Réponse serveur invalide: ${responseText.substring(0, 200)}...`);
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${data.message || 'Erreur serveur'}`);
+      }
+
+      if (data.success) {
+        setIsModalOpen(false);
+        setEditingSkill(undefined);
+        
+        setTimeout(() => {
+          loadSkills();
+        }, 300);
+      } else {
+        throw new Error(data.message || 'Erreur inconnue');
+      }
+      
+    } catch (error) {
+      console.error('❌ Erreur sauvegarde:', error);
+      alert(`Erreur: ${error.message}`);
+    }
+  };
+
+  // 🚫 Fermer modal
   const handleCloseModal = () => {
-    console.log('🚪 Fermeture modal');
     setIsModalOpen(false);
     setEditingSkill(undefined);
   };
 
-  // 💾 Sauvegarder une compétence
-  const handleSaveSkill = async (skillData: Omit<ModifiedSkill, 'id'>) => {
-    try {
-      console.log('💾 Sauvegarde:', skillData);
-      
-      if (editingSkill) {
-        // ✏️ Modification
-        const updatedSkill = { ...editingSkill, ...skillData };
-        setSkills(prev => prev.map(skill => 
-          skill.id === editingSkill.id ? updatedSkill : skill
-        ));
-      } else {
-        // ➕ Ajout
-        const newSkill: ModifiedSkill = {
-          id: Date.now().toString(),
-          ...skillData
-        };
-        setSkills(prev => [...prev, newSkill]);
-      }
-      
-      handleCloseModal();
-    } catch (error) {
-      console.error('Erreur lors de la sauvegarde:', error);
+  // 🖼️ Gestion des erreurs d'images
+  const handleImageError = (skill: Skill, e: React.SyntheticEvent<HTMLImageElement>) => {
+    const imageKey = `${skill._id}-${skill.icon}`;
+    
+    if (!imageErrorRef.current.has(imageKey)) {
+      imageErrorRef.current.add(imageKey);
+      (e.target as HTMLImageElement).src = '/icons/default.svg';
     }
   };
 
-  // 🗑️ Supprimer une compétence
-  const handleDeleteSkill = async (skillId: string) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) {
-      try {
-        setSkills(prev => prev.filter(skill => skill.id !== skillId));
-        console.log('🗑️ Compétence supprimée:', skillId);
-      } catch (error) {
-        console.error('Erreur lors de la suppression:', error);
-      }
-    }
-  };
-
-  // 🎨 NOUVELLES FONCTIONS POUR LES NIVEAUX
-  const getLevelInfo = (level: SkillLevel) => {
-    switch (level) {
-      case 'Débutant':
-        return {
-          color: '#ef4444',
-          bgColor: 'rgba(239, 68, 68, 0.1)',
-          borderColor: 'rgba(239, 68, 68, 0.3)',
-          icon: '🌱',
-          className: 'beginner'
-        };
-      case 'Junior':
-        return {
-          color: '#22c55e',
-          bgColor: 'rgba(34, 197, 94, 0.1)',
-          borderColor: 'rgba(34, 197, 94, 0.3)',
-          icon: '⚡',
-          className: 'junior'
-        };
-      case 'Senior':
-        return {
-          color: '#3b82f6',
-          bgColor: 'rgba(59, 130, 246, 0.1)',
-          borderColor: 'rgba(59, 130, 246, 0.3)',
-          icon: '🚀',
-          className: 'senior'
-        };
-    }
-  };
-
-  // 📊 Calculer les statistiques
-  const getStats = () => {
-    const levelCounts = skills.reduce((acc, skill) => {
-      acc[skill.level] = (acc[skill.level] || 0) + 1;
-      return acc;
-    }, {} as Record<SkillLevel, number>);
-
-    return {
-      total: skills.length,
-      categories: getExistingCategories().length,
-      beginners: levelCounts['Débutant'] || 0,
-      juniors: levelCounts['Junior'] || 0,
-      seniors: levelCounts['Senior'] || 0
-    };
-  };
-
-  const stats = getStats();
-
-  // 🔄 Loading
-  if (isLoading) {
-    return (
-      <section className="skills-section">
-        <div className="skills-section__header">
-          <div className="skills-section__title-group">
-            <h2 className="skills-section__title">🛠️ Compétences</h2>
-          </div>
-        </div>
-        <div className="skills-section__content">
-          <div className="skills-section__loading">
-            <div className="skills-section__spinner"></div>
-            <p>Chargement des compétences...</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const stats = getSkillStats();
 
   return (
     <>
-      {/* 🛠️ SECTION SKILLS */}
-      <section id="skills-section" className="skills-section">
-        {/* HEADER */}
+      <section className="skills-section">
         <div className="skills-section__header">
           <div className="skills-section__title-group">
             <h2 className="skills-section__title">
-              🛠️ Compétences Techniques
+              <span className="skills-section__icon">🛠️</span>
+              Compétences Techniques
             </h2>
-            <p className="skills-section__description">
-              Gérez vos compétences et votre niveau d'expertise
+            <p className="skills-section__subtitle">
+              Gérez vos compétences et niveaux d'expertise
             </p>
           </div>
-          
-          <div className="skills-section__actions">
-            <button 
-              onClick={handleAddSkill}
-              className="skills-section__add-btn"
-            >
-              ➕ Ajouter une compétence
-            </button>
+
+          <button 
+            onClick={handleAddSkill}
+            className="skills-section__add-btn"
+            disabled={isLoading}
+          >
+            <span className="skills-section__add-icon">➕</span>
+            Ajouter une compétence
+          </button>
+        </div>
+
+        {error && (
+          <div className="skills-section__error">
+            <span className="error-icon">❌</span>
+            <span>{error}</span>
+            <button onClick={loadSkills} className="retry-btn">🔄 Réessayer</button>
+          </div>
+        )}
+
+        <div className="skills-section__stats">
+          <div className="stat-card">
+            <div className="stat-card__icon">🎯</div>
+            <div className="stat-card__content">
+              <span className="stat-card__label"> Total : </span>
+              <span className="stat-card__number">{stats.total}</span>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-card__icon">🚀</div>
+            <div className="stat-card__content">
+              <span className="stat-card__label"> Expert : </span>
+              <span className="stat-card__number">{stats.byLevel['Senior']}</span>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-card__icon">⚡</div>
+            <div className="stat-card__content">
+              <span className="stat-card__label"> Avancé : </span>
+              <span className="stat-card__number">{stats.byLevel['Junior']}</span>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-card__icon">⭐</div>
+            <div className="stat-card__content">
+              <span className="stat-card__label"> Mis en avant : </span>
+              <span className="stat-card__number">{stats.featured}</span>
+            </div>
           </div>
         </div>
 
-        {/* STATUS BAR AMÉLIORÉE */}
-        <div className="skills-section__status">
-          <div className="skills-section__status-item">
-            <span className="skills-section__status-label">Total :</span>
-            <span className="skills-section__status-value">{stats.total} compétences</span>
-          </div>
-          <div className="skills-section__status-item">
-            <span className="skills-section__status-label">Catégories :</span>
-            <span className="skills-section__status-value">{stats.categories}</span>
-          </div>
-          <div className="skills-section__status-item">
-            <span className="skills-section__status-label">🌱 Débutant :</span>
-            <span className="skills-section__status-value">{stats.beginners}</span>
-          </div>
-          <div className="skills-section__status-item">
-            <span className="skills-section__status-label">⚡ Junior :</span>
-            <span className="skills-section__status-value">{stats.juniors}</span>
-          </div>
-          <div className="skills-section__status-item">
-            <span className="skills-section__status-label">🚀 Senior :</span>
-            <span className="skills-section__status-value">{stats.seniors}</span>
-          </div>
-        </div>
-
-        {/* CONTENT */}
         <div className="skills-section__content">
-          {skills.length > 0 ? (
-            <div className="skills-grid">
+          {isLoading ? (
+            <div className="skills-section__loading">
+              <div className="loading-spinner"></div>
+              <span>Chargement des compétences...</span>
+            </div>
+          ) : skills.length > 0 ? (
+            <div className="skills-section__grid">
               {skills.map((skill) => {
                 const levelInfo = getLevelInfo(skill.level);
-                
                 return (
-                  <div key={skill.id} className="skill-card">
-                    
-                    {/* Header avec icône et actions */}
+                  <div key={skill._id} className="skill-card">
                     <div className="skill-card__header">
-                      <div className="skill-card__icon">
-                        {skill.icon ? (
-                          <img src={skill.icon} alt={skill.name} />
-                        ) : (
-                          <span className="skill-card__icon-placeholder">
-                            {skill.name.charAt(0).toUpperCase()}
-                          </span>
-                        )}
+                      <div className="skill-card__icon-container">
+                        <img 
+                          src={getImageUrl(skill.icon)} 
+                          alt={skill.name}
+                          className="skill-card__icon"
+                          onError={(e) => handleImageError(skill, e)}
+                        />
                       </div>
+                      
                       <div className="skill-card__actions">
+                        {skill.featured && (
+                          <div className="skill-card__featured-badge">⭐</div>
+                        )}
                         <button
                           onClick={() => handleEditSkill(skill)}
                           className="skill-card__action-btn skill-card__action-btn--edit"
@@ -283,7 +403,7 @@ const SkillsSection: React.FC = () => {
                           ✏️
                         </button>
                         <button
-                          onClick={() => handleDeleteSkill(skill.id)}
+                          onClick={() => handleDeleteSkill(skill)}
                           className="skill-card__action-btn skill-card__action-btn--delete"
                           title="Supprimer"
                         >
@@ -292,15 +412,13 @@ const SkillsSection: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Contenu */}
                     <div className="skill-card__content">
                       <h3 className="skill-card__name">{skill.name}</h3>
                       {skill.description && (
                         <p className="skill-card__description">{skill.description}</p>
                       )}
 
-                      {/* ✅ NOUVEAU SYSTÈME DE NIVEAU - BADGE */}
-                      <div className="skill-card__level">
+                      <div className="skill-card__footer">
                         <div className="skill-card__level-badge-container">
                           <div 
                             className={`skill-card__level-badge ${levelInfo.className}`}
@@ -330,7 +448,7 @@ const SkillsSection: React.FC = () => {
                 );
               })}
             </div>
-          ) : (
+          ) : !isLoading ? (
             <div className="skills-section__empty">
               <div className="skills-section__empty-icon">🛠️</div>
               <h3 className="skills-section__empty-title">Aucune compétence</h3>
@@ -344,11 +462,10 @@ const SkillsSection: React.FC = () => {
                 ➕ Ajouter ma première compétence
               </button>
             </div>
-          )}
+          ) : null}
         </div>
       </section>
 
-      {/* 🚨 MODAL */}
       {isModalOpen && (
         <Modal
           onClose={handleCloseModal}

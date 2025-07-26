@@ -4,12 +4,6 @@ export interface AboutData {
   journeyParagraph: string;
   goalsParagraph: string;
   hobbies: string[];
-  lastUpdated?: Date;
-}
-
-export interface AboutFormState extends AboutData {
-  isModified: boolean;
-  validationErrors: AboutValidationErrors;
 }
 
 export interface AboutValidationErrors {
@@ -19,3 +13,4 @@ export interface AboutValidationErrors {
   goalsParagraph?: string;
   hobbies?: string;
 }
+

@@ -115,6 +115,31 @@
     color: var(--color-text-primary);
     font-weight: var(--font-weight-semi-bold);
   }
+
+  // ====================================
+  // 📊 STATS
+  // ====================================
+
+  &__stats {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--font-size-sm);
+    
+    [data-theme="dark"] & {
+      background: var(--color-gray-100);
+    } 
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+  }
   
   // ====================================
   // 🔘 BOUTONS
@@ -226,10 +251,26 @@
 // 🎯 SKILLS GRID
 // ====================================
 
-.skills-grid {
+&__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr); // Force 3 colonnes sur grand écran
+  }
+  
+  @media (max-width: $tablet) {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+  
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    padding: var(--spacing-md);
+  }
 }
 
 // ====================================
@@ -392,7 +433,7 @@
   }
   
   // ====================================
-  // 🎨 NOUVEAU SYSTÈME DE BADGES
+  // 🎨 SYSTÈME DE BADGES
   // ====================================
   
   &__level {
