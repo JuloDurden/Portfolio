@@ -281,7 +281,7 @@ const SkillsSection: React.FC = () => {
 
   return (
     <>
-      <section className="skills-section">
+      <section className="skills-section" id='skills-section'>
         <div className="skills-section__header">
           <div className="skills-section__title-group">
             <h2 className="skills-section__title">

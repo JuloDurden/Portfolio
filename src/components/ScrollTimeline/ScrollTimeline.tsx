@@ -185,15 +185,6 @@ const ScrollTimeline: React.FC<ScrollTimelineProps> = ({ items, className = '' }
     }, 800);
   };
 
-  // ✅ DEBUG - Affichage des données
-  console.log('📊 Timeline State:', {
-    currentIndex,
-    isTimelineActive,
-    isScrolling,
-    totalItems: items.length,
-    currentItem: items[currentIndex]?.title
-  });
-
   return (
     <div 
       ref={timelineRef}

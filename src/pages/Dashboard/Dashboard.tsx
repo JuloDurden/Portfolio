@@ -16,6 +16,7 @@ import ProjectsList from './sections/Projects/ProjectsList';
 
 // Import des hooks
 import { useSkills } from '../../hooks/useSkills';
+import useExperiences from '../../hooks/useExperiences';
 
 import projectsData from '../../data/projects.json';
 
@@ -43,12 +44,13 @@ const Dashboard: React.FC = () => {
   
   // 🎯 HOOK SKILLS POUR LES VRAIES DONNÉES
   const { skillsCount, loading: skillsLoading, refetchSkills } = useSkills(true);
+  const { stats: experiencesStats, loading: experiencesLoading } = useExperiences();
 
   // 📊 Stats avec VRAIES données skills
   const stats: DashboardStats = {
     projectsCount: projectsData.length,
     skillsCount: skillsLoading ? 0 : skillsCount, // 🔥 VRAIE donnée !
-    experiencesCount: 6,
+    experiencesCount: experiencesLoading ? 0 : (experiencesStats?.totalCount || 0),
     lastUpdate: new Date().toLocaleDateString('fr-FR')
   };
 
@@ -177,7 +179,7 @@ const Dashboard: React.FC = () => {
                 <div className="dashboard__stat-icon">🛠️</div>
                 <div className="dashboard__stat-content">
                   <div className="dashboard__stat-number">
-                    {skillsLoading ? '...' : skillsCount}
+                    {skillsLoading ? '...' : stats.skillsCount}
                   </div>
                   <div className="dashboard__stat-label">Compétences</div>
                 </div>
@@ -186,7 +188,9 @@ const Dashboard: React.FC = () => {
               <div className="dashboard__stat-card">
                 <div className="dashboard__stat-icon">💼</div>
                 <div className="dashboard__stat-content">
-                  <div className="dashboard__stat-number">{stats.experiencesCount}</div>
+                  <div className="dashboard__stat-number">
+                    {experiencesLoading ? '...' : stats.experiencesCount}
+                  </div>
                   <div className="dashboard__stat-label">Expériences</div>
                 </div>
               </div>

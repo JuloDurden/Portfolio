@@ -7,8 +7,6 @@ export const API_BASE_URL = isDev
   ? railwayURL // 🎯 Force Railway en dev pour l'instant
   : ((process.env as any).REACT_APP_API_URL || railwayURL);
 
-console.log('🚀 API_BASE_URL Final:', API_BASE_URL);
-
 // 🎯 Headers par défaut
 export const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
