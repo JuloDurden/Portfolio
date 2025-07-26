@@ -1,14 +1,21 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
+// Import liés à la page
+import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
 import SectionNavigation from '../../components/SectionNavigation/SectionNavigation';
+import './Dashboard.scss';
+
+// Import des différentes sections
 import PersonalDataSection from './sections/PersonalData/PersonalDataSection';
 import AboutSection from './sections/About/AboutSection';
 import ExperiencesSection from './sections/Experiences/ExperiencesSection';
 import SkillsSection from './sections/Skills/SkillsSection';
 import ProjectsList from './sections/Projects/ProjectsList';
-import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
-import './Dashboard.scss';
+
+// Import des hooks
+import { useSkills } from '../../hooks/useSkills';
 
 import projectsData from '../../data/projects.json';
 
@@ -33,11 +40,14 @@ interface DashboardStats {
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  
+  // 🎯 HOOK SKILLS POUR LES VRAIES DONNÉES
+  const { skillsCount, loading: skillsLoading, refetchSkills } = useSkills(true);
 
-  // 📊 Stats mockées (en attendant l'API)
+  // 📊 Stats avec VRAIES données skills
   const stats: DashboardStats = {
     projectsCount: projectsData.length,
-    skillsCount: 12,
+    skillsCount: skillsLoading ? 0 : skillsCount, // 🔥 VRAIE donnée !
     experiencesCount: 6,
     lastUpdate: new Date().toLocaleDateString('fr-FR')
   };
@@ -98,7 +108,6 @@ const Dashboard: React.FC = () => {
     // Pas de timeout nécessaire car c'est un formulaire direct
   };
 
-
   return (
     <div className="dashboard">
       {/* 🎯 HEADER DU DASHBOARD */}
@@ -140,13 +149,16 @@ const Dashboard: React.FC = () => {
         defaultActiveSection="overview"
       />
 
-      {/* 📊 CONTENU PRINCIPAL */}
+      {/* 📋 CONTENU PRINCIPAL */}
       <main className="dashboard__main">
         <div className="dashboard__container">
           {/* 📊 VUE D'ENSEMBLE */}
           <section id="dashboard-overview" className="dashboard__section">
             <div className="dashboard__section-header">
-              <h2 className="dashboard__section-title">📊 Vue d'ensemble</h2>
+              <h2 className="dashboard__section-title">
+                <span className="dashboard__section-icon">📊</span>
+                Vue d'ensemble
+              </h2>
               <p className="dashboard__section-subtitle">
                 Statistiques rapides de votre portfolio
               </p>
@@ -164,7 +176,9 @@ const Dashboard: React.FC = () => {
               <div className="dashboard__stat-card">
                 <div className="dashboard__stat-icon">🛠️</div>
                 <div className="dashboard__stat-content">
-                  <div className="dashboard__stat-number">{stats.skillsCount}</div>
+                  <div className="dashboard__stat-number">
+                    {skillsLoading ? '...' : skillsCount}
+                  </div>
                   <div className="dashboard__stat-label">Compétences</div>
                 </div>
               </div>
@@ -191,7 +205,7 @@ const Dashboard: React.FC = () => {
               <div className="dashboard__quick-buttons">
                 <button 
                   className="dashboard__quick-btn"
-                  onClick={handleNewProject} // 🚀 CONNECTÉ !
+                  onClick={handleNewProject}
                 >
                   🚀 Nouveau projet
                 </button>
@@ -201,7 +215,8 @@ const Dashboard: React.FC = () => {
                 >
                   🆕 Nouvelle compétence
                 </button>
-                <button className="dashboard__quick-btn"
+                <button 
+                  className="dashboard__quick-btn"
                   onClick={handleEditAbout}
                 >
                   📝 Modifier About

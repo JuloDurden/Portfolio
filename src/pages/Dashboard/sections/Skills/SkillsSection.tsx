@@ -37,7 +37,7 @@ const SkillsSection: React.FC = () => {
         } else if (mounted) {
           setError(data.message || 'Erreur de chargement');
         }
-      } catch (error) {
+      } catch (error: any) {
         if (mounted) {
           setError(error.message);
         }
@@ -58,8 +58,6 @@ const SkillsSection: React.FC = () => {
 
   // 🖼️ Construire l'URL complète pour les images - VERSION FINALE
   const getImageUrl = (iconPath: string): string => {
-    console.log('🖼️ getImageUrl INPUT:', iconPath);
-    
     if (!iconPath) return '/icons/default.svg';
     if (iconPath.startsWith('http')) return iconPath;
     
@@ -73,7 +71,6 @@ const SkillsSection: React.FC = () => {
     
     // 🚀 Force le bon format d'URL
     const finalUrl = `${API_BASE_URL}/uploads/skills/${cleanPath}`;
-    console.log('🖼️ getImageUrl OUTPUT:', finalUrl);
     return finalUrl;
   };
 
@@ -94,7 +91,7 @@ const SkillsSection: React.FC = () => {
       } else {
         setError(data.message || 'Erreur de chargement');
       }
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message);
     } finally {
       setIsLoading(false);
@@ -155,34 +152,20 @@ const SkillsSection: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // ✏️ Modifier une compétence - VERSION DEBUG
+  // ✏️ Modifier une compétence
   const handleEditSkill = (skill: Skill) => {
-    console.log('🔧 EDIT SKILL:', { 
-      id: skill._id, 
-      name: skill.name,
-      fullSkill: skill 
-    });
     setEditingSkill(skill);
     setIsModalOpen(true);
   };
 
-  // 🗑️ Supprimer une compétence - VERSION DEBUG
+  // 🗑️ Supprimer une compétence
   const handleDeleteSkill = async (skill: Skill) => {
-    console.log('🗑️ DELETE SKILL:', { 
-      id: skill._id, 
-      name: skill.name,
-      fullSkill: skill 
-    });
-    
     if (!window.confirm(`Êtes-vous sûr de vouloir supprimer "${skill.name}" ?`)) {
       return;
     }
 
     try {
-      const url = `${API_BASE_URL}/api/skills/${skill._id}`;
-      console.log('🔗 DELETE URL:', url);
-      
-      const response = await fetch(url, {
+      const response = await fetch(`${API_BASE_URL}/api/skills/${skill._id}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
@@ -199,23 +182,18 @@ const SkillsSection: React.FC = () => {
       } else {
         alert(`Erreur: ${data.message}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Erreur suppression:', error);
       alert(`Erreur lors de la suppression: ${error.message}`);
     }
   };
 
-  // 💾 Sauvegarder une compétence - VERSION DEBUG
+  // 💾 Sauvegarder une compétence - CORRIGÉ
   const handleSaveSkill = async (skillData: SkillFormData) => {
-    console.log('💾 SAVE SKILL DATA:', skillData);
-    console.log('📝 EDITING SKILL:', editingSkill);
-    console.log('💾 SAVE SKILL - ID:', skill._id, 'TYPE:', typeof skill._id);
-    console.log('🌐 REQUEST URL:', `${API_BASE_URL}/api/skills/${skill._id}`);
-
-    
     try {
       const formData = new FormData();
       
+      // ✅ CORRECTION : Utilise editingSkill correctement
       const skillId = editingSkill?.id || `skill-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       formData.append('id', skillId);
       
@@ -241,13 +219,11 @@ const SkillsSection: React.FC = () => {
         formData.append('icon', skillData.icon.trim());
       }
 
+      // ✅ CORRECTION : Logique simplifiée
       const url = editingSkill 
         ? `${API_BASE_URL}/api/skills/${editingSkill._id}` 
         : `${API_BASE_URL}/api/skills`;
       const method = editingSkill ? 'PUT' : 'POST';
-
-      console.log('🌐 REQUEST URL:', url);
-      console.log('📡 REQUEST METHOD:', method);
 
       const response = await fetch(url, {
         method,
@@ -279,7 +255,7 @@ const SkillsSection: React.FC = () => {
         throw new Error(data.message || 'Erreur inconnue');
       }
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Erreur sauvegarde:', error);
       alert(`Erreur: ${error.message}`);
     }
@@ -347,7 +323,7 @@ const SkillsSection: React.FC = () => {
           <div className="stat-card">
             <div className="stat-card__icon">🚀</div>
             <div className="stat-card__content">
-              <span className="stat-card__label"> Expert : </span>
+              <span className="stat-card__label"> Senior : </span>
               <span className="stat-card__number">{stats.byLevel['Senior']}</span>
             </div>
           </div>
@@ -355,16 +331,16 @@ const SkillsSection: React.FC = () => {
           <div className="stat-card">
             <div className="stat-card__icon">⚡</div>
             <div className="stat-card__content">
-              <span className="stat-card__label"> Avancé : </span>
+              <span className="stat-card__label"> Junior : </span>
               <span className="stat-card__number">{stats.byLevel['Junior']}</span>
             </div>
           </div>
 
           <div className="stat-card">
-            <div className="stat-card__icon">⭐</div>
+            <div className="stat-card__icon">🌱</div>
             <div className="stat-card__content">
-              <span className="stat-card__label"> Mis en avant : </span>
-              <span className="stat-card__number">{stats.featured}</span>
+              <span className="stat-card__label"> Débutant : </span>
+              <span className="stat-card__number">{stats.byLevel['Débutant']}</span>
             </div>
           </div>
         </div>
