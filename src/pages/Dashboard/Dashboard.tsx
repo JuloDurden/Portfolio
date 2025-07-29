@@ -17,8 +17,10 @@ import ProjectsList from './sections/Projects/ProjectsList';
 // Import des hooks
 import { useSkills } from '../../hooks/useSkills';
 import useExperiences from '../../hooks/useExperiences';
+import { useProjects } from '../../hooks/useProjects'; // ✅ AJOUT DU HOOK PROJECTS
 
-import projectsData from '../../data/projects.json';
+// 🔥 SUPPRIME CETTE LIGNE !
+// import projectsData from '../../data/projects.json';
 
 // 🎯 Navigation items pour le dashboard
 const DASHBOARD_NAVIGATION = [
@@ -42,14 +44,15 @@ const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   
-  // 🎯 HOOK SKILLS POUR LES VRAIES DONNÉES
-  const { skillsCount, loading: skillsLoading, refetchSkills } = useSkills(true);
+  // 🎯 HOOKS POUR LES VRAIES DONNÉES
+  const { skillsCount, loading: skillsLoading } = useSkills(true);
   const { stats: experiencesStats, loading: experiencesLoading } = useExperiences();
+  const { projects, loading: projectsLoading } = useProjects(); // ✅ VRAIES DONNÉES PROJECTS !
 
-  // 📊 Stats avec VRAIES données skills
+  // 📊 Stats avec VRAIES données de tous les hooks !
   const stats: DashboardStats = {
-    projectsCount: projectsData.length,
-    skillsCount: skillsLoading ? 0 : skillsCount, // 🔥 VRAIE donnée !
+    projectsCount: projectsLoading ? 0 : projects.length, // 🔥 VRAIE donnée backend !
+    skillsCount: skillsLoading ? 0 : skillsCount,
     experiencesCount: experiencesLoading ? 0 : (experiencesStats?.totalCount || 0),
     lastUpdate: new Date().toLocaleDateString('fr-FR')
   };
@@ -170,7 +173,9 @@ const Dashboard: React.FC = () => {
               <div className="dashboard__stat-card">
                 <div className="dashboard__stat-icon">🚀</div>
                 <div className="dashboard__stat-content">
-                  <div className="dashboard__stat-number">{stats.projectsCount}</div>
+                  <div className="dashboard__stat-number">
+                    {projectsLoading ? '...' : stats.projectsCount}
+                  </div>
                   <div className="dashboard__stat-label">Projets</div>
                 </div>
               </div>

@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AboutData, AboutValidationErrors } from './types';
 import AboutForm from './AboutForm';
+import { useUserData } from '../../../../hooks/useUserData';
 import userService from '../../../../userService';
 import './AboutSection.scss';
 
 const AboutSection: React.FC = () => {
+  // 🔥 UTILISER LE HOOK useUserData
+  const { biographyData, loading: dataLoading, error: dataError, refetch } = useUserData();
+  
   const [aboutData, setAboutData] = useState<AboutData>({
     currentJob: '',
     introductionParagraph: '',
@@ -15,7 +19,6 @@ const AboutSection: React.FC = () => {
   
   const [validationErrors, setValidationErrors] = useState<AboutValidationErrors>({});
   const [loadingFields, setLoadingFields] = useState<Set<string>>(new Set());
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error' | null;
     message: string;
@@ -24,33 +27,18 @@ const AboutSection: React.FC = () => {
   // 🔥 REF POUR DEBOUNCE
   const debounceTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
-  // 🔥 CHARGEMENT INITIAL
+  // 🔥 SYNCHRONISER AVEC LES DONNÉES API
   useEffect(() => {
-    const loadAboutData = async () => {
-      try {
-        const userData = await userService.getUserData();
-        if (userData?.about) {
-          setAboutData({
-            currentJob: userData.about.currentJob || '',
-            introductionParagraph: userData.about.introductionParagraph || '',
-            journeyParagraph: userData.about.journeyParagraph || '',
-            goalsParagraph: userData.about.goalsParagraph || '',
-            hobbies: userData.about.hobbies || []
-          });
-        }
-      } catch (error) {
-        console.error('Erreur chargement About:', error);
-        setFeedback({
-          type: 'error',
-          message: 'Erreur lors du chargement des données'
-        });
-      } finally {
-        setIsInitialLoading(false);
-      }
-    };
-
-    loadAboutData();
-  }, []);
+    if (biographyData && !dataLoading) {
+      setAboutData({
+        currentJob: biographyData.currentJob || '',
+        introductionParagraph: biographyData.biography.introduction || '',
+        journeyParagraph: biographyData.biography.journey || '',
+        goalsParagraph: biographyData.biography.goals || '',
+        hobbies: biographyData.hobbies || []
+      });
+    }
+  }, [biographyData, dataLoading]);
 
   // 🔥 VALIDATION
   const validateField = (field: keyof AboutData, value: any): string | undefined => {
@@ -125,7 +113,7 @@ const AboutSection: React.FC = () => {
         const updatedData = { ...aboutData, [field]: value };
         console.log('🚀 ENVOI API:', { [field]: value });
         
-        // Appel API
+        // 🔥 APPEL API AVEC BONNE MÉTHODE
         const response = await userService.updateAboutData(updatedData);
 
         console.log('✅ RÉPONSE API:', response);
@@ -135,6 +123,9 @@ const AboutSection: React.FC = () => {
             type: 'success',
             message: `${getFieldLabel(field)} sauvegardé`
           });
+          
+          // 🔥 RAFRAÎCHIR LES DONNÉES POUR SYNCHRONISER
+          setTimeout(() => refetch(), 500);
         } else {
           throw new Error(response.message || 'Erreur de sauvegarde');
         }
@@ -147,9 +138,14 @@ const AboutSection: React.FC = () => {
         });
         
         // Remettre l'ancienne valeur en cas d'erreur
-        setAboutData(prev => ({ ...prev, [field]: aboutData[field] }));
-
-        console.log('💾 STATE LOCAL MIS À JOUR:', { [field]: value });
+        if (biographyData) {
+          const originalValue = field === 'currentJob' ? biographyData.currentJob :
+                               field === 'introductionParagraph' ? biographyData.biography.introduction :
+                               field === 'journeyParagraph' ? biographyData.biography.journey :
+                               field === 'goalsParagraph' ? biographyData.biography.goals :
+                               field === 'hobbies' ? biographyData.hobbies : '';
+          setAboutData(prev => ({ ...prev, [field]: originalValue }));
+        }
         
       } finally {
         // Arrêter le loading
@@ -189,12 +185,27 @@ const AboutSection: React.FC = () => {
     }
   }, [feedback]);
 
-  if (isInitialLoading) {
+  // 🔥 GESTION LOADING ET ERREURS
+  if (dataLoading) {
     return (
       <div className="about-section">
         <div className="loading-message">
           <span className="loading-spinner"></span>
           Chargement des données About...
+        </div>
+      </div>
+    );
+  }
+
+  if (dataError) {
+    return (
+      <div className="about-section">
+        <div className="error-message">
+          <span className="error-icon">❌</span>
+          Erreur de chargement : {dataError}
+          <button onClick={refetch} className="retry-btn">
+            🔄 Réessayer
+          </button>
         </div>
       </div>
     );

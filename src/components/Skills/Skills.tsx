@@ -1,44 +1,53 @@
 import React, { useState, useMemo } from 'react';
-import skillsData from '../../data/skills.json';
+import { useSkills } from '../../hooks/useSkills';
 import './Skills.scss';
 
-interface Skill {
-  id: string;
-  name: string;
-  description: string;
-  level: 'Débutant' | 'Junior' | 'Senior'; // ✅ CHANGÉ
-  icon: string;
-  categories: string[];
-}
-
 interface TooltipData {
-  skill: Skill;
+  skill: SkillData;
   x: number;
   y: number;
 }
 
+interface SkillData {
+  _id: string;
+  id: string;
+  name: string;
+  description: string;
+  level: string;
+  icon: string;
+  categories: string[];
+  isVisible: boolean;
+  order: number;
+  featured: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const Skills: React.FC = () => {
+  const { visibleSkills, loading, error } = useSkills();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
 
-  // Extraire toutes les catégories uniques
+  // Extraire toutes les catégories uniques depuis l'API
   const allCategories = useMemo(() => {
     const categories = new Set<string>();
-    (skillsData.skills as Skill[]).forEach(skill => {
+    visibleSkills.forEach(skill => {
       skill.categories.forEach(cat => categories.add(cat));
     });
     return Array.from(categories).sort();
-  }, []);
+  }, [visibleSkills]);
 
   // Filtrer les skills selon les catégories sélectionnées
   const filteredSkills = useMemo(() => {
     if (selectedCategories.length === 0) {
-      return skillsData.skills as Skill[];
+      return visibleSkills.sort((a, b) => a.order - b.order);
     }
-    return (skillsData.skills as Skill[]).filter(skill =>
-      selectedCategories.some(cat => skill.categories.includes(cat))
-    );
-  }, [selectedCategories]);
+    return visibleSkills
+      .filter(skill => 
+        selectedCategories.some(cat => skill.categories.includes(cat))
+      )
+      .sort((a, b) => a.order - b.order);
+  }, [visibleSkills, selectedCategories]);
 
   // Gérer la sélection des catégories
   const toggleCategory = (category: string) => {
@@ -56,7 +65,7 @@ const Skills: React.FC = () => {
     setSelectedCategories([]);
   };
 
-  // 🎨 NOUVELLES FONCTIONS POUR LES NIVEAUX
+  // 🎨 FONCTIONS POUR LES NIVEAUX
   const getLevelClass = (level: string): string => {
     switch (level) {
       case 'Débutant': return 'beginner';
@@ -75,8 +84,25 @@ const Skills: React.FC = () => {
     }
   };
 
+  // Fonction pour formater l'URL Cloudinary
+  const getImageUrl = (iconPath: string): string => {
+    if (!iconPath) return '';
+    
+    // Si c'est déjà une URL complète, la retourner
+    if (iconPath.startsWith('http://') || iconPath.startsWith('https://')) {
+      return iconPath;
+    }
+    
+    // Si c'est un path Cloudinary, construire l'URL
+    if (iconPath.includes('skill-icons/')) {
+      return `https://res.cloudinary.com/dudq3pjid/image/upload/${iconPath}`;
+    }
+    
+    return iconPath;
+  };
+
   // Tooltip functions
-  const showTooltip = (skill: Skill, event: React.MouseEvent) => {
+  const showTooltip = (skill: SkillData, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setTooltip({
       skill,
@@ -89,9 +115,43 @@ const Skills: React.FC = () => {
     setTooltip(null);
   };
 
+  // 🔄 ÉTATS DE CHARGEMENT ET ERREUR
+  if (loading) {
+    return (
+      <div className="skills">
+        <div className="skills__loading">
+          <i className="fas fa-spinner fa-spin"></i>
+          <p>Chargement des compétences...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="skills">
+        <div className="skills__error">
+          <i className="fas fa-exclamation-triangle"></i>
+          <p>Erreur lors du chargement : {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (visibleSkills.length === 0) {
+    return (
+      <div className="skills">
+        <div className="skills__empty">
+          <i className="fas fa-tools"></i>
+          <p>Aucune compétence à afficher pour le moment.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="skills">
-      {/* 🎯 FILTRES ULTRA-COMPACTS - MAX 3 LIGNES */}
+      {/* 🎯 FILTRES DYNAMIQUES DEPUIS L'API */}
       <div className="skills__filters">
         <div className="skills__categories">
           {allCategories.map((category) => (
@@ -115,18 +175,18 @@ const Skills: React.FC = () => {
         )}
       </div>
 
-      {/* 🎯 GRILLE SKILLS AVEC NOUVEAUX NIVEAUX */}
+      {/* 🎯 GRILLE SKILLS DEPUIS L'API */}
       <div className="skills__grid">
         {filteredSkills.map((skill) => (
           <div
-            key={skill.id}
+            key={skill._id}
             className="skills__card"
             onMouseEnter={(e) => showTooltip(skill, e)}
             onMouseLeave={hideTooltip}
           >
             <div className="skills__card-header">
               <img 
-                src={skill.icon}
+                src={getImageUrl(skill.icon)}
                 alt={skill.name}
                 className="skills__card-icon"
                 onError={(e) => {
@@ -138,13 +198,13 @@ const Skills: React.FC = () => {
                   }
                 }}
               />
-              <div className="skills__fallback-icon">
-                <i className={`fab fa-${skill.icon}`}></i>
+              <div className="skills__fallback-icon" style={{ display: 'none' }}>
+                <i className="fas fa-code"></i>
               </div>
               <h3 className="skills__card-title">{skill.name}</h3>
             </div>
             
-            {/* 🎨 NOUVEAU SYSTÈME DE NIVEAU */}
+            {/* 🎨 SYSTÈME DE NIVEAU DEPUIS L'API */}
             <div className="skills__card-body">
               <div className={`skills__level-badge ${getLevelClass(skill.level)}`}>
                 <span className="skills__level-icon">
@@ -159,7 +219,7 @@ const Skills: React.FC = () => {
         ))}
       </div>
 
-      {/* 🎯 TOOLTIP MODIFIÉ */}
+      {/* 🎯 TOOLTIP AVEC DONNÉES API */}
       {tooltip && (
         <div 
           className="skills__tooltip"
@@ -173,7 +233,7 @@ const Skills: React.FC = () => {
         >
           <div className="skills__tooltip-header">
             <img 
-              src={tooltip.skill.icon} 
+              src={getImageUrl(tooltip.skill.icon)} 
               alt={tooltip.skill.name}
               className="skills__tooltip-icon"
             />

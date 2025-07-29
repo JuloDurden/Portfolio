@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Project } from './types';
+import { Project, ProjectFormData } from './types';
 import './ProjectForm.scss';
 
 interface ProjectFormProps {
   project?: Project | null;
-  onSubmit: (project: Omit<Project, 'id'>) => Promise<void>;
+  onSubmit: (data: ProjectFormData, coverFile?: File, pictureFiles?: File[]) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -13,518 +13,499 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   onSubmit, 
   onCancel 
 }) => {
-  // ====================================
-  // 🔄 STATE MANAGEMENT
-  // ====================================
-  const [formData, setFormData] = useState({
+  // 📋 Form state
+  const [formData, setFormData] = useState<ProjectFormData>({
     title: '',
     subtitle: '',
     description: '',
+    competences: [],
     informations: {
       client: '',
-      date: '',
-      duration: '',
-      team: ''
+      date: new Date().toISOString().split('T')[0]
     },
     links: {
       website: '',
       github: ''
     },
-    technologies: [] as string[],
-    pictures: [] as string[]
+    technologies: [],
+    category: '',
+    featured: false
   });
-  
-  const [newTech, setNewTech] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // ====================================
-  // 🔄 INITIALISATION DU FORMULAIRE
-  // ====================================
+  // 🖼️ Files state
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [pictureFiles, setPictureFiles] = useState<File[]>([]);
+  const [coverPreview, setCoverPreview] = useState<string>('');
+  const [picturesPreviews, setPicturesPreviews] = useState<string[]>([]);
+
+  // 📝 Form state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [tempTech, setTempTech] = useState('');
+  const [tempCompetence, setTempCompetence] = useState('');
+
+  // 🔄 Load project data if editing
   useEffect(() => {
+    console.log('🔄 ProjectForm useEffect - project:', project);
+    
     if (project) {
       setFormData({
-        title: project.title,
-        subtitle: project.subtitle,
-        description: project.description,
-        informations: { ...project.informations },
-        links: { ...project.links },
-        technologies: [...project.technologies],
-        pictures: [...project.pictures]
+        title: project.title || '',
+        subtitle: project.subtitle || '',
+        description: project.description || '',
+        competences: project.competences || [],
+        informations: {
+          client: project.informations?.client || '',
+          date: project.informations?.date || new Date().toISOString().split('T')[0]
+        },
+        links: {
+          website: project.links?.website || '',
+          github: project.links?.github || ''
+        },
+        technologies: project.technologies || [],
+        category: project.category || '',
+        featured: project.featured || false
       });
+      
+      // 🔥 CORRECTION ICI - GESTION SÉCURISÉE DU COVER
+      let coverUrl = '';
+      
+      if (project.cover) {
+        if (typeof project.cover === 'string') {
+          // Cover est une string simple
+          coverUrl = project.cover;
+        } else if (typeof project.cover === 'object') {
+          // Cover est un objet avec small/large
+          if (project.cover.small) {
+            coverUrl = project.cover.small;
+          } else if (project.cover.large) {
+            coverUrl = project.cover.large;
+          }
+        }
+      }
+      
+      console.log('🖼️ Cover URL final pour preview:', coverUrl);
+      setCoverPreview(coverUrl);
+    } else {
+      // 🔄 Reset form for new project
+      setFormData({
+        title: '',
+        subtitle: '',
+        description: '',
+        competences: [],
+        informations: {
+          client: '',
+          date: new Date().toISOString().split('T')[0]
+        },
+        links: {
+          website: '',
+          github: ''
+        },
+        technologies: [],
+        category: '',
+        featured: false
+      });
+      setCoverPreview('');
+      setPicturesPreviews([]);
+      setCoverFile(null);
+      setPictureFiles([]);
     }
   }, [project]);
 
-  // ====================================
-  // 📝 GESTION DES INPUTS
-  // ====================================
+  // 🖼️ HANDLE COVER FILE
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validation
+      if (file.size > 5 * 1024 * 1024) { // 5MB max
+        alert('Le fichier cover ne peut pas dépasser 5MB');
+        return;
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        alert('Le cover doit être une image');
+        return;
+      }
+
+      setCoverFile(file);
+      
+      // Preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setCoverPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // 🖼️ HANDLE PICTURES FILES
+  const handlePicturesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    
+    if (files.length > 10) {
+      alert('Maximum 10 images supplémentaires autorisées');
+      return;
+    }
+
+    // Validation
+    const validFiles = files.filter(file => {
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`${file.name} dépasse 5MB`);
+        return false;
+      }
+      if (!file.type.startsWith('image/')) {
+        alert(`${file.name} n'est pas une image`);
+        return false;
+      }
+      return true;
+    });
+
+    setPictureFiles(validFiles);
+    
+    // Previews
+    const previews: string[] = [];
+    let loadedCount = 0;
+    
+    if (validFiles.length === 0) {
+      setPicturesPreviews([]);
+      return;
+    }
+    
+    validFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previews[index] = e.target?.result as string;
+        loadedCount++;
+        if (loadedCount === validFiles.length) {
+          setPicturesPreviews([...previews]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // 📝 HANDLE INPUT CHANGE
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
       setFormData(prev => ({
         ...prev,
         [parent]: {
-          ...prev[parent as keyof typeof prev],
-          [child]: value
+          ...prev[parent as keyof ProjectFormData],
+          [child]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
         }
       }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-    
-    // Supprimer l'erreur si elle existe
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+      }));
     }
   };
 
-  // ====================================
-  // 🏷️ GESTION DES TECHNOLOGIES
-  // ====================================
-  const handleAddTechnology = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && newTech.trim()) {
-      e.preventDefault();
-      if (!formData.technologies.includes(newTech.trim())) {
-        setFormData(prev => ({
-          ...prev,
-          technologies: [...prev.technologies, newTech.trim()]
-        }));
-      }
-      setNewTech('');
+  // 🏷️ ADD TECHNOLOGY
+  const addTechnology = () => {
+    if (tempTech.trim() && !formData.technologies.includes(tempTech.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        technologies: [...prev.technologies, tempTech.trim()]
+      }));
+      setTempTech('');
     }
   };
 
-  const handleRemoveTechnology = (techToRemove: string) => {
+  // 🗑️ REMOVE TECHNOLOGY
+  const removeTechnology = (tech: string) => {
     setFormData(prev => ({
       ...prev,
-      technologies: prev.technologies.filter(tech => tech !== techToRemove)
+      technologies: prev.technologies.filter(t => t !== tech)
     }));
   };
 
-  // ====================================
-  // 🖼️ GESTION DES IMAGES
-  // ====================================
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-
-    setSelectedFiles(files);
-
-    // Créer les previews
-    const urls: string[] = [];
-    Array.from(files).forEach(file => {
-      const url = URL.createObjectURL(file);
-      urls.push(url);
-    });
-    setPreviewUrls(urls);
-  };
-
-  const handleRemovePreview = (index: number) => {
-    setPreviewUrls(prev => prev.filter((_, i) => i !== index));
-    
-    if (selectedFiles) {
-      const dt = new DataTransfer();
-      Array.from(selectedFiles)
-        .filter((_, i) => i !== index)
-        .forEach(file => dt.items.add(file));
-      setSelectedFiles(dt.files);
+  // 💡 ADD COMPETENCE
+  const addCompetence = () => {
+    if (tempCompetence.trim() && !formData.competences.includes(tempCompetence.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        competences: [...prev.competences, tempCompetence.trim()]
+      }));
+      setTempCompetence('');
     }
   };
 
-  const handleRemoveExistingPicture = (pictureUrl: string) => {
+  // 🗑️ REMOVE COMPETENCE
+  const removeCompetence = (competence: string) => {
     setFormData(prev => ({
       ...prev,
-      pictures: prev.pictures.filter(url => url !== pictureUrl)
+      competences: prev.competences.filter(c => c !== competence)
     }));
   };
 
-  // ====================================
-  // ✅ VALIDATION
-  // ====================================
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.title.trim()) {
-      newErrors.title = 'Le titre est obligatoire';
-    }
-
-    if (!formData.subtitle.trim()) {
-      newErrors.subtitle = 'Le sous-titre est obligatoire';
-    }
-
-    if (!formData.description.trim()) {
-      newErrors.description = 'La description est obligatoire';
-    }
-
-    if (!formData.informations.client.trim()) {
-      newErrors['informations.client'] = 'Le client est obligatoire';
-    }
-
-    if (!formData.informations.date.trim()) {
-      newErrors['informations.date'] = 'La date est obligatoire';
-    }
-
-    if (formData.technologies.length === 0) {
-      newErrors.technologies = 'Au moins une technologie est requise';
-    }
-
-    // Vérifier qu'il y a au moins une image (nouvelle ou existante)
-    if (formData.pictures.length === 0 && (!selectedFiles || selectedFiles.length === 0)) {
-      newErrors.pictures = 'Au moins une image est requise';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // ====================================
-  // 🚀 SOUMISSION DU FORMULAIRE
-  // ====================================
+  // 📤 HANDLE SUBMIT
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    // Validation
+    if (!formData.title.trim()) {
+      alert('Le titre est obligatoire');
+      return;
+    }
+    
+    if (!project && !coverFile) {
+      alert('Une image de cover est obligatoire');
       return;
     }
 
-    setIsSubmitting(true);
-    
-    try {
-      // Préparer les données pour l'API
-      const projectData = {
-        ...formData,
-        // L'API gérera l'upload des fichiers et génèrera les URLs
-        newFiles: selectedFiles ? Array.from(selectedFiles) : []
-      };
+    console.log('📋 ProjectForm - handleSubmit appelé');
+    console.log('📸 Cover file:', coverFile);
+    console.log('🖼️ Picture files:', pictureFiles);
+    console.log('📋 Form data:', formData);
+    console.log('🎯 Project (mode édition?):', project);
 
-      await onSubmit(projectData as any);
+    try {
+      setIsSubmitting(true);
+      await onSubmit(formData, coverFile || undefined, pictureFiles);
     } catch (error) {
       console.error('Erreur lors de la soumission:', error);
-      // Ici tu peux ajouter une notification d'erreur
+      alert('Erreur lors de l\'enregistrement. Vérifiez la console.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // ====================================
-  // 🗑️ NETTOYAGE DES URLS
-  // ====================================
-  useEffect(() => {
-    return () => {
-      previewUrls.forEach(url => URL.revokeObjectURL(url));
-    };
-  }, [previewUrls]);
-
   return (
     <form onSubmit={handleSubmit} className="project-form">
-      {/* ====================================
-          📋 INFORMATIONS PRINCIPALES
-          ==================================== */}
-      <div className="project-form__section">
-        <h3 className="project-form__section-title">Informations principales</h3>
+      <div className="project-form__grid">
         
-        <div className="project-form__row">
-          <div className="project-form__field">
-            <label className="project-form__label">
-              Titre *
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                className={`project-form__input ${errors.title ? 'project-form__input--error' : ''}`}
-                placeholder="Mon Super Projet"
-              />
-              {errors.title && (
-                <span className="project-form__error">{errors.title}</span>
-              )}
-            </label>
-          </div>
+        {/* 📋 INFOS GÉNÉRALES */}
+        <div className="project-form__section">
+          <h3>Informations générales</h3>
           
           <div className="project-form__field">
-            <label className="project-form__label">
-              Sous-titre *
-              <input
-                type="text"
-                name="subtitle"
-                value={formData.subtitle}
-                onChange={handleInputChange}
-                className={`project-form__input ${errors.subtitle ? 'project-form__input--error' : ''}`}
-                placeholder="Application web moderne"
-              />
-              {errors.subtitle && (
-                <span className="project-form__error">{errors.subtitle}</span>
-              )}
-            </label>
+            <label htmlFor="title">Titre *</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+            />
           </div>
-        </div>
 
-        <div className="project-form__field">
-          <label className="project-form__label">
-            Description *
+          <div className="project-form__field">
+            <label htmlFor="subtitle">Sous-titre</label>
+            <input
+              type="text"
+              id="subtitle"
+              name="subtitle"
+              value={formData.subtitle}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="project-form__field">
+            <label htmlFor="description">Description</label>
             <textarea
+              id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
               rows={4}
-              className={`project-form__textarea ${errors.description ? 'project-form__input--error' : ''}`}
-              placeholder="Description détaillée du projet..."
             />
-            {errors.description && (
-              <span className="project-form__error">{errors.description}</span>
-            )}
-          </label>
-        </div>
-      </div>
+          </div>
 
-      {/* ====================================
-          ℹ️ INFORMATIONS PROJET
-          ==================================== */}
-      <div className="project-form__section">
-        <h3 className="project-form__section-title">Détails du projet</h3>
-        
-        <div className="project-form__row">
           <div className="project-form__field">
-            <label className="project-form__label">
-              Client *
-              <input
-                type="text"
-                name="informations.client"
-                value={formData.informations.client}
-                onChange={handleInputChange}
-                className={`project-form__input ${errors['informations.client'] ? 'project-form__input--error' : ''}`}
-                placeholder="Nom du client"
-              />
-              {errors['informations.client'] && (
-                <span className="project-form__error">{errors['informations.client']}</span>
-              )}
-            </label>
-          </div>
-          
-          <div className="project-form__field">
-            <label className="project-form__label">
-              Date *
-              <input
-                type="text"
-                name="informations.date"
-                value={formData.informations.date}
-                onChange={handleInputChange}
-                className={`project-form__input ${errors['informations.date'] ? 'project-form__input--error' : ''}`}
-                placeholder="2024"
-              />
-              {errors['informations.date'] && (
-                <span className="project-form__error">{errors['informations.date']}</span>
-              )}
-            </label>
-          </div>
-        </div>
-
-        <div className="project-form__row">
-          <div className="project-form__field">
-            <label className="project-form__label">
-              Durée
-              <input
-                type="text"
-                name="informations.duration"
-                value={formData.informations.duration}
-                onChange={handleInputChange}
-                className="project-form__input"
-                placeholder="3 mois"
-              />
-            </label>
-          </div>
-          
-          <div className="project-form__field">
-            <label className="project-form__label">
-              Équipe
-              <input
-                type="text"
-                name="informations.team"
-                value={formData.informations.team}
-                onChange={handleInputChange}
-                className="project-form__input"
-                placeholder="Solo, En équipe..."
-              />
-            </label>
-          </div>
-        </div>
-      </div>
-
-      {/* ====================================
-          🔗 LIENS
-          ==================================== */}
-      <div className="project-form__section">
-        <h3 className="project-form__section-title">Liens</h3>
-        
-        <div className="project-form__row">
-          <div className="project-form__field">
-            <label className="project-form__label">
-              Site web
-              <input
-                type="url"
-                name="links.website"
-                value={formData.links.website}
-                onChange={handleInputChange}
-                className="project-form__input"
-                placeholder="https://monprojet.com"
-              />
-            </label>
-          </div>
-          
-          <div className="project-form__field">
-            <label className="project-form__label">
-              GitHub
-              <input
-                type="url"
-                name="links.github"
-                value={formData.links.github}
-                onChange={handleInputChange}
-                className="project-form__input"
-                placeholder="https://github.com/user/repo"
-              />
-            </label>
-          </div>
-        </div>
-      </div>
-
-      {/* ====================================
-          🏷️ TECHNOLOGIES
-          ==================================== */}
-      <div className="project-form__section">
-        <h3 className="project-form__section-title">Technologies *</h3>
-        
-        <div className="project-form__field">
-          <label className="project-form__label">
-            Ajouter une technologie
+            <label htmlFor="category">Catégorie</label>
             <input
               type="text"
-              value={newTech}
-              onChange={(e) => setNewTech(e.target.value)}
-              onKeyDown={handleAddTechnology}
-              className="project-form__input"
-              placeholder="React, TypeScript... (Appuyez sur Entrée)"
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
             />
-          </label>
+          </div>
+
+          <div className="project-form__field">
+            <label className="project-form__checkbox">
+              <input
+                type="checkbox"
+                name="featured"
+                checked={formData.featured}
+                onChange={handleInputChange}
+              />
+              Projet mis en avant
+            </label>
+          </div>
         </div>
 
-        <div className="project-form__tags">
-          {formData.technologies.map((tech, index) => (
-            <span key={index} className="project-form__tag">
-              {tech}
-              <button
-                type="button"
-                onClick={() => handleRemoveTechnology(tech)}
-                className="project-form__tag-remove"
-              >
-                ×
-              </button>
-            </span>
-          ))}
-        </div>
-        
-        {errors.technologies && (
-          <span className="project-form__error">{errors.technologies}</span>
-        )}
-      </div>
-
-      {/* ====================================
-          🖼️ IMAGES
-          ==================================== */}
-      <div className="project-form__section">
-        <h3 className="project-form__section-title">Images *</h3>
-        <p className="project-form__hint">
-          La première image sera utilisée comme cover (miniature + détail)
-        </p>
-        
-        <div className="project-form__field">
-          <label className="project-form__label">
-            Sélectionner des images
+        {/* 🖼️ IMAGES */}
+        <div className="project-form__section">
+          <h3>Images</h3>
+          
+          <div className="project-form__field">
+            <label htmlFor="cover">Image de cover * {!project && '(obligatoire)'}</label>
             <input
               type="file"
+              id="cover"
+              accept="image/*"
+              onChange={handleCoverChange}
+            />
+            {coverPreview && (
+              <div className="project-form__preview">
+                <img src={coverPreview} alt="Cover preview" />
+                <small>Sera redimensionnée en 400x400 (card) et 1000x1000 (détails)</small>
+              </div>
+            )}
+          </div>
+
+          <div className="project-form__field">
+            <label htmlFor="pictures">Images supplémentaires (max 10)</label>
+            <input
+              type="file"
+              id="pictures"
               multiple
               accept="image/*"
-              onChange={handleFileChange}
-              className="project-form__file-input"
+              onChange={handlePicturesChange}
             />
-          </label>
+            {picturesPreviews.length > 0 && (
+              <div className="project-form__previews">
+                {picturesPreviews.map((preview, index) => (
+                  <img key={index} src={preview} alt={`Preview ${index + 1}`} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Images existantes (mode édition) */}
-        {formData.pictures.length > 0 && (
-          <div className="project-form__images-section">
-            <h4 className="project-form__images-title">Images actuelles</h4>
-            <div className="project-form__images-grid">
-              {formData.pictures.map((picture, index) => (
-                <div key={index} className="project-form__image-item">
-                  <img src={picture} alt={`Image ${index + 1}`} />
-                  {index === 0 && (
-                    <span className="project-form__cover-badge">COVER</span>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveExistingPicture(picture)}
-                    className="project-form__image-remove"
-                  >
-                    ×
-                  </button>
-                </div>
+        {/* 🏷️ TECHNOLOGIES */}
+        <div className="project-form__section">
+          <h3>Technologies</h3>
+          
+          <div className="project-form__field">
+            <div className="project-form__add-item">
+              <input
+                type="text"
+                placeholder="Ajouter une technologie"
+                value={tempTech}
+                onChange={(e) => setTempTech(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTechnology())}
+              />
+              <button type="button" onClick={addTechnology}>Ajouter</button>
+            </div>
+            
+            <div className="project-form__tags">
+              {formData.technologies.map((tech, index) => (
+                <span key={index} className="project-form__tag">
+                  {tech}
+                  <button type="button" onClick={() => removeTechnology(tech)}>×</button>
+                </span>
               ))}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Nouvelles images (preview) */}
-        {previewUrls.length > 0 && (
-          <div className="project-form__images-section">
-            <h4 className="project-form__images-title">Nouvelles images</h4>
-            <div className="project-form__images-grid">
-              {previewUrls.map((url, index) => (
-                <div key={index} className="project-form__image-item">
-                  <img src={url} alt={`Preview ${index + 1}`} />
-                  {index === 0 && formData.pictures.length === 0 && (
-                    <span className="project-form__cover-badge">COVER</span>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => handleRemovePreview(index)}
-                    className="project-form__image-remove"
-                  >
-                    ×
-                  </button>
-                </div>
+        {/* 💡 COMPÉTENCES */}
+        <div className="project-form__section">
+          <h3>Compétences</h3>
+          
+          <div className="project-form__field">
+            <div className="project-form__add-item">
+              <input
+                type="text"
+                placeholder="Ajouter une compétence"
+                value={tempCompetence}
+                onChange={(e) => setTempCompetence(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCompetence())}
+              />
+              <button type="button" onClick={addCompetence}>Ajouter</button>
+            </div>
+            
+            <div className="project-form__tags">
+              {formData.competences.map((comp, index) => (
+                <span key={index} className="project-form__tag">
+                  {comp}
+                  <button type="button" onClick={() => removeCompetence(comp)}>×</button>
+                </span>
               ))}
             </div>
           </div>
-        )}
+        </div>
+
+        {/* ℹ️ INFORMATIONS PROJET */}
+        <div className="project-form__section">
+          <h3>Informations projet</h3>
+          
+          <div className="project-form__field">
+            <label htmlFor="informations.client">Client</label>
+            <input
+              type="text"
+              id="informations.client"
+              name="informations.client"
+              value={formData.informations.client || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="project-form__field">
+            <label htmlFor="informations.date">Date</label>
+            <input
+              type="date"
+              id="informations.date"
+              name="informations.date"
+              value={formData.informations.date}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        {/* 🔗 LIENS */}
+        <div className="project-form__section">
+          <h3>Liens</h3>
+          
+          <div className="project-form__field">
+            <label htmlFor="links.website">Site web</label>
+            <input
+              type="url"
+              id="links.website"
+              name="links.website"
+              value={formData.links.website || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="project-form__field">
+            <label htmlFor="links.github">GitHub</label>
+            <input
+              type="url"
+              id="links.github"
+              name="links.github"
+              value={formData.links.github || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
         
-        {errors.pictures && (
-          <span className="project-form__error">{errors.pictures}</span>
-        )}
       </div>
 
-      {/* ====================================
-          🔄 ACTIONS
-          ==================================== */}
+      {/* 🎯 ACTIONS */}
       <div className="project-form__actions">
-        <button
-          type="button"
+        <button 
+          type="button" 
           onClick={onCancel}
-          className="project-form__btn project-form__btn--cancel"
           disabled={isSubmitting}
+          className="project-form__cancel"
         >
           Annuler
         </button>
         
-        <button
-          type="submit"
-          className="project-form__btn project-form__btn--submit"
+        <button 
+          type="submit" 
           disabled={isSubmitting}
+          className="project-form__submit"
         >
           {isSubmitting ? 'Enregistrement...' : project ? 'Modifier' : 'Créer'}
         </button>

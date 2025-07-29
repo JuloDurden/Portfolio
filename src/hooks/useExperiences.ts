@@ -14,28 +14,106 @@ import {
 const mapToBackend = (data: ExperienceFormData) => {
   const formData = new FormData();
   
-  // Mapping exact selon ton modèle backend
+  // Mapping exact selon modèle backend
   formData.append('type', data.type === 'experience' ? 'work' : 'education');
   formData.append('position', data.title); // title → position
   formData.append('company', data.company);
   formData.append('location', data.location);
   formData.append('startDate', data.startDate);
   
-  // ❌ ATTENTION: le backend n'a pas isCurrentlyActive !
-  // formData.append('isCurrentlyActive', data.isCurrentlyActive.toString());
+  // ✅ CORRECTION : Arrays comme éléments séparés (pas JSON.stringify)
+  data.description.forEach((desc, index) => {
+    formData.append(`description[${index}]`, desc);
+  });
   
-  // Arrays → JSON strings (ton backend les attend comme ça)
-  formData.append('description', JSON.stringify(data.description));
-  formData.append('technologies', JSON.stringify(data.technologies));
+  data.technologies.forEach((tech, index) => {
+    formData.append(`technologies[${index}]`, tech);
+  });
   
   if (data.endDate && !data.isCurrentlyActive) {
     formData.append('endDate', data.endDate);
   }
   // Si isCurrentlyActive = true, on n'envoie pas endDate
   
-  // Photo OBLIGATOIRE selon ton modèle
+  // Photo OBLIGATOIRE selon modèle
   if (data.photoFile) {
     formData.append('image', data.photoFile); // photoFile → image
+  }
+  
+  return formData;
+};
+
+// ✅ HELPER : Convertir FormData en ExperienceFormData
+const formDataToExperienceFormData = (formData: FormData): ExperienceFormData => {
+  // Récupérer les descriptions
+  const descriptions: string[] = [];
+  let i = 0;
+  while (formData.get(`description[${i}]`) !== null) {
+    const desc = formData.get(`description[${i}]`) as string;
+    if (desc && desc.trim()) descriptions.push(desc.trim());
+    i++;
+  }
+
+  // Récupérer les technologies
+  const technologies: string[] = [];
+  i = 0;
+  while (formData.get(`technologies[${i}]`) !== null) {
+    const tech = formData.get(`technologies[${i}]`) as string;
+    if (tech && tech.trim()) technologies.push(tech.trim());
+    i++;
+  }
+
+  // Construire l'objet ExperienceFormData
+  const experienceData: ExperienceFormData = {
+    type: (formData.get('type') as string) === 'work' ? 'experience' : 'formation',
+    title: formData.get('position') as string || '',
+    company: formData.get('company') as string || '',
+    location: formData.get('location') as string || '',
+    startDate: formData.get('startDate') as string || '',
+    endDate: formData.get('endDate') as string || '',
+    isCurrentlyActive: !formData.get('endDate') || (formData.get('endDate') as string).trim() === '',
+    description: descriptions,
+    technologies: technologies,
+    photoFile: formData.get('image') as File || null
+  };
+
+  return experienceData;
+};
+
+// ✅ CORRECTION : mapToBackendUpdate pour les modifications (ENVOIE TOUS LES CHAMPS)
+const mapToBackendUpdate = (data: ExperienceFormData) => {
+  const formData = new FormData();
+  
+  // ✅ ENVOYER TOUS LES CHAMPS POUR LA MODIFICATION
+  formData.append('type', data.type === 'experience' ? 'work' : 'education');
+  formData.append('position', data.title);
+  formData.append('company', data.company || ''); // Peut être vide
+  formData.append('location', data.location || '');
+  formData.append('startDate', data.startDate);
+  
+  // ✅ EndDate : soit une date, soit vide pour "en cours"
+  if (data.endDate && !data.isCurrentlyActive) {
+    formData.append('endDate', data.endDate);
+  } else {
+    formData.append('endDate', ''); // Sera interprété comme null côté serveur
+  }
+  
+  // ✅ Arrays : tous les éléments même si inchangés
+  if (data.description && data.description.length > 0) {
+    data.description.forEach((desc, index) => {
+      formData.append(`description[${index}]`, desc || '');
+    });
+  }
+  
+  if (data.technologies && data.technologies.length > 0) {
+    data.technologies.forEach((tech, index) => {
+      formData.append(`technologies[${index}]`, tech || '');
+    });
+  }
+  
+  // ✅ Image seulement si nouvelle
+  if (data.photoFile) {
+    formData.append('image', data.photoFile);
   }
   
   return formData;
@@ -88,7 +166,8 @@ const mapFromBackend = (backendExp: any): Experience => {
     description: parseArrayField(backendExp.description),
     technologies: parseArrayField(backendExp.technologies),
     
-    photo: backendExp.image ? `${API_BASE_URL}/uploads/${backendExp.image}` : null,
+    // ✅ CORRECTION : URL DIRECTE CLOUDINARY
+    photo: backendExp.image || null,
     createdAt: backendExp.createdAt,
     updatedAt: backendExp.updatedAt
   };
@@ -154,56 +233,73 @@ const useExperiences = () => {
   // ====================================
   // ➕ CRÉER UNE EXPÉRIENCE
   // ====================================
-  const createExperience = async (data: ExperienceFormData): Promise<Experience> => {
-    setLoading(true);
-    setError(null);
+  const createExperience = async (formData: FormData): Promise<Experience> => {
+    console.log('📤 Envoi création expérience...');
     
-    try {
-      const formData = mapToBackend(data);
-      
-      const response = await fetch(`${API_BASE_URL}/api/experiences`, {
-        method: 'POST',
-        headers: getAuthHeadersForFormData(),
-        body: formData
-      });
-            
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Create error response:', errorText);
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
+    // ✅ LOGS POUR DEBUG
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`📁 ${key}:`, value.name, value.type, value.size);
+      } else {
+        console.log(`📝 ${key}:`, value);
       }
-      
-      const result = await response.json();
-      
-      if (!result.success) {
-        throw new Error(result.message || 'Erreur lors de la création');
-      }
-      
-      const newExperience = mapFromBackend(result.data);
-      
-      // Recharger la liste complète
-      await fetchExperiences();
-      
-      return newExperience;
-    } catch (err) {
-      console.error('❌ Erreur createExperience:', err);
-      const errorMsg = err instanceof Error ? err.message : 'Erreur de création';
-      setError(errorMsg);
-      throw new Error(errorMsg);
-    } finally {
-      setLoading(false);
     }
+
+    // ✅ CORRECTION : Utilise getAuthHeadersForFormData()
+    const response = await fetch(`${API_BASE_URL}/api/experiences`, {
+      method: 'POST',
+      headers: getAuthHeadersForFormData(),
+      body: formData
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.log('❌ Create error response:', error);
+      throw new Error(`HTTP ${response.status}: ${JSON.stringify(error)}`);
+    }
+
+    const result = await response.json();
+    console.log('✅ Expérience créée:', result);
+    
+    // ✅ MAP LA RÉPONSE ET AJOUTE À LA LISTE
+    const newExperience = mapFromBackend(result.data);
+    setExperiences(prev => [...prev, newExperience]);
+    
+    return newExperience;
   };
 
   // ====================================
-  // ✏️ MODIFIER UNE EXPÉRIENCE
+  // ✏️ MODIFIER UNE EXPÉRIENCE - ✅ CORRIGÉ POUR ACCEPTER FormData ET ExperienceFormData
   // ====================================
-  const updateExperience = async (id: string, data: ExperienceFormData): Promise<Experience> => {
+  const updateExperience = async (id: string, data: ExperienceFormData | FormData): Promise<Experience> => {
     setLoading(true);
     setError(null);
     
     try {
-      const formData = mapToBackend(data);
+      console.log('🔄 Modification expérience avec données:', data);
+      
+      // ✅ Gérer les deux cas : ExperienceFormData ou FormData
+      let formData: FormData;
+      
+      if (data instanceof FormData) {
+        // ✅ C'est déjà du FormData, on l'utilise directement
+        formData = data;
+        console.log('📤 FormData reçu directement pour update');
+      } else {
+        // ✅ C'est du ExperienceFormData, on le convertit
+        formData = mapToBackendUpdate(data);
+        console.log('📤 ExperienceFormData converti en FormData pour update');
+      }
+      
+      // ✅ DEBUG : Voir ce qui est envoyé
+      console.log('📤 FormData envoyé pour update:');
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`📁 ${key}:`, value.name, value.type, value.size);
+        } else {
+          console.log(`📝 ${key}:`, value);
+        }
+      }
       
       const response = await fetch(`${API_BASE_URL}/api/experiences/${id}`, {
         method: 'PUT',
@@ -218,6 +314,7 @@ const useExperiences = () => {
       }
       
       const result = await response.json();
+      console.log('✅ Expérience modifiée:', result);
       
       if (!result.success) {
         throw new Error(result.message || 'Erreur lors de la modification');
@@ -297,7 +394,10 @@ const useExperiences = () => {
     refetch: fetchExperiences,
     
     // Utils
-    clearError: () => setError(null)
+    clearError: () => setError(null),
+    
+    // ✅ HELPER EXPORTÉ
+    formDataToExperienceFormData
   };
 };
 

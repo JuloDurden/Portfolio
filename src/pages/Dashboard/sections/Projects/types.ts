@@ -1,12 +1,15 @@
-// src/components/sections/Projects/types.ts
+// Backend-compatible types
 export interface Project {
   id: string;
   title: string;
   subtitle: string;
-  cover: string; // Image cover (petite résolution pour la carte)
+  cover: {
+    small: string;  // 400x400 pour ProjectCard
+    large: string;  // 1000x1000 pour détails + pictures[]
+  };
   description: string;
-  pictures: string[]; // Images haute résolution pour ProjectDetail
-  competences: string[]; // Skills sélectionnés depuis la section Skills
+  pictures: string[]; // Images supplémentaires + cover.large automatiquement
+  competences: string[];
   informations: {
     client?: string;
     date: string;
@@ -16,4 +19,25 @@ export interface Project {
     github?: string;
   };
   technologies: string[];
+  category?: string;
+  featured?: boolean;
+}
+
+// Pour les formulaires
+export interface ProjectFormData {
+  title: string;
+  subtitle: string;
+  description: string;
+  competences: string[];
+  informations: {
+    client?: string;
+    date: string;
+  };
+  links: {
+    website?: string;
+    github?: string;
+  };
+  technologies: string[];
+  category?: string;
+  featured?: boolean;
 }

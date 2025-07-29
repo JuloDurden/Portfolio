@@ -193,8 +193,8 @@ const SkillsSection: React.FC = () => {
     try {
       const formData = new FormData();
       
-      // ✅ CORRECTION : Utilise editingSkill correctement
-      const skillId = editingSkill?.id || `skill-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      // ✅ CORRECTION PRINCIPALE : Utilise _id au lieu de id
+      const skillId = editingSkill?._id || `skill-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       formData.append('id', skillId);
       
       formData.append('name', skillData.name.trim());

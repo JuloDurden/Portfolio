@@ -10,6 +10,16 @@ const ProjectDetail: React.FC = () => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // 🔧 FONCTION POUR CONVERTIR LES RETOURS À LA LIGNE
+  const formatDescription = (text: string) => {
+    return text.split('\n').map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        {index < text.split('\n').length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
   if (loading) {
     return (
       <div className="app">
@@ -36,7 +46,9 @@ const ProjectDetail: React.FC = () => {
     return <Navigate to="/404" replace />;
   }
 
-  const allImages = [project.cover, ...project.pictures];
+  // ✅ CORRECTION : Utilise cover.large pour l'affichage principal
+  const coverImageUrl = project.cover?.large || project.cover?.small || '';
+  const allImages = [coverImageUrl, ...project.pictures];
 
   const handleImageClick = (index: number) => {
     setCurrentImageIndex(index);
@@ -73,10 +85,10 @@ const ProjectDetail: React.FC = () => {
           <div className="project-detail__gallery animate-fade-in animate-delay-200">
             <div className="project-detail__gallery-container">
               <div className="project-detail__gallery-grid">
-                {/* Image principale - 2/3 de la largeur */}
+                {/* ✅ CORRECTION : Image principale avec cover.large */}
                 <div className="project-detail__gallery-main">
                   <img 
-                    src={project.cover} 
+                    src={coverImageUrl}
                     alt={project.title}
                     className="project-detail__gallery-main-image"
                     onClick={() => handleImageClick(0)}
@@ -133,49 +145,39 @@ const ProjectDetail: React.FC = () => {
                 <div className="project-detail__meta animate-fade-in-up animate-delay-400">
                   <div className="project-detail__meta-item">
                     <span className="project-detail__meta-label">Client</span>
-                    <span className="project-detail__meta-value">{project.informations.client}</span>
+                    <span className="project-detail__meta-value">{project.informations?.client || 'Non spécifié'}</span>
                   </div>
                   <div className="project-detail__meta-item">
                     <span className="project-detail__meta-label">Date</span>
-                    <span className="project-detail__meta-value">{project.informations.date}</span>
+                    <span className="project-detail__meta-value">{project.informations?.date || 'Non spécifié'}</span>
                   </div>
                 </div>
 
                 <hr className="project-detail__divider" />
 
-                {/* Description */}
+                {/* Description avec formatage des retours à la ligne */}
                 <div className="project-detail__description animate-fade-in-up animate-delay-500">
                   <h2 className="project-detail__section-title">À propos de ce projet</h2>
-                  <p className="project-detail__text">{project.description}</p>
-                </div>
-
-                <hr className="project-detail__divider" />
-
-                {/* Technologies */}
-                <div className="project-detail__technologies animate-fade-in-up animate-delay-600">
-                  <h3 className="project-detail__section-title">Technologies utilisées</h3>
-                  <div className="project-detail__tech-list">
-                    {project.technologies.map((tech, index) => (
-                      <span key={index} className="project-detail__tech-tag">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="project-detail__text">
+                    {formatDescription(project.description || '')}
+                  </p>
                 </div>
 
                 <hr className="project-detail__divider" />
 
                 {/* Compétences */}
-                <div className="project-detail__competences animate-fade-in-up animate-delay-700">
-                  <h3 className="project-detail__section-title">Compétences développées</h3>
-                  <ul className="project-detail__competences-list">
-                    {project.competences.map((competence, index) => (
-                      <li key={index} className="project-detail__competences-item">
-                        {competence}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {project.competences && project.competences.length > 0 && (
+                  <div className="project-detail__competences animate-fade-in-up animate-delay-700">
+                    <h3 className="project-detail__section-title">Compétences développées</h3>
+                    <ul className="project-detail__competences-list">
+                      {project.competences.map((competence, index) => (
+                        <li key={index} className="project-detail__competences-item">
+                          {competence}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               {/* Sidebar */}
@@ -184,7 +186,7 @@ const ProjectDetail: React.FC = () => {
                   <h3 className="project-detail__card-title">Liens du projet</h3>
                   
                   <div className="project-detail__links">
-                    {project.links.website && (
+                    {project.links?.website && (
                       <a 
                         href={project.links.website} 
                         target="_blank" 
@@ -194,20 +196,36 @@ const ProjectDetail: React.FC = () => {
                         🌐 Voir le site web
                       </a>
                     )}
-                    <a 
-                      href={project.links.github} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="project-detail__link project-detail__link--secondary"
-                    >
-                      📝 Voir le dépot GitHub
-                    </a>
+                    {project.links?.github && (
+                      <a 
+                        href={project.links.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="project-detail__link project-detail__link--secondary"
+                      >
+                        📝 Voir le dépot GitHub
+                      </a>
+                    )}
                   </div>
 
                   <div className="project-detail__card-footer">
-                    <p className="project-detail__card-note">
-                      💡 Ce projet fait partie de mon parcours d'apprentissage en développement web.
-                    </p>
+                    {/* <p className="project-detail__card-note"> */}
+                    {/* Technologies */}
+                    {project.technologies && project.technologies.length > 0 && (
+                      <>
+                        <div className="project-detail__technologies animate-fade-in-up animate-delay-600">
+                          <h3 className="project-detail__section-title">Technologies utilisées</h3>
+                          <div className="project-detail__tech-list">
+                            {project.technologies.map((tech, index) => (
+                              <span key={index} className="project-detail__tech-tag">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {/* </p> */}
                   </div>
                 </div>
               </div>

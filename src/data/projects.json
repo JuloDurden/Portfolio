@@ -35,7 +35,11 @@
 		"title": "Sophie Bluel",
         "subtitle": "Créer une page web dynamique avec JavaScript",
 		"cover": "/assets/projects/002sophiebluel/cover.webp",
-		"description": "Dans ce projet, j’ai développé la partie front-end d’un site vitrine pour Sophie Bluel, architecte d’intérieur, en rendant la page web interactive et dynamique à l’aide de JavaScript pur. À partir d’un HTML statique et des maquettes Figma, j’ai intégré une galerie filtrable des réalisations, mis en place une page de connexion sécurisée pour l’administratrice, et développé une interface d’administration avec une modale pour l’ajout de nouveaux projets (images, catégories…). L’ensemble des données est géré via une API que j’ai interconnectée en JavaScript, en utilisant fetch et la gestion des requêtes asynchrones.Ce projet m’a permis de travailler pour la première fois avec un back-end simulé, et de mettre en place une gestion fine des événements DOM, des interactions utilisateur, et de la manipulation dynamique du contenu.",
+		"description": "Dans ce projet, j’ai développé la partie front-end d’un site vitrine pour Sophie Bluel, architecte d’intérieur, en rendant la page web interactive et dynamique à l’aide de JavaScript pur. À partir d’un HTML statique et des maquettes Figma, j’ai intégré une galerie filtrable des réalisations, mis en place une page de connexion sécurisée pour l’administratrice, et développé une interface d’administration avec une modale pour l’ajout de nouveaux projets (images, catégories…). L’ensemble des données est géré via une API que j’ai interconnectée en JavaScript, en utilisant fetch et la gestion des requêtes asynchrones.Ce projet m’a permis de travailler pour la première fois avec un back-end simulé, et de mettre en place une gestion fine des événements DOM, des interactions utilisateur, et de la manipulation dynamique du contenu.
+
+Principales difficultés rencontrées :
+- Mettre en pratique mes connaissances de JavaScript tout en évitant ou corrigeant les bugs.
+- Appréhender la communication avec une API REST",
         "pictures": [
 			"/assets/projects/002sophiebluel/1.webp",
 			"/assets/projects/002sophiebluel/2.webp",
@@ -45,7 +49,7 @@
             "Manipulation du DOM avec JavaScript",
             "Gestion des événements et intéractions utilisateur",
             "Communication avec une API (GET, POST, DELETE)",
-            "Création d'une authentification basique (login/token",
+            "Création d'une authentification basique (login/token)",
             "Conception d'une interface modale dynamique",
             "Rendu conditionnel et mise à jour du contenu sans rechargement"
         ],
@@ -107,14 +111,16 @@
 		"title": "Kasa",
         "subtitle": "Créer une application web de location immobilière avec React",
 		"cover": "/assets/projects/004kasa/cover.webp",
-		"description": "Pour ce projet, j’ai développé le front-end complet d’une application de location immobilière nommée Kasa, en utilisant React et React Router. L’objectif était de proposer une expérience utilisateur fluide et moderne, à partir de maquettes Figma et de données simulées stockées dans un fichier JSON. J’ai structuré l’interface autour de composants réutilisables, mis en place une navigation dynamique avec React Router, et intégré des animations CSS pour enrichir l’interactivité. J’ai utilisé SASS pour gérer les styles de façon modulaire et évolutive. Le projet a été initialisé avec Vite, ce qui m’a permis de bénéficier d’un environnement de développement rapide et optimisé.",
+		"description": "Pour ce projet, j’ai développé le front-end complet d’une application de location immobilière nommée Kasa, en utilisant React et React Router. L’objectif était de proposer une expérience utilisateur fluide et moderne, à partir de maquettes Figma et de données simulées stockées dans un fichier JSON. J’ai structuré l’interface autour de composants réutilisables, mis en place une navigation dynamique avec React Router, et intégré des animations CSS pour enrichir l’interactivité. J’ai utilisé SASS pour gérer les styles de façon modulaire et évolutive. Le projet a été initialisé avec Vite, ce qui m’a permis de bénéficier d’un environnement de développement rapide et optimisé.
+
+La principale difficulté a été d'appréhender React et son architecture par composants ainsi que son système de routage dynamique",
         "pictures": [
 			"/assets/projects/004kasa/1.webp",
 			"/assets/projects/004kasa/2.webp",
 			"/assets/projects/004kasa/3.webp"
 		],
         "competences": [
-            "Création d'une SPA avec React (Single Page Application",
+            "Création d'une SPA avec React (Single Page Application)",
             "Routage dynamique avec React Router",
             "Manipulation de données JSON et rendu conditionnel",
             "Architecture par composants",
@@ -145,7 +151,9 @@
 		"title": "Mon Vieux Grimoire",
         "subtitle": "Développer le backend d'un site de notation de livres",
 		"cover": "/assets/projects/005vieuxgrimoire/cover.webp",
-		"description": "Dans ce projet, j’ai développé le back-end complet d’un site de notation de livres, Mon Vieux Grimoire, en mettant en place une API REST sécurisée avec Node.js, Express et MongoDB. Mon rôle a consisté à concevoir l’architecture serveur selon le modèle MVC, créer les modèles de données avec Mongoose, implémenter les opérations CRUD pour gérer les livres et les notations, mettre en place un système d’authentification sécurisé avec hashage des mots de passe, gérer le téléversement et l’optimisation des images et calculer dynamiquement les notes moyennes des livres.",
+		"description": "Dans ce projet, j’ai développé le back-end complet d’un site de notation de livres, Mon Vieux Grimoire, en mettant en place une API REST sécurisée avec Node.js, Express et MongoDB. Mon rôle a consisté à concevoir l’architecture serveur selon le modèle MVC, créer les modèles de données avec Mongoose, implémenter les opérations CRUD pour gérer les livres et les notations, mettre en place un système d’authentification sécurisé avec hashage des mots de passe, gérer le téléversement et l’optimisation des images et calculer dynamiquement les notes moyennes des livres.
+
+Ce projet m'a permis de me confronter à une architecture MVC et, pour moi, la principale difficulté a été de créer les opérations CRUD ainsi que la logique métier.",
         "pictures": [
 			"/assets/projects/005vieuxgrimoire/1.webp",
 			"/assets/projects/005vieuxgrimoire/2.webp"
@@ -184,7 +192,12 @@
 		"title": "Menu Maker by Qwenta",
         "subtitle": "Planifier le développement du site d'un client",
 		"cover": "/assets/projects/006menumaker/cover.webp",
-		"description": "Pour ce projet, j’ai endossé le rôle de chef de projet technique en planifiant le développement d’un site web professionnel pour un client, sans coder directement. L’objectif était d’assurer une préparation claire, structurée et efficace du futur développement. À partir des maquettes Figma, des spécifications fonctionnelles et des User Stories, j’ai réalisé une veille technologique pour recommander les outils et technologies les plus adaptés au projet, rédigé les spécifications techniques détaillées, décomposé les besoins en tâches techniques claires, structuré le projet dans Notion, en créant un tableau Kanban pour assurer un suivi rigoureux, préparé une présentation de la solution technique, en tenant compte des contraintes, des priorités et de la scalabilité. Ce projet m’a permis de développer des compétences transversales en gestion de projet web, essentielles pour collaborer efficacement dans des équipes agiles ou encadrer le développement d’une application web.",
+		"description": "Pour ce projet, j’ai endossé le rôle de chef de projet technique en planifiant le développement d’un site web professionnel pour un client, sans coder directement. L’objectif était d’assurer une préparation claire, structurée et efficace du futur développement. 
+À partir des maquettes Figma, des spécifications fonctionnelles et des User Stories, j’ai réalisé une veille technologique pour recommander les outils et technologies les plus adaptés au projet, rédigé les spécifications techniques détaillées, décomposé les besoins en tâches techniques claires, structuré le projet dans Notion, en créant un tableau Kanban pour assurer un suivi rigoureux, préparé une présentation de la solution technique, en tenant compte des contraintes, des priorités et de la scalabilité. 
+
+Ce projet m’a permis de développer des compétences transversales en gestion de projet web, essentielles pour collaborer efficacement dans des équipes agiles ou encadrer le développement d’une application web.
+
+💡 Ce projet fait partie de mon parcours d'apprentissage en développement web.",
         "pictures": [
 			"/assets/projects/006menumaker/1.webp",
 			"/assets/projects/006menumaker/2.webp",
@@ -217,7 +230,13 @@
 		"title": "DevToolBox",
         "subtitle": "Recenser les technologies web les plus utilisées et faciliter l'accès à leur documentation",
 		"cover": "/assets/projects/007devtoolbox/cover.webp",
-		"description": "DevToolBox est un projet personnel de veille technologique que j’ai conçu pour recenser, de façon claire et accessible, les principaux langages, frameworks et outils utilisés par les développeurs web. J’ai développé une page responsive en HTML et CSS, mettant en avant une interface simple et moderne, avec un système de cartes cliquables menant directement vers les sites officiels des technologies présentées. L’ensemble de la page propose un thème clair/sombre activable sans JavaScript, et s’appuie sur des animations CSS douces pour enrichir l’expérience utilisateur. Ce projet m’a permis de renforcer mes compétences en intégration responsive, en design accessible, et en animation front-end, tout en créant un support de veille technique utile et agréable à utiliser.",
+		"description": "DevToolBox est un projet personnel de veille technologique que j’ai conçu pour recenser, de façon claire et accessible, les principaux langages, frameworks et outils utilisés par les développeurs web. Il est lié au projet Menu Maker by Qwenta.
+
+		J’ai développé une page responsive en HTML et CSS, mettant en avant une interface simple et moderne, avec un système de cartes cliquables menant directement vers les sites officiels des technologies présentées. L’ensemble de la page propose un thème clair/sombre activable sans JavaScript, et s’appuie sur des animations CSS douces pour enrichir l’expérience utilisateur. 
+
+		Ce projet m’a permis de renforcer mes compétences en intégration responsive, en design accessible, et en animation front-end, tout en créant un support de veille technique utile et agréable à utiliser.
+
+		Le but était de faire une page unique très simple qui servirait au support de la veille technologique du projet Menu Maker by Qwenta. Il pourra évoluer à terme vers un projet plus conséquent.",
         "pictures": [
 			"/assets/projects/007devtoolbox/1.webp",
 			"/assets/projects/007devtoolbox/2.webp"

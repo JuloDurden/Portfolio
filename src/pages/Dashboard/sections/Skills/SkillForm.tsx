@@ -283,7 +283,7 @@ const SkillForm: React.FC<SkillFormProps> = ({
                 type="url"
                 value={typeof formData.icon === 'string' ? formData.icon : ''}
                 onChange={(e) => handleIconUrlChange(e.target.value)}
-                placeholder="ou collez une URL d'image..."
+                placeholder="Collez une URL d'image..."
                 disabled={!!iconFile}
               />
               {iconFile && (

@@ -97,6 +97,11 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
       newErrors.description = 'Au moins une description est requise';
     }
 
+    // Image (obligatoire pour création uniquement)
+    if (mode === 'create' && !formData.photoFile && !formData.photo) {
+      newErrors.photo = 'Une image est obligatoire';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -171,26 +176,63 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
   // ====================================
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('📝 Soumission formulaire...', { mode, formData });
     
-    if (!validateForm() || isSubmitting) return;
-
-    // Nettoyer les données avant envoi
-    const cleanedData: ExperienceFormData = {
-      ...formData,
-      title: formData.title.trim(),
-      company: formData.company.trim(),
-      location: formData.location.trim(),
-      endDate: formData.isCurrentlyActive ? null : formData.endDate,
-      description: formData.description.filter(desc => desc.trim() !== '')
-    };
+    // ✅ VALIDATION
+    if (!validateForm()) {
+      console.log('❌ Validation échouée:', errors);
+      return;
+    }
 
     try {
-      await onSubmit(cleanedData);
+      const submitFormData = new FormData();
+      
+      // ✅ AJOUT IMAGE (SI NOUVELLE)
+      if (formData.photoFile) {
+        console.log('📁 Ajout nouvelle image:', formData.photoFile.name, formData.photoFile.type);
+        submitFormData.append('image', formData.photoFile);
+      }
+      
+      // ✅ MAPPING DES CHAMPS (frontend → backend)
+      submitFormData.append('type', formData.type === 'experience' ? 'work' : 'education');
+      submitFormData.append('position', formData.title);
+      submitFormData.append('company', formData.company);
+      submitFormData.append('location', formData.location);
+      submitFormData.append('startDate', formData.startDate);
+      
+      if (formData.endDate && !formData.isCurrentlyActive) {
+        submitFormData.append('endDate', formData.endDate);
+      }
+
+      // ✅ DESCRIPTION TABLEAU
+      const validDescriptions = formData.description.filter(desc => desc.trim());
+      validDescriptions.forEach((desc, index) => {
+        submitFormData.append(`description[${index}]`, desc.trim());
+      });
+
+      // ✅ TECHNOLOGIES TABLEAU  
+      formData.technologies.forEach((tech, index) => {
+        submitFormData.append(`technologies[${index}]`, tech);
+      });
+
+      // ✅ LOGS DEBUG
+      console.log('📤 FormData préparé:');
+      for (let [key, value] of submitFormData.entries()) {
+        if (value instanceof File) {
+          console.log(`📁 ${key}:`, value.name, value.type, value.size);
+        } else {
+          console.log(`📝 ${key}:`, value);
+        }
+      }
+
+      console.log('📤 Envoi vers onSubmit...');
+      await onSubmit(submitFormData);
+      
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
-      setErrors(prev => ({ 
-        ...prev, 
-        general: 'Erreur lors de la sauvegarde. Veuillez réessayer.' 
+      console.error('❌ Erreur soumission:', error);
+      setErrors(prev => ({
+        ...prev,
+        general: error instanceof Error ? error.message : 'Erreur inconnue'
       }));
     }
   };
@@ -251,7 +293,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
 
       {/* 🖼️ PHOTO */}
       <div className="form-group">
-        <label className="form-label">Photo (optionnelle)</label>
+        <label className="form-label">Photo {mode === 'create' ? '*' : '(optionnelle)'}</label>
         <ExperiencePhotoUpload
           currentPhoto={photoPreview}
           onPhotoChange={(file) => {

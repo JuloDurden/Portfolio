@@ -1,10 +1,9 @@
-// src/components/sections/Projects/ProjectsList.tsx
 import React, { useState } from 'react';
 import { useProjects } from '../../../../hooks/useProjects';
 import ProjectCard from '../../../../components/ProjectCard/ProjectCard';
 import ProjectForm from './ProjectForm';
 import Modal from '../../../../components/Modal/Modal';
-import { Project } from './types';
+import { Project, ProjectFormData } from './types';
 import './ProjectsList.scss';
 
 const ProjectsList: React.FC = () => {
@@ -45,14 +44,31 @@ const ProjectsList: React.FC = () => {
     }
   };
 
-  const handleFormSubmit = async (projectData: Omit<Project, 'id'>) => {
-    if (editingProject) {
-      await updateProject(editingProject.id, projectData);
-    } else {
-      await addProject(projectData);
+  const handleFormSubmit = async (
+    projectData: ProjectFormData,
+    coverFile?: File,
+    picturesFiles?: File[]
+  ) => {
+    // 🔍 DEBUG - AJOUTER CES LOGS
+    console.log('📦 ProjectsList - handleFormSubmit reçoit:');
+    console.log('📸 Cover file reçu:', coverFile);
+    console.log('🖼️ Pictures files reçues:', picturesFiles);
+    console.log('📋 Project data reçue:', projectData);
+
+    try {
+      if (editingProject) {
+        console.log('🔄 Mode édition - appel updateProject');
+        await updateProject(editingProject.id, projectData, coverFile, picturesFiles);
+      } else {
+        console.log('➕ Mode création - appel addProject');
+        console.log('📸 Fichier envoyé à addProject:', coverFile);
+        await addProject(projectData, coverFile, picturesFiles);
+      }
+      setIsFormOpen(false);
+      setEditingProject(null);
+    } catch (error) {
+      console.error('❌ Erreur dans ProjectsList:', error);
     }
-    setIsFormOpen(false);
-    setEditingProject(null);
   };
 
   const handleFormClose = () => {

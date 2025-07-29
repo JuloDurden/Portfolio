@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProfilePictureUpload from './ProfilePictureUpload';
 import { PersonalData, PersonalDataFormErrors } from './types';
-import { updatePersonalData, uploadAvatar } from '../../../../userService';
 
 interface PersonalDataFormProps {
   initialData?: PersonalData;
@@ -32,6 +31,23 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+
+  // 🔄 Met à jour formData quand initialData change
+  useEffect(() => {
+    if (initialData) {
+      console.log('🔄 Mise à jour formData avec initialData:', initialData);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        dateOfBirth: '',
+        githubUrl: '',
+        profilePicture: '',
+        ...initialData
+      });
+      setProfilePreview(initialData.profilePicture || null);
+    }
+  }, [initialData]);
 
   // 🔄 Détecter les changements
   useEffect(() => {
@@ -92,8 +108,10 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
     }
   };
 
-  // 📸 UPLOAD Avatar séparé
+  // 📸 UPLOAD Avatar avec CLOUDINARY SUPPORT
   const handlePictureChange = async (file: File | null, previewUrl: string | null) => {
+    console.log('📸 handlePictureChange appelé avec file:', !!file);
+    
     // 📝 Met à jour localement d'abord
     setProfileFile(file);
     setProfilePreview(previewUrl || initialData?.profilePicture || null);
@@ -108,20 +126,98 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
       setIsUploadingAvatar(true);
       
       try {
-        // 🎯 APPEL CORRIGÉ - GESTION DU SUCCESS
-        const uploadResult = await uploadAvatar(file);
+        // 🔑 RÉCUPÉRER LE TOKEN
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('Token d\'authentification manquant');
+        }
+
+        // 📦 PRÉPARER FormData
+        const avatarFormData = new FormData();
+        avatarFormData.append('avatar', file);
+
+        // 🎯 URL CORRECTE (selon les routes)
+        const API_URL = import.meta.env.VITE_API_URL;
+        const uploadUrl = `${API_URL}/api/user/avatar`;
         
+        console.log('🔗 URL d\'upload utilisée:', uploadUrl);
+        console.log('🔑 Token présent:', !!token);
+
+        // 🚀 REQUÊTE D'UPLOAD
+        const uploadResponse = await fetch(uploadUrl, {
+          method: 'POST', // Correspond à router.post('/avatar', ...)
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: avatarFormData
+        });
+
+        console.log('📡 Response status upload:', uploadResponse.status);
+        console.log('📡 Response headers:', Object.fromEntries(uploadResponse.headers.entries()));
+
+        if (!uploadResponse.ok) {
+          const errorText = await uploadResponse.text();
+          console.error('❌ Erreur serveur:', errorText);
+          throw new Error(`Erreur HTTP ${uploadResponse.status}: ${errorText}`);
+        }
+
+        // 🔍 PARSING SÉCURISÉ DE LA RÉPONSE
+        const responseText = await uploadResponse.text();
+        console.log('📄 Response text brut:', responseText);
+
+        if (!responseText.trim()) {
+          throw new Error('Réponse vide du serveur');
+        }
+
+        let uploadResult;
+        try {
+          uploadResult = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('❌ Erreur parsing JSON:', parseError);
+          throw new Error(`Réponse serveur invalide: ${responseText.substring(0, 100)}`);
+        }
+
         console.log('✅ Avatar uploadé avec succès !', uploadResult);
         
-        // 📝 Met à jour formData avec la nouvelle URL
-        if (uploadResult.avatarUrl) {
-          setFormData(prev => ({
-            ...prev,
-            profilePicture: uploadResult.avatarUrl
-          }));
+        // 📝 🌟 TRAITER L'URL CLOUDINARY
+        if (uploadResult.success && uploadResult.data?.profilePicture) {
+          let newAvatarUrl = uploadResult.data.profilePicture;
+          console.log('📸 URL avatar reçue depuis DB:', newAvatarUrl);
           
-          setProfilePreview(uploadResult.avatarUrl);
+          // ✅ CLOUDINARY URL - Utiliser directement
+          if (newAvatarUrl.startsWith('https://res.cloudinary.com/')) {
+            console.log('🌟 URL Cloudinary détectée - utilisation directe');
+            setFormData(prev => ({
+              ...prev,
+              profilePicture: newAvatarUrl
+            }));
+            setProfilePreview(newAvatarUrl);
+          } 
+          // 🔧 RAILWAY FALLBACK
+          else if (!newAvatarUrl.startsWith('http')) {
+            newAvatarUrl = `${API_URL}/${newAvatarUrl}`;
+            console.log('🔧 URL Railway générée:', newAvatarUrl);
+            setFormData(prev => ({
+              ...prev,
+              profilePicture: newAvatarUrl
+            }));
+            setProfilePreview(newAvatarUrl);
+          }
+          // ✅ URL COMPLÈTE 
+          else {
+            console.log('✅ URL complète détectée');
+            setFormData(prev => ({
+              ...prev,
+              profilePicture: newAvatarUrl
+            }));
+            setProfilePreview(newAvatarUrl);
+          }
+          
           setProfileFile(null); // Reset car déjà uploadé
+          
+        } else {
+          console.warn('⚠️ Réponse inattendue:', uploadResult);
+          throw new Error('Format de réponse inattendu du serveur');
         }
         
       } catch (error: any) {
@@ -140,40 +236,36 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
     }
   };
 
-  // 💾 Soumission FORM (sans upload avatar)
+  // 💾 Soumission FORM - UTILISE onSave DU PARENT
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) return;
+    console.log('📝 Sauvegarde des données personnelles...');
+    
+    if (!validateForm()) {
+      console.log('❌ Validation échouée');
+      return;
+    }
 
     setIsSaving(true);
+    setErrors(prev => ({ ...prev, submit: undefined }));
 
     try {
-      console.log('📝 Sauvegarde des données personnelles...');
-      const result = await updatePersonalData(formData);
-
-      if (result.success) {
-        console.log('✅ Données sauvegardées avec succès');
-        
-        // 🔄 Appeler le callback parent
-        await onSave(formData);
-        
-        // 🎯 Reset des états locaux
-        setHasChanges(false);
-        setProfileFile(null);
-        
-      } else {
-        throw new Error(result.message || 'Erreur lors de la sauvegarde');
-      }
-
-    } catch (error: any) {
-      console.error('❌ Erreur sauvegarde PersonalData:', error);
+      // 🔥 APPELER LA FONCTION PARENT onSave
+      await onSave(formData, profileFile);
       
-      if (error.message?.includes('email')) {
-        setErrors(prev => ({ ...prev, email: 'Cet email est déjà utilisé' }));
-      } else {
-        console.error('Erreur générale:', error.message);
-      }
+      console.log('✅ Données sauvegardées avec succès');
+      
+      // 🎯 Reset des états locaux
+      setHasChanges(false);
+      setProfileFile(null);
+      
+    } catch (error: any) {
+      console.log('❌ Erreur sauvegarde PersonalData:', error);
+      setErrors(prev => ({
+        ...prev,
+        submit: error instanceof Error ? error.message : 'Erreur de sauvegarde'
+      }));
     } finally {
       setIsSaving(false);
     }
@@ -200,6 +292,13 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="personal-data-form">
       
+      {/* ❌ ERREUR GÉNÉRALE */}
+      {errors.submit && (
+        <div className="personal-data-form__error personal-data-form__error--global">
+          ❌ {errors.submit}
+        </div>
+      )}
+
       {/* 📸 PHOTO DE PROFIL */}
       <div className="personal-data-form__picture">
         <ProfilePictureUpload
@@ -211,6 +310,11 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
         {isUploadingAvatar && (
           <div className="personal-data-form__upload-status">
             📸 Upload en cours...
+          </div>
+        )}
+        {errors.profilePicture && (
+          <div className="personal-data-form__error">
+            ⚠️ {errors.profilePicture}
           </div>
         )}
       </div>
@@ -347,6 +451,28 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
             : '💾 Sauvegarder'
           }
         </button>
+      </div>
+
+      {/* 🐛 DEBUG FORM DATA */}
+      <div style={{ 
+        background: '#e8f4f8', 
+        color: '#000000',
+        padding: '8px', 
+        margin: '10px 0', 
+        fontSize: '11px',
+        fontFamily: 'monospace',
+        border: '1px solid #ccc',
+        borderRadius: '4px'
+      }}>
+        <strong>🐛 DEBUG FORM:</strong><br/>
+        FirstName: "{formData.firstName}" | LastName: "{formData.lastName}"<br/>
+        Email: "{formData.email}" | Date: "{formData.dateOfBirth}"<br/>
+        GitHub: "{formData.githubUrl}"<br/>
+        ProfilePicture: "{formData.profilePicture?.substring(0, 80)}..."<br/>
+        ProfilePreview: "{profilePreview?.substring(0, 80)}..."<br/>
+        HasChanges: {hasChanges ? '✅' : '❌'} | Loading: {isFormLoading ? '🔄' : '✅'}<br/>
+        UploadingAvatar: {isUploadingAvatar ? '📸' : '❌'}<br/>
+        🌟 URL Type: {formData.profilePicture?.includes('cloudinary.com') ? 'CLOUDINARY' : 'RAILWAY'}
       </div>
     </form>
   );
