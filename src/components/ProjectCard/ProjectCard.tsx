@@ -21,16 +21,50 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   // 🛡️ ÉTAT POUR ÉVITER LA BOUCLE INFINIE
   const [imageError, setImageError] = useState(false);
 
-  // 🔥 STABILISE L'URL AVEC useMemo
-  const coverImage = useMemo(() => {
-    if (imageError) {
-      return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSIyMDAiIHk9IjE1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSIjOTg5OGE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgaW5kaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg=='; // SVG placeholder
+  // 🔒 FONCTION POUR FORCER HTTPS
+  const ensureHttps = (url: string): string => {
+    if (!url || typeof url !== 'string') return url;
+    
+    // ✅ Si c'est déjà HTTPS ou data: ou blob:, on garde tel quel
+    if (url.startsWith('https://') || url.startsWith('data:') || url.startsWith('blob:')) {
+      return url;
     }
     
+    // 🔄 Si c'est HTTP, on convertit vers HTTPS
+    if (url.startsWith('http://')) {
+      console.log('🔒 Conversion HTTP → HTTPS:', url);
+      return url.replace('http://', 'https://');
+    }
+    
+    // 📦 Si c'est une URL relative, on ajoute le domaine HTTPS
+    if (url.startsWith('/') || url.startsWith('./')) {
+      const API_URL = import.meta.env.VITE_API_URL || 'https://backend-portfolio-production-39a1.up.railway.app';
+      const baseUrl = API_URL.replace('http://', 'https://'); // Force HTTPS sur l'API aussi
+      return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+    }
+    
+    return url;
+  };
+
+  // 🔥 STABILISE L'URL AVEC useMemo + HTTPS
+  const coverImage = useMemo(() => {
+    if (imageError) {
+      return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSIyMDAiIHk9IjE1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSIjOTg5OGE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgaW5kaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg==';
+    }
+    
+    let imageUrl = '';
+    
     if (typeof project.cover === 'string') {
-      return project.cover;
+      imageUrl = project.cover;
     } else if (project.cover && typeof project.cover === 'object') {
-      return project.cover.small || project.cover.large;
+      imageUrl = project.cover.small || project.cover.large || '';
+    }
+    
+    // 🔒 FORCER HTTPS SUR L'URL FINALE
+    if (imageUrl) {
+      const httpsUrl = ensureHttps(imageUrl);
+      console.log('🔒 Image URL pour', project.title, ':', httpsUrl);
+      return httpsUrl;
     }
     
     return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSIyMDAiIHk9IjE1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSIjOTg5OGE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgaW5kaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg==';
@@ -64,9 +98,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   // 🛡️ GESTION ERREUR IMAGE (UNE SEULE FOIS)
-  const handleImageError = () => {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     if (!imageError) {
-      console.log('❌ Image cassée pour:', project.title);
+      const imgSrc = (e.target as HTMLImageElement).src;
+      console.log('❌ Image cassée pour:', project.title, 'URL:', imgSrc);
       setImageError(true);
     }
   };
@@ -86,7 +121,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           onError={handleImageError}
           onLoad={() => {
             if (!imageError) {
-              console.log('✅ Image OK:', project.title);
+              console.log('✅ Image HTTPS OK:', project.title, coverImage.substring(0, 50));
             }
           }}
           style={{ 
