@@ -59,7 +59,7 @@
   // ✅ BOUTON PRINCIPAL DU HEADER
   .btn-primary {
     padding: var(--spacing-md) var(--spacing-lg);
-    background: #{$primary-color};
+    background: var(--color-primary);
     color: white;
     border: none;
     border-radius: var(--border-radius);
@@ -73,9 +73,9 @@
     white-space: nowrap;
     
     &:hover:not(:disabled) {
-      background: #{darken($primary-color, 8%)};
+      background: var(--color-secondary);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px #{rgba($primary-color, 0.3)};
+      box-shadow: 0 4px 12px rgba(0, 109, 119, 0.3);
     }
 
     &:disabled {

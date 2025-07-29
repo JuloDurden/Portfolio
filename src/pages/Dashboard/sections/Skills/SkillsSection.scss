@@ -146,22 +146,21 @@
   // ====================================
   
   &__add-btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-secondary);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--color-primary);
     border: 1px solid var(--color-secondary);
     border-radius: var(--border-radius);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    color: var(--color-white);
+    color: white;
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: var(--font-primary);
     
     &:hover:not(:disabled) {
-      background: #{darken($secondary-color, 10%)};
-      border-color: #{darken($secondary-color, 10%)};
+      background: var(--color-secondary);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(131, 197, 190, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 109, 119, 0.3);
     }
     
     &--primary {
