@@ -73,7 +73,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   return (
     <Link 
-      to={`/projects/${project.id}`} 
+      to={`/projects/${project._id}`} 
       className={`project-card ${className} ${project.featured ? 'project-card--featured' : ''}`}
     >
       
