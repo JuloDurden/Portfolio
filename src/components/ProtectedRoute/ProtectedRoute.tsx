@@ -7,28 +7,35 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, isLoading } = useAuth(); // ← CHANGER isAuthenticated en user
+  const { user, isLoading, isAuthenticated } = useAuth();
   const location = useLocation();
 
-  console.log('🔐 ProtectedRoute - USER:', user); // ← DEBUG
-  console.log('⏳ ProtectedRoute - LOADING:', isLoading); // ← DEBUG
+  console.log('🔐 ProtectedRoute - USER:', user);
+  console.log('⏳ ProtectedRoute - LOADING:', isLoading);
+  console.log('🔑 ProtectedRoute - AUTHENTICATED:', isAuthenticated);
 
   // ⏳ Chargement en cours
   if (isLoading) {
     return (
-      <div className="loading">
-        <p>Vérification de l'authentification...</p>
+      <div className="loading" style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '50vh',
+        fontSize: '1.2rem'
+      }}>
+        <p>⏳ Vérification de l'authentification...</p>
       </div>
     );
   }
 
-  // 🔐 Pas connecté → redirection vers l'accueil
-  if (!user) { // ← CHANGER !isAuthenticated en !user
-    console.log('❌ ProtectedRoute - PAS CONNECTÉ, REDIRECTION VERS /'); // ← DEBUG
+  // 🔐 Pas connecté OU pas d'utilisateur → redirection vers l'accueil
+  if (!isAuthenticated || !user) {
+    console.log('❌ ProtectedRoute - PAS CONNECTÉ, REDIRECTION VERS /');
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
-  console.log('✅ ProtectedRoute - CONNECTÉ, AFFICHAGE DASHBOARD'); // ← DEBUG
+  console.log('✅ ProtectedRoute - CONNECTÉ, AFFICHAGE DASHBOARD');
   // ✅ Connecté → affichage du contenu
   return <>{children}</>;
 };

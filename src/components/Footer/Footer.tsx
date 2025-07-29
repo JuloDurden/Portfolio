@@ -1,5 +1,4 @@
-// src/components/Footer/Footer.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import Modal from '../Modal/Modal';
@@ -8,22 +7,52 @@ import './Footer.scss';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
-  const { isAuthenticated, user, login, logout } = useAuth();
+  const { isAuthenticated, user, logout, checkAuthStatus, isLoading } = useAuth();
   const navigate = useNavigate();
   
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [loginError, setLoginError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(false);
 
-  // 💖 Gestion du clic sur le cœur
-  const handleHeartClick = () => {
-    if (isAuthenticated) {
-      // Si connecté, afficher le menu utilisateur ou rediriger
+  // 💖 Gestion du clic sur le cœur - SIMPLIFIÉE
+  const handleHeartClick = async () => {
+    console.log('💖 Clic sur le cœur - isAuthenticated:', isAuthenticated, 'user:', user);
+    
+    // Si pas de chargement en cours et utilisateur connecté
+    if (!isLoading && isAuthenticated && user) {
+      console.log('✅ Utilisateur connecté, redirection vers dashboard');
       navigate('/dashboard');
-    } else {
-      // Si pas connecté, ouvrir le modal
+      return;
+    }
+    
+    // Si en cours de chargement, attendre
+    if (isLoading) {
+      console.log('⏳ Chargement en cours, attente...');
+      return;
+    }
+
+    // Vérifier si une session valide existe
+    console.log('🔍 Vérification de la session...');
+    setIsCheckingAuth(true);
+    
+    try {
+      const isValidSession = await checkAuthStatus();
+      
+      if (isValidSession) {
+        console.log('✅ Session valide trouvée, redirection vers dashboard');
+        // Petite attente pour laisser le temps au state de se mettre à jour
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 100);
+      } else {
+        console.log('❌ Pas de session valide, ouverture du modal');
+        setShowLoginModal(true);
+      }
+    } catch (error) {
+      console.error('💥 Erreur lors de la vérification:', error);
       setShowLoginModal(true);
+    } finally {
+      setIsCheckingAuth(false);
     }
   };
 
@@ -34,36 +63,9 @@ function Footer() {
     }
   };
 
-  // 🔐 Gestion de la connexion
-  const handleLogin = async (email: string, password: string) => {
-    setIsLoading(true);
-    setLoginError('');
-    
-    try {
-      const success = await login(email, password);
-      
-      if (success) {
-        // ✅ Connexion réussie
-        setShowLoginModal(false);
-        navigate('/dashboard');
-      } else {
-        setLoginError('Email ou mot de passe incorrect.');
-      }
-      
-    } catch (error) {
-      setLoginError('Erreur de connexion. Veuillez réessayer.');
-      console.error('Erreur de connexion:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // 🚪 Fermeture du modal
   const handleCloseModal = () => {
-    if (!isLoading) {
-      setShowLoginModal(false);
-      setLoginError('');
-    }
+    setShowLoginModal(false);
   };
 
   // 📤 Déconnexion
@@ -72,6 +74,20 @@ function Footer() {
     setShowUserMenu(false);
     navigate('/');
   };
+
+  // 🔍 Fermer le menu utilisateur si on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (showUserMenu) {
+        setShowUserMenu(false);
+      }
+    };
+
+    if (showUserMenu) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [showUserMenu]);
 
   return (
     <>
@@ -82,11 +98,20 @@ function Footer() {
           </div>
           
           <div className="footer__bottom">
-            <p>
-              Développé avec{' '}
+            {/* ✅ STRUCTURE CORRIGÉE - PLUS DE DIV DANS P */}
+            <div className="footer__bottom-content">
+              <span>Développé avec </span>
               
               {/* 💖 Gestion de l'état connecté/déconnecté */}
-              {isAuthenticated ? (
+              {isLoading ? (
+                <span className="footer__heart footer__heart--loading" title="Chargement...">
+                  ⏳
+                </span>
+              ) : isCheckingAuth ? (
+                <span className="footer__heart footer__heart--checking" title="Vérification...">
+                  🔄
+                </span>
+              ) : (isAuthenticated && user) ? (
                 <span className="footer__admin-section">
                   <span 
                     className="footer__heart footer__heart--admin"
@@ -100,23 +125,28 @@ function Footer() {
                     👨‍💻
                   </span>
                   
-                  {/* Menu utilisateur */}
-                  <div className="footer__user-menu">
+                  {/* Menu utilisateur - STRUCTURE CORRIGÉE */}
+                  <span className="footer__user-menu">
                     <button
                       className="footer__user-toggle"
-                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowUserMenu(!showUserMenu);
+                      }}
                       aria-label="Menu utilisateur"
                     >
                       ⚙️
                     </button>
                     
                     {showUserMenu && (
-                      <div className="footer__user-dropdown">
+                      <div className="footer__user-dropdown" onClick={(e) => e.stopPropagation()}>
                         <div className="footer__user-info">
                           <strong>{user?.firstName} {user?.lastName}</strong>
+                          <br />
                           <small>{user?.email}</small>
                         </div>
-                        <hr />
+                        {/* ✅ SEPARATOR CORRIGÉ - div au lieu de hr */}
+                        <div className="footer__separator"></div>
                         <button onClick={() => navigate('/dashboard')}>
                           📊 Dashboard
                         </button>
@@ -125,7 +155,7 @@ function Footer() {
                         </button>
                       </div>
                     )}
-                  </div>
+                  </span>
                 </span>
               ) : (
                 <span 
@@ -141,8 +171,8 @@ function Footer() {
                 </span>
               )}
               
-              {' '}et React + TypeScript
-            </p>
+              <span> et React + TypeScript</span>
+            </div>
           </div>
         </div>
       </footer>
@@ -153,14 +183,9 @@ function Footer() {
           title=""
           onClose={handleCloseModal}
           size="small"
-          closeOnOverlay={!isLoading}
+          closeOnOverlay={true}
         >
-          <LoginForm 
-            onLogin={handleLogin}
-            onClose={handleCloseModal}
-            isLoading={isLoading}
-            error={loginError}
-          />
+          <LoginForm onClose={handleCloseModal} />
         </Modal>
       )}
     </>

@@ -209,7 +209,7 @@ const PersonalDataSection: React.FC = () => {
   // 🐛 GESTION DES ERREURS DE CHARGEMENT
   if (dataError) {
     return (
-      <section className="personal-data-section">
+      <section className="personal-data-section" id='personal-data-section'>
         <div className="personal-data-section__error">
           <h2>❌ Erreur de chargement</h2>
           <p>Impossible de charger les données personnelles: {dataError}</p>

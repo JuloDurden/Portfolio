@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './LoginForm.scss';
@@ -19,8 +19,41 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // 🔐 HOOKS
-  const { login } = useAuth();
+  const { login, isAuthenticated, user, checkAuthStatus } = useAuth();
   const navigate = useNavigate();
+
+  // 🔍 Vérifier si déjà connecté au montage
+  useEffect(() => {
+    const checkExistingAuth = async () => {
+      console.log('🔍 LoginForm: Vérification - isAuthenticated:', isAuthenticated, 'user:', user);
+      
+      // Si utilisateur connecté avec données complètes
+      if (isAuthenticated && user) {
+        console.log('✅ LoginForm: Utilisateur déjà connecté, redirection...');
+        onClose();
+        navigate('/dashboard');
+        return;
+      }
+
+      // Double vérification avec le serveur si pas d'utilisateur en mémoire
+      if (!user) {
+        try {
+          const isValidSession = await checkAuthStatus();
+          if (isValidSession) {
+            console.log('✅ LoginForm: Session valide trouvée, redirection...');
+            onClose();
+            setTimeout(() => {
+              navigate('/dashboard');
+            }, 100);
+          }
+        } catch (error) {
+          console.log('ℹ️ LoginForm: Pas de session valide, affichage du formulaire');
+        }
+      }
+    };
+
+    checkExistingAuth();
+  }, [isAuthenticated, user, checkAuthStatus, onClose, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,21 +61,32 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
       ...prev,
       [name]: value
     }));
+    
+    // Effacer l'erreur lors de la saisie
+    if (error) setError('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🚀 TENTATIVE LOGIN:', formData);
+    console.log('🚀 TENTATIVE LOGIN:', { email: formData.email });
     
     setIsLoading(true);
     setError('');
 
     try {
-      await login(formData.email, formData.password);
-      console.log('✅ LOGIN RÉUSSI');
-      onClose(); // Fermer la modal
-      console.log('🚀 REDIRECTION VERS /dashboard'); // ← AJOUTER LOG
-      navigate('/dashboard'); // ← AJOUTER REDIRECTION
+      const success = await login(formData.email, formData.password);
+      
+      if (success) {
+        console.log('✅ LOGIN RÉUSSI');
+        onClose();
+        console.log('🚀 REDIRECTION VERS /dashboard');
+        // Attendre un peu que le state se mette à jour
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 100);
+      } else {
+        setError('Email ou mot de passe incorrect');
+      }
     } catch (error) {
       console.error('❌ ERREUR LOGIN:', error);
       setError('Email ou mot de passe incorrect');
@@ -56,10 +100,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && !isLoading) {
       onClose();
     }
   };
+
+  // Si déjà connecté avec données utilisateur, ne rien afficher
+  if (isAuthenticated && user) {
+    return null;
+  }
 
   return (
     <div className="login-form" onKeyDown={handleKeyDown}>
