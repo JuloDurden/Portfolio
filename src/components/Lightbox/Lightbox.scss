@@ -2,7 +2,7 @@
 @import '../../styles/globals/mixins';
 
 // ====================================
-// 🖼️ LIGHTBOX CONTAINER
+// 🖼️ LIGHTBOX CONTAINER - CORRIGÉ
 // ====================================
 
 .lightbox {
@@ -13,7 +13,7 @@
   height: 100vh;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
-  z-index: 9999;
+  z-index: 99999; // 🎯 AU-DESSUS DU HEADER (999) ET DROPDOWN (1001)
   
   display: flex;
   align-items: center;
@@ -21,6 +21,11 @@
   
   opacity: 0;
   animation: lightboxFadeIn 0.3s ease-out forwards;
+  
+  // 🚫 EMPÊCHER INTERACTION AVEC LE RESTE DE LA PAGE
+  pointer-events: auto;
+  touch-action: none;
+  overscroll-behavior: none;
   
   // Contenu principal
   &__content {
@@ -30,6 +35,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2; // 🎯 AU-DESSUS DU BACKDROP
     
     img {
       max-width: 100%;
@@ -38,21 +44,28 @@
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow-xl);
       animation: lightboxImageIn 0.4s ease-out 0.1s both;
+      
+      // 🚫 EMPÊCHER SÉLECTION/DRAG
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
     }
   }
   
-  // Bouton fermer
+  // 🎯 BOUTON FERMER - ZONE ÉTENDUE ET SÉCURISÉE
   &__close {
     position: absolute;
-    top: var(--spacing-lg);
+    top: var(--spacing-2xl);
     right: var(--spacing-lg);
     width: 50px;
     height: 50px;
+    z-index: 10; // 🎯 AU-DESSUS DE TOUT
     
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
     border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     
     color: var(--color-white);
     font-size: var(--font-size-xl);
@@ -60,34 +73,59 @@
     line-height: 1;
     
     cursor: pointer;
-    transition: var(--transition-base);
+    transition: all 0.2s ease;
+    pointer-events: auto;
+    touch-action: manipulation;
     
     display: flex;
     align-items: center;
     justify-content: center;
     
-    &:hover {
-      background: rgba(255, 255, 255, 0.2);
+    // 🎯 ZONE DE CLIC ÉTENDUE
+    &::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: 50%;
+      pointer-events: auto;
+    }
+    
+    &:hover,
+    &:focus {
+      background: rgba(255, 255, 255, 0.25);
       transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.4);
     }
     
     &:active {
       transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.3);
     }
     
-    // Responsive
+    // 📱 MOBILE - PLUS ACCESSIBLE
     @include respond-to('mobile') {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       font-size: var(--font-size-lg);
       top: var(--spacing-md);
       right: var(--spacing-md);
+      
+      // Zone étendue sur mobile
+      &::before {
+        top: -15px;
+        left: -15px;
+        right: -15px;
+        bottom: -15px;
+      }
     }
   }
 }
 
 // ====================================
-// 🧭 LIGHTBOX NAVIGATION
+// 🧭 LIGHTBOX NAVIGATION - AMÉLIORÉE
 // ====================================
 
 .lightbox-navigation {
@@ -98,42 +136,59 @@
   align-items: center;
   justify-content: space-between;
   pointer-events: none;
+  z-index: 5; // 🎯 SOUS LE BOUTON CLOSE MAIS AU-DESSUS DE L'IMAGE
   
-  // Boutons de navigation
+  // 🎯 BOUTONS DE NAVIGATION - ZONES SÉCURISÉES
   &__btn {
-    width: 50px;
-    height: 50px;
+    width: 60px; // 🎯 PLUS GRANDS
+    height: 60px;
     
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(15px);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     
     color: var(--color-white);
     cursor: pointer;
-    transition: var(--transition-base);
+    transition: all 0.2s ease;
     pointer-events: auto;
+    touch-action: manipulation;
     
     display: flex;
     align-items: center;
     justify-content: center;
     
-    svg {
-      width: 24px;
-      height: 24px;
+    // 🎯 ZONE DE CLIC ÉTENDUE
+    &::before {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      right: -15px;
+      bottom: -15px;
+      border-radius: 50%;
+      pointer-events: auto;
     }
     
-    &:hover {
+    svg {
+      width: 28px; // 🎯 PLUS GROS
+      height: 28px;
+      pointer-events: none; // 🚫 EMPÊCHER SVG D'INTERCEPTER
+    }
+    
+    &:hover,
+    &:focus {
       background: rgba(255, 255, 255, 0.2);
       transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.5);
     }
     
     &:active {
       transform: scale(0.95);
     }
     
-    // Position spécifique
+    // Position spécifique avec marge sécurisée
     &--prev {
       margin-left: var(--spacing-lg);
     }
@@ -142,14 +197,22 @@
       margin-right: var(--spacing-lg);
     }
     
-    // Responsive
+    // 📱 MOBILE - OPTIMISÉ TOUCH
     @include respond-to('mobile') {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       
       svg {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
+      }
+      
+      // Zone étendue sur mobile
+      &::before {
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
       }
       
       &--prev {
@@ -168,18 +231,21 @@
     bottom: var(--spacing-lg);
     left: 50%;
     transform: translateX(-50%);
+    z-index: 5;
     
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius-xl);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     
     padding: var(--spacing-xs) var(--spacing-md);
     color: var(--color-white);
     font-size: var(--font-size-sm);
-    @include font-medium;
+    font-weight: var(--font-weight-medium);
     
     pointer-events: auto;
+    user-select: none;
     
     @include respond-to('mobile') {
       bottom: var(--spacing-md);
@@ -190,25 +256,26 @@
 }
 
 // ====================================
-// 🎨 VARIANTE POUR HOME PAGE
+// 🎨 VARIANTE POUR HOME PAGE - MISE À JOUR
 // ====================================
 
 .project-showcase__navigation {
   .lightbox-navigation {
     &__btn {
-      background: rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(0, 0, 0, 0.2);
       color: var(--color-text-primary);
       
       &:hover {
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(0, 0, 0, 0.3);
       }
     }
     
     &__counter {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
       border: 1px solid rgba(0, 0, 0, 0.1);
       color: var(--color-text-primary);
     }
@@ -253,12 +320,12 @@
   
   .lightbox-navigation {
     &__btn {
-      width: 45px;
-      height: 45px;
+      width: 55px;
+      height: 55px;
       
       svg {
-        width: 22px;
-        height: 22px;
+        width: 26px;
+        height: 26px;
       }
     }
   }
@@ -274,28 +341,37 @@
         border-radius: 0;
       }
     }
+    
+    // 🎯 BOUTON CLOSE PLUS ACCESSIBLE EN MOBILE
+    &__close {
+      top: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+    }
   }
 }
 
 // ====================================
-// 🌙 SUPPORT DARK MODE
+// 🌙 SUPPORT DARK MODE - AMÉLIORÉ
 // ====================================
 
 @media (prefers-color-scheme: dark) {
   .project-showcase__navigation {
     .lightbox-navigation {
       &__btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(30, 41, 59, 0.8);
+        border: 2px solid rgba(255, 255, 255, 0.2);
         color: var(--color-white);
         
         &:hover {
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(30, 41, 59, 0.9);
+          border-color: rgba(255, 255, 255, 0.3);
         }
       }
       
       &__counter {
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(30, 41, 59, 0.9);
         border: 1px solid rgba(255, 255, 255, 0.1);
         color: var(--color-white);
       }
@@ -303,16 +379,51 @@
   }
 }
 
+// Thème sombre explicite
+[data-theme="dark"] {
+  .lightbox {
+    background: rgba(15, 23, 42, 0.95); // Plus sombre
+    
+    &__close {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(148, 163, 184, 0.3);
+      
+      &:hover {
+        background: rgba(30, 41, 59, 0.9);
+        border-color: rgba(148, 163, 184, 0.5);
+      }
+    }
+  }
+  
+  .lightbox-navigation {
+    &__btn {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(148, 163, 184, 0.3);
+      
+      &:hover {
+        background: rgba(30, 41, 59, 0.9);
+        border-color: rgba(148, 163, 184, 0.5);
+      }
+    }
+    
+    &__counter {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(148, 163, 184, 0.2);
+    }
+  }
+}
+
 // ====================================
-// ♿ ACCESSIBILITÉ
+// ♿ ACCESSIBILITÉ RENFORCÉE
 // ====================================
 
 // Focus visible pour navigation clavier
 .lightbox__close,
 .lightbox-navigation__btn {
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+    z-index: 20; // 🎯 AU-DESSUS DE TOUT QUAND FOCUS
   }
 }
 
@@ -326,5 +437,22 @@
   .lightbox__close,
   .lightbox-navigation__btn {
     transition: none;
+    
+    &:hover {
+      transform: none;
+    }
   }
+}
+
+// 🎯 SÉCURITÉ ANTI-INTERFERENCE
+.lightbox {
+  // Isoler pour empêcher les conflits CSS
+  isolation: isolate;
+  
+  // Stack context forcé
+  transform: translateZ(0);
+  will-change: opacity;
+  
+  // Empêcher débordement
+  overflow: hidden;
 }

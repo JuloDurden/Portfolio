@@ -21,6 +21,18 @@ const Lightbox: React.FC<LightboxProps> = ({
   altText = '',
   showNavigation = true
 }) => {
+  // 🚫 BLOQUER LE SCROLL DU BODY
+  useEffect(() => {
+    if (isOpen) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [isOpen]);
+
   const goToPrevious = useCallback(() => {
     if (images.length > 1) {
       const newIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
@@ -35,44 +47,71 @@ const Lightbox: React.FC<LightboxProps> = ({
     }
   }, [currentIndex, images.length, onIndexChange]);
 
-  // Gestion clavier
+  // 🎯 GESTION CLAVIER AMÉLIORÉE
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // 🚫 EMPÊCHER LES ACTIONS PAR DÉFAUT
+      if (['Escape', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
       switch (e.key) {
         case 'Escape':
           onClose();
           break;
         case 'ArrowLeft':
-          e.preventDefault();
           goToPrevious();
           break;
         case 'ArrowRight':
-          e.preventDefault();
           goToNext();
           break;
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, true); // 🎯 CAPTURE PHASE
+    return () => document.removeEventListener('keydown', handleKeyDown, true);
   }, [isOpen, onClose, goToPrevious, goToNext]);
+
+  // 🚫 EMPÊCHER LE SCROLL SUR LA LIGHTBOX
+  const handleLightboxClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
+  }, [onClose]);
+
+  const handleContentClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleCloseClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
+  }, [onClose]);
 
   if (!isOpen || images.length === 0) return null;
 
   return (
     <div 
       className="lightbox" 
-      onClick={onClose}
+      onClick={handleLightboxClick}
+      onTouchStart={(e) => e.preventDefault()} // 🎯 MOBILE
       role="dialog"
       aria-label="Galerie d'images"
       aria-modal="true"
     >
-      <div className="lightbox__content" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className="lightbox__content" 
+        onClick={handleContentClick}
+      >
         <img 
           src={images[currentIndex]} 
           alt={`${altText} - Image ${currentIndex + 1} sur ${images.length}`}
+          draggable={false} // 🚫 PAS DE DRAG
         />
         
         <LightboxNavigation
@@ -86,8 +125,10 @@ const Lightbox: React.FC<LightboxProps> = ({
       
       <button 
         className="lightbox__close"
-        onClick={onClose}
+        onClick={handleCloseClick}
+        onTouchStart={handleCloseClick} // 🎯 SUPPORT MOBILE
         aria-label="Fermer la galerie"
+        type="button"
       >
         ×
       </button>

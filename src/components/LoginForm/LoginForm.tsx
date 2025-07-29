@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom'; // ← AJOUTER
+import { useNavigate } from 'react-router-dom';
 import './LoginForm.scss';
 
 interface LoginFormProps {
@@ -20,7 +20,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
 
   // 🔐 HOOKS
   const { login } = useAuth();
-  const navigate = useNavigate(); // ← AJOUTER
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
