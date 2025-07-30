@@ -3,41 +3,41 @@
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
 >
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/</loc>
+    <loc>https://www.julienclavel.fr/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/about</loc>
+    <loc>https://www.julienclavel.fr/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects</loc>
+    <loc>https://www.julienclavel.fr/projects</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Projets -->
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects/001booki</loc>
+    <loc>https://www.julienclavel.fr/projects/6880d39de8dce6fc3e533dbe</loc>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects/002sophiebluel</loc>
+    <loc>https://www.julienclavel.fr/projects/68889688f99a340490c1bd08</loc>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects/003ninacarducci</loc>
+    <loc>https://www.julienclavel.fr/projects/6881187342125329000b2d3a</loc>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects/004kasa</loc>
+    <loc>https://www.julienclavel.fr/projects/6888953ff99a340490c1bcfa</loc>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects/005vieuxgrimoire</loc>
+    <loc>https://www.julienclavel.fr/projects/68889b23f99a340490c1bd62</loc>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects/006menumaker</loc>
+    <loc>https://www.julienclavel.fr/projects/68889d51f99a340490c1bda1</loc>
   </url>
   <url>
-    <loc>https://portfolio-mu-liart-34.vercel.app/projects/007devtoolbox</loc>
+    <loc>https://www.julienclavel.fr/projects/68889f0af99a340490c1bde3</loc>
   </url>
 </urlset>
