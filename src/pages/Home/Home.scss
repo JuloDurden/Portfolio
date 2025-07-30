@@ -75,6 +75,10 @@
         @media (max-width: 768px) {
           font-size: 1rem;
         }
+
+        [data-theme="dark"] & {
+          color: white;
+        }
       }
       
       // Timeline wrapper
@@ -172,6 +176,10 @@
       
       &:last-child {
         margin-bottom: 0;
+      }
+
+      [data-theme="dark"] & {
+          color: white;
       }
     }
     
