@@ -179,6 +179,10 @@
       cursor: not-allowed;
       transform: none;
     }
+
+    [data-theme="dark"] & {
+    color: white;
+  }
   }
   
   // ====================================

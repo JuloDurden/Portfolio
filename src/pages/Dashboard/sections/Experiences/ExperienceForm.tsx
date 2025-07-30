@@ -454,7 +454,7 @@ const ExperienceForm: React.FC<ExperienceFormProps> = ({
             onClick={addDescriptionItem}
             disabled={isSubmitting}
           >
-            + Ajouter un point
+            Ajouter un point
           </button>
         </div>
         {errors.description && <span className="error-message">{errors.description}</span>}

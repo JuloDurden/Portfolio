@@ -274,62 +274,28 @@
     
     button {
       padding: var(--spacing-md) var(--spacing-lg);
-      background: linear-gradient(
-        135deg, 
-        var(--color-secondary), 
-        #{lighten($secondary-color, 5%)}
-      );
-      color: #{darken($secondary-color, 40%)};
-      border: 2px solid var(--color-secondary);
+      background: var(--color-primary);
+      color: white;
+      border: none;
       border-radius: var(--border-radius);
-      font-weight: var(--font-weight-semi-bold);
       font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      min-width: 100px;
-      
-      // ✨ EFFET SHIMMER
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.4),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      white-space: nowrap;
       
       &:hover:not(:disabled) {
-        background: linear-gradient(
-          135deg, 
-          #{lighten($secondary-color, 8%)}, 
-          #{lighten($secondary-color, 12%)}
-        );
-        border-color: #{lighten($secondary-color, 8%)};
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(131, 197, 190, 0.3);
-        
-        &::before {
-          left: 100%;
-        }
+        background: var(--color-secondary);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 109, 119, 0.3);
       }
-      
-      &:active {
-        transform: translateY(0);
-      }
-      
+
       &:disabled {
-        opacity: 0.5;
+        opacity: 0.6;
         cursor: not-allowed;
-        transform: none !important;
       }
     }
     
@@ -457,48 +423,20 @@
     
     // ✅ BOUTON SUBMIT
     &--submit {
-      background: linear-gradient(
-        135deg, 
-        var(--color-primary), 
-        #{darken($primary-color, 8%)}
-      );
+      background: var(--color-primary);
       color: white;
-      border-color: var(--color-primary);
+      border: none;
       box-shadow: 0 4px 15px rgba(0, 109, 119, 0.3);
-      
-      // ✨ EFFET SHIMMER
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.3),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-      
+            
       &:hover:not(:disabled) {
-        background: linear-gradient(
-          135deg, 
-          #{lighten($primary-color, 5%)}, 
-          #{darken($primary-color, 3%)}
-        );
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 109, 119, 0.4);
-        
-        &::before {
-          left: 100%;
-        }
-      }
-      
-      &:active:not(:disabled) {
+        background: var(--color-secondary);
         transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 109, 119, 0.3);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
       }
     }
   }
@@ -544,23 +482,29 @@
     }
     
     button {
-      position: absolute;
-      top: var(--spacing-xs);
-      right: var(--spacing-xs);
-      background: rgba(239, 68, 68, 0.9);
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: var(--color-primary);
       color: white;
       border: none;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      border-radius: var(--border-radius);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 12px;
+      gap: var(--spacing-sm);
+      white-space: nowrap;
       
-      &:hover {
-        background: var(--color-error);
+      &:hover:not(:disabled) {
+        background: var(--color-secondary);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 109, 119, 0.3);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
       }
     }
   }
