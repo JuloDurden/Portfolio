@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ProfilePictureUpload from './ProfilePictureUpload';
 import { PersonalData, PersonalDataFormErrors } from './types';
+import { useUserData, ChangePasswordData } from '../../../../hooks/useUserData';
+import './PersonalDataForm.scss';
 
 interface PersonalDataFormProps {
   initialData?: PersonalData;
@@ -31,6 +33,19 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+
+  // 🔐 NOUVEAUX STATES POUR LE MOT DE PASSE
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
+  const [passwordData, setPasswordData] = useState<ChangePasswordData>({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [passwordErrors, setPasswordErrors] = useState<{[key: string]: string}>({});
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  // 🔐 HOOK POUR LE CHANGEMENT DE MOT DE PASSE
+  const { changePassword } = useUserData();
 
   // 🔄 Met à jour formData quand initialData change
   useEffect(() => {
@@ -98,6 +113,34 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
+  // 🔐 VALIDATION MOT DE PASSE
+  const validatePassword = (): boolean => {
+    const newErrors: {[key: string]: string} = {};
+
+    if (!passwordData.currentPassword) {
+      newErrors.currentPassword = 'Le mot de passe actuel est requis';
+    }
+
+    if (!passwordData.newPassword) {
+      newErrors.newPassword = 'Le nouveau mot de passe est requis';
+    } else if (passwordData.newPassword.length < 6) {
+      newErrors.newPassword = 'Le mot de passe doit contenir au moins 6 caractères';
+    }
+
+    if (!passwordData.confirmPassword) {
+      newErrors.confirmPassword = 'Veuillez confirmer le nouveau mot de passe';
+    } else if (passwordData.newPassword !== passwordData.confirmPassword) {
+      newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
+    }
+
+    if (passwordData.newPassword === passwordData.currentPassword) {
+      newErrors.newPassword = 'Le nouveau mot de passe doit être différent de l\'ancien';
+    }
+
+    setPasswordErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // 📝 Gestion changements
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -105,6 +148,16 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
     
     if (errors[name as keyof PersonalDataFormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  // 🔐 GESTION CHANGEMENTS MOT DE PASSE
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPasswordData(prev => ({ ...prev, [name]: value }));
+    
+    if (passwordErrors[name]) {
+      setPasswordErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
 
@@ -128,11 +181,12 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
       try {
         // 🔑 RÉCUPÉRER LE TOKEN
         const token = localStorage.getItem('token');
+        
         if (!token) {
           throw new Error('Token d\'authentification manquant');
         }
 
-        // 📦 PRÉPARER FormData
+        // 📤 PRÉPARER FORMDATA
         const avatarFormData = new FormData();
         avatarFormData.append('avatar', file);
 
@@ -271,6 +325,47 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
     }
   };
 
+  // 🔐 CHANGEMENT DE MOT DE PASSE
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    console.log('🔐 Changement de mot de passe...');
+    
+    if (!validatePassword()) {
+      console.log('❌ Validation mot de passe échouée');
+      return;
+    }
+
+    setIsChangingPassword(true);
+    setPasswordErrors(prev => ({ ...prev, submit: undefined }));
+
+    try {
+      await changePassword(passwordData);
+      
+      console.log('✅ Mot de passe changé avec succès');
+      
+      // 🎯 Reset du formulaire mot de passe
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+      setShowPasswordSection(false);
+      
+      // TODO: Afficher un message de succès
+      alert('✅ Mot de passe changé avec succès !');
+      
+    } catch (error: any) {
+      console.error('❌ Erreur changement mot de passe:', error);
+      setPasswordErrors(prev => ({
+        ...prev,
+        submit: error.message || 'Erreur lors du changement de mot de passe'
+      }));
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
   // 🔄 Reset form
   const handleReset = () => {
     setFormData(initialData || {
@@ -287,194 +382,308 @@ const PersonalDataForm: React.FC<PersonalDataFormProps> = ({
     setHasChanges(false);
   };
 
+  // 🔐 RESET MOT DE PASSE
+  const handlePasswordReset = () => {
+    setPasswordData({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+    setPasswordErrors({});
+    setShowPasswordSection(false);
+  };
+
   const isFormLoading = isLoading || isSaving || isUploadingAvatar;
 
   return (
-    <form onSubmit={handleSubmit} className="personal-data-form">
-      
-      {/* ❌ ERREUR GÉNÉRALE */}
-      {errors.submit && (
-        <div className="personal-data-form__error personal-data-form__error--global">
-          ❌ {errors.submit}
-        </div>
-      )}
-
-      {/* 📸 PHOTO DE PROFIL */}
-      <div className="personal-data-form__picture">
-        <ProfilePictureUpload
-          currentPicture={profilePreview || undefined}
-          onPictureChange={handlePictureChange}
-          error={errors.profilePicture}
-          isUploading={isUploadingAvatar}
-        />
-        {isUploadingAvatar && (
-          <div className="personal-data-form__upload-status">
-            📸 Upload en cours...
-          </div>
-        )}
-        {errors.profilePicture && (
-          <div className="personal-data-form__error">
-            ⚠️ {errors.profilePicture}
-          </div>
-        )}
-      </div>
-
-      {/* 📝 CHAMPS FORMULAIRE */}
-      <div className="personal-data-form__fields">
-        <div className="personal-data-form__row">
-          <div className="personal-data-form__field">
-            <label htmlFor="firstName" className="personal-data-form__label">
-              👤 Prénom *
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              className={`personal-data-form__input ${
-                errors.firstName ? 'personal-data-form__input--error' : ''
-              }`}
-              placeholder="Votre prénom"
-              disabled={isFormLoading}
-            />
-            {errors.firstName && (
-              <div className="personal-data-form__error">{errors.firstName}</div>
-            )}
-          </div>
-
-          <div className="personal-data-form__field">
-            <label htmlFor="lastName" className="personal-data-form__label">
-              👤 Nom de famille *
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              className={`personal-data-form__input ${
-                errors.lastName ? 'personal-data-form__input--error' : ''
-              }`}
-              placeholder="Votre nom de famille"
-              disabled={isFormLoading}
-            />
-            {errors.lastName && (
-              <div className="personal-data-form__error">{errors.lastName}</div>
-            )}
-          </div>
-        </div>
-
-        <div className="personal-data-form__field">
-          <label htmlFor="email" className="personal-data-form__label">
-            📧 Adresse email *
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={`personal-data-form__input ${
-              errors.email ? 'personal-data-form__input--error' : ''
-            }`}
-            placeholder="votre@email.com"
-            disabled={isFormLoading}
-          />
-          {errors.email && (
-            <div className="personal-data-form__error">{errors.email}</div>
-          )}
-        </div>
-
-        <div className="personal-data-form__field">
-          <label htmlFor="dateOfBirth" className="personal-data-form__label">
-            🎂 Date de naissance *
-          </label>
-          <input
-            type="date"
-            id="dateOfBirth"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
-            onChange={handleChange}
-            className={`personal-data-form__input ${
-              errors.dateOfBirth ? 'personal-data-form__input--error' : ''
-            }`}
-            disabled={isFormLoading}
-          />
-          {errors.dateOfBirth && (
-            <div className="personal-data-form__error">{errors.dateOfBirth}</div>
-          )}
-        </div>
-
-        <div className="personal-data-form__field">
-          <label htmlFor="githubUrl" className="personal-data-form__label">
-            🐙 URL GitHub
-          </label>
-          <input
-            type="url"
-            id="githubUrl"
-            name="githubUrl"
-            value={formData.githubUrl}
-            onChange={handleChange}
-            className={`personal-data-form__input ${
-              errors.githubUrl ? 'personal-data-form__input--error' : ''
-            }`}
-            placeholder="https://github.com/votre-username"
-            disabled={isFormLoading}
-          />
-          {errors.githubUrl && (
-            <div className="personal-data-form__error">{errors.githubUrl}</div>
-          )}
-        </div>
-      </div>
-
-      {/* 💾 ACTIONS */}
-      <div className="personal-data-form__actions">
-        <button
-          type="button"
-          onClick={handleReset}
-          disabled={!hasChanges || isFormLoading}
-          className="personal-data-form__btn personal-data-form__btn--secondary"
-        >
-          🔄 Annuler
-        </button>
+    <div className="personal-data-form-container">
+      {/* 📝 FORMULAIRE DONNÉES PERSONNELLES */}
+      <form onSubmit={handleSubmit} className="personal-data-form">
         
-        <button
-          type="submit"
-          disabled={!hasChanges || isFormLoading}
-          className="personal-data-form__btn personal-data-form__btn--primary"
-        >
-          {isSaving 
-            ? '💾 Sauvegarde...' 
-            : isUploadingAvatar 
-            ? '📸 Upload...' 
-            : '💾 Sauvegarder'
-          }
-        </button>
-      </div>
+        {/* ❌ ERREUR GÉNÉRALE */}
+        {errors.submit && (
+          <div className="personal-data-form__error personal-data-form__error--global">
+            ❌ {errors.submit}
+          </div>
+        )}
 
-      {/* 🐛 DEBUG FORM DATA */}
-      <div style={{ 
-        background: '#e8f4f8', 
-        color: '#000000',
-        padding: '8px', 
-        margin: '10px 0', 
-        fontSize: '11px',
-        fontFamily: 'monospace',
-        border: '1px solid #ccc',
-        borderRadius: '4px'
-      }}>
-        <strong>🐛 DEBUG FORM:</strong><br/>
-        FirstName: "{formData.firstName}" | LastName: "{formData.lastName}"<br/>
-        Email: "{formData.email}" | Date: "{formData.dateOfBirth}"<br/>
-        GitHub: "{formData.githubUrl}"<br/>
-        ProfilePicture: "{formData.profilePicture?.substring(0, 80)}..."<br/>
-        ProfilePreview: "{profilePreview?.substring(0, 80)}..."<br/>
-        HasChanges: {hasChanges ? '✅' : '❌'} | Loading: {isFormLoading ? '🔄' : '✅'}<br/>
-        UploadingAvatar: {isUploadingAvatar ? '📸' : '❌'}<br/>
-        🌟 URL Type: {formData.profilePicture?.includes('cloudinary.com') ? 'CLOUDINARY' : 'RAILWAY'}
+        {/* 📸 PHOTO DE PROFIL */}
+        <div className="personal-data-form__picture">
+          <ProfilePictureUpload
+            currentPicture={profilePreview || undefined}
+            onPictureChange={handlePictureChange}
+            error={errors.profilePicture}
+            isUploading={isUploadingAvatar}
+          />
+          {isUploadingAvatar && (
+            <div className="personal-data-form__upload-status">
+              📸 Upload en cours...
+            </div>
+          )}
+          {errors.profilePicture && (
+            <div className="personal-data-form__error">
+              ⚠️ {errors.profilePicture}
+            </div>
+          )}
+        </div>
+
+        {/* 📝 CHAMPS FORMULAIRE */}
+        <div className="personal-data-form__fields">
+          <div className="personal-data-form__row">
+            <div className="personal-data-form__field">
+              <label htmlFor="firstName" className="personal-data-form__label">
+                👤 Prénom *
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                className={`personal-data-form__input ${
+                  errors.firstName ? 'personal-data-form__input--error' : ''
+                }`}
+                placeholder="Votre prénom"
+                disabled={isFormLoading}
+              />
+              {errors.firstName && (
+                <div className="personal-data-form__error">{errors.firstName}</div>
+              )}
+            </div>
+
+            <div className="personal-data-form__field">
+              <label htmlFor="lastName" className="personal-data-form__label">
+                👤 Nom de famille *
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                className={`personal-data-form__input ${
+                  errors.lastName ? 'personal-data-form__input--error' : ''
+                }`}
+                placeholder="Votre nom de famille"
+                disabled={isFormLoading}
+              />
+              {errors.lastName && (
+                <div className="personal-data-form__error">{errors.lastName}</div>
+              )}
+            </div>
+          </div>
+
+          <div className="personal-data-form__field">
+            <label htmlFor="email" className="personal-data-form__label">
+              📧 Adresse email *
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`personal-data-form__input ${
+                errors.email ? 'personal-data-form__input--error' : ''
+              }`}
+              placeholder="votre@email.com"
+              disabled={isFormLoading}
+            />
+            {errors.email && (
+              <div className="personal-data-form__error">{errors.email}</div>
+            )}
+          </div>
+
+          <div className="personal-data-form__field">
+            <label htmlFor="dateOfBirth" className="personal-data-form__label">
+              🎂 Date de naissance *
+            </label>
+            <input
+              type="date"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+              className={`personal-data-form__input ${
+                errors.dateOfBirth ? 'personal-data-form__input--error' : ''
+              }`}
+              disabled={isFormLoading}
+            />
+            {errors.dateOfBirth && (
+              <div className="personal-data-form__error">{errors.dateOfBirth}</div>
+            )}
+          </div>
+
+          <div className="personal-data-form__field">
+            <label htmlFor="githubUrl" className="personal-data-form__label">
+              🐙 URL GitHub
+            </label>
+            <input
+              type="url"
+              id="githubUrl"
+              name="githubUrl"
+              value={formData.githubUrl}
+              onChange={handleChange}
+              className={`personal-data-form__input ${
+                errors.githubUrl ? 'personal-data-form__input--error' : ''
+              }`}
+              placeholder="https://github.com/votre-username"
+              disabled={isFormLoading}
+            />
+            {errors.githubUrl && (
+              <div className="personal-data-form__error">{errors.githubUrl}</div>
+            )}
+          </div>
+        </div>
+
+        {/* 💾 ACTIONS - DONNÉES PERSONNELLES */}
+        <div className="personal-data-form__actions">
+          <button
+            type="button"
+            onClick={handleReset}
+            disabled={!hasChanges || isFormLoading}
+            className="personal-data-form__btn personal-data-form__btn--secondary"
+          >
+            🔄 Annuler
+          </button>
+          
+          <button
+            type="submit"
+            disabled={!hasChanges || isFormLoading}
+            className="personal-data-form__btn personal-data-form__btn--primary"
+          >
+            {isSaving 
+              ? '💾 Sauvegarde...' 
+              : isUploadingAvatar 
+              ? '📸 Upload...' 
+              : '💾 Sauvegarder'
+            }
+          </button>
+        </div>
+      </form>
+
+      {/* 🔐 SECTION CHANGEMENT MOT DE PASSE */}
+      <div className="password-section">
+        <div className="password-section__header">
+          <h3 className="password-section__title">🔐 Sécurité</h3>
+          {!showPasswordSection ? (
+            <button
+              type="button"
+              onClick={() => setShowPasswordSection(true)}
+              className="password-section__toggle-btn"
+              disabled={isFormLoading}
+            >
+              🔑 Changer le mot de passe
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handlePasswordReset}
+              className="password-section__toggle-btn password-section__toggle-btn--cancel"
+              disabled={isChangingPassword}
+            >
+              ❌ Annuler
+            </button>
+          )}
+        </div>
+
+        {showPasswordSection && (
+          <form onSubmit={handlePasswordSubmit} className="password-form">
+            {/* ❌ ERREUR GÉNÉRALE MOT DE PASSE */}
+            {passwordErrors.submit && (
+              <div className="password-form__error password-form__error--global">
+                ❌ {passwordErrors.submit}
+              </div>
+            )}
+
+            <div className="password-form__fields">
+              <div className="password-form__field">
+                <label htmlFor="currentPassword" className="password-form__label">
+                  🔐 Mot de passe actuel *
+                </label>
+                <input
+                  type="password"
+                  id="currentPassword"
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordChange}
+                  className={`password-form__input ${
+                    passwordErrors.currentPassword ? 'password-form__input--error' : ''
+                  }`}
+                  placeholder="Votre mot de passe actuel"
+                  disabled={isChangingPassword}
+                />
+                {passwordErrors.currentPassword && (
+                  <div className="password-form__error">{passwordErrors.currentPassword}</div>
+                )}
+              </div>
+
+              <div className="password-form__field">
+                <label htmlFor="newPassword" className="password-form__label">
+                  🆕 Nouveau mot de passe *
+                </label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  className={`password-form__input ${
+                    passwordErrors.newPassword ? 'password-form__input--error' : ''
+                  }`}
+                  placeholder="Nouveau mot de passe (min. 6 caractères)"
+                  disabled={isChangingPassword}
+                />
+                {passwordErrors.newPassword && (
+                  <div className="password-form__error">{passwordErrors.newPassword}</div>
+                )}
+              </div>
+
+              <div className="password-form__field">
+                <label htmlFor="confirmPassword" className="password-form__label">
+                  ✅ Confirmer le nouveau mot de passe *
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordChange}
+                  className={`password-form__input ${
+                    passwordErrors.confirmPassword ? 'password-form__input--error' : ''
+                  }`}
+                  placeholder="Confirmez le nouveau mot de passe"
+                  disabled={isChangingPassword}
+                />
+                {passwordErrors.confirmPassword && (
+                  <div className="password-form__error">{passwordErrors.confirmPassword}</div>
+                )}
+              </div>
+            </div>
+
+            {/* 🔐 ACTIONS MOT DE PASSE */}
+            <div className="password-form__actions">
+              <button
+                type="button"
+                onClick={handlePasswordReset}
+                disabled={isChangingPassword}
+                className="password-form__btn password-form__btn--secondary"
+              >
+                🔄 Annuler
+              </button>
+              
+              <button
+                type="submit"
+                disabled={isChangingPassword}
+                className="password-form__btn password-form__btn--primary"
+              >
+                {isChangingPassword ? '🔐 Changement...' : '🔑 Changer le mot de passe'}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
-    </form>
+    </div>
   );
 };
 

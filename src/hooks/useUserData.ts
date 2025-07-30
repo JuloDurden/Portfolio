@@ -46,6 +46,19 @@ interface UserApiResponse {
   };
 }
 
+// 🔐 Interface pour le changement de mot de passe
+export interface ChangePasswordData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+// 🔐 Interface pour la réponse du changement de mot de passe
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string;
+}
+
 export const useUserData = () => {
   const [biographyData, setBiographyData] = useState<BiographyData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -184,6 +197,84 @@ export const useUserData = () => {
     }
   };
 
+  // 🔐 CHANGEMENT DE MOT DE PASSE - VERSION CORRIGÉE
+  const changePassword = async (passwordData: ChangePasswordData): Promise<ChangePasswordResponse> => {
+    try {
+      console.log('🔐 Tentative de changement de mot de passe');
+      
+      // 🛡️ VALIDATIONS CÔTÉ CLIENT RENFORCÉES
+      if (!passwordData.currentPassword?.trim()) {
+        throw new Error('Le mot de passe actuel est requis');
+      }
+
+      if (!passwordData.newPassword?.trim()) {
+        throw new Error('Le nouveau mot de passe est requis');
+      }
+
+      if (!passwordData.confirmPassword?.trim()) {
+        throw new Error('La confirmation du mot de passe est requise');
+      }
+
+      if (passwordData.newPassword !== passwordData.confirmPassword) {
+        throw new Error('Les mots de passe ne correspondent pas');
+      }
+
+      if (passwordData.newPassword.length < 6) {
+        throw new Error('Le nouveau mot de passe doit contenir au moins 6 caractères');
+      }
+
+      if (passwordData.newPassword === passwordData.currentPassword) {
+        throw new Error('Le nouveau mot de passe doit être différent de l\'ancien');
+      }
+
+      // 🔑 RÉCUPÉRATION DU TOKEN
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('Vous devez être connecté pour changer votre mot de passe');
+      }
+
+      console.log('📡 Envoi de la requête de changement de mot de passe...');
+
+      // 🚀 REQUÊTE API
+      const response = await fetch(`${API_BASE_URL}/api/user/change-password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        }),
+      });
+
+      const result = await response.json();
+
+      // 🔍 GESTION DES ERREURS HTTP
+      if (!response.ok) {
+        console.error('❌ Erreur HTTP:', response.status, result);
+        throw new Error(result.message || `Erreur ${response.status}: ${response.statusText}`);
+      }
+
+      console.log('✅ Mot de passe changé avec succès:', result);
+      
+      return {
+        success: true,
+        message: result.message || 'Mot de passe changé avec succès'
+      };
+
+    } catch (err) {
+      console.error('❌ Erreur changement mot de passe:', err);
+      
+      // 🔄 RETOUR D'ERREUR STRUCTURÉ
+      return {
+        success: false,
+        message: err instanceof Error ? err.message : 'Erreur inconnue lors du changement de mot de passe'
+      };
+    }
+  };
+
   // 🎯 FETCH AU MOUNT
   useEffect(() => {
     fetchUserData();
@@ -193,6 +284,7 @@ export const useUserData = () => {
     biographyData,
     loading,
     error,
-    refetch: fetchUserData
+    refetch: fetchUserData,
+    changePassword
   };
 };

@@ -284,54 +284,6 @@ const PersonalDataSection: React.FC = () => {
         </div>
       </div>
 
-      {/* 🐛 DEBUG INFO AMÉLIORER */}
-      {biographyData && (
-        <div style={{ 
-          background: '#e8f4fd',
-          color: '#003366', 
-          padding: '12px', 
-          margin: '10px 0', 
-          fontSize: '11px',
-          borderRadius: '4px',
-          fontFamily: 'monospace',
-          border: '1px solid #b3d9ff'
-        }}>
-          <strong>🐛 DEBUG MAPPING COMPLET:</strong><br/>
-          
-          <strong>📊 biographyData structure:</strong><br/>
-          - fullName: "{biographyData.fullName || '❌ VIDE'}"<br/>
-          - email: "{biographyData.email || '❌ VIDE'}"<br/>
-          - dateOfBirth: "{biographyData.dateOfBirth || '❌ VIDE'}"<br/>
-          - githubUrl: "{biographyData.githubUrl || '❌ VIDE'}"<br/>
-          
-          <strong>📊 biographyData.rawData:</strong><br/>
-          {biographyData.rawData ? (
-            <>
-              - email: "{biographyData.rawData.email || '❌ VIDE'}"<br/>
-              - dateOfBirth: "{biographyData.rawData.dateOfBirth || '❌ VIDE'}"<br/>
-              - githubUrl: "{biographyData.rawData.githubUrl || '❌ VIDE'}"<br/>
-            </>
-          ) : (
-            '❌ rawData est NULL/UNDEFINED<br/>'
-          )}
-          
-          <strong>📊 personalData final:</strong><br/>
-          {personalData ? (
-            <>
-              - firstName: "{personalData.firstName}"<br/>
-              - lastName: "{personalData.lastName}"<br/>
-              - email: "{personalData.email}"<br/>
-              - dateOfBirth: "{personalData.dateOfBirth}"<br/>
-              - githubUrl: "{personalData.githubUrl}"<br/>
-            </>
-          ) : (
-            '❌ personalData est NULL<br/>'
-          )}
-          
-          <strong>Status:</strong> {saveStatus} | <strong>Loading:</strong> {isLoading ? 'OUI' : 'NON'}
-        </div>
-      )}
-
       {/* 📝 CONTENU PRINCIPAL */}
       <div className="personal-data-section__content">
         {personalData ? (
