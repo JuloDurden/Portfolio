@@ -7,7 +7,7 @@ Ce projet met en avant mes compétences en développement web, ainsi que plusieu
 
 ## ✨ Aperçu en ligne
 
-🔗 [Voir le site en ligne](https://portfolio-mu-liart-34.vercel.app)
+🔗 [Voir le site en ligne](https://www.julienclavel.fr)
 
 ---
 
