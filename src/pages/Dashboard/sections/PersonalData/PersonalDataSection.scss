@@ -1,4 +1,4 @@
-@import '../../../../styles/globals/variables';
+@use '../../../../styles/globals/variables' as *;
 
 .personal-data-section {
   background: var(--color-white);

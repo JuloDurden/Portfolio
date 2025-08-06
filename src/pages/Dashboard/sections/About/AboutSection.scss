@@ -1,4 +1,5 @@
-@import "../../../../styles/globals/variables";
+@use "../../../../styles/globals/variables" as *;
+@use 'sass:color';
 
 // ====================================
 // 📝 ABOUT SECTION  
@@ -241,7 +242,8 @@
         white-space: nowrap;
         
         &:hover:not(:disabled) {
-          background: #{darken($primary-color, 8%)};
+          background: color.adjust($primary-color, $lightness: -8%);
+          // background: #{darken($primary-color, 8%)};
           transform: translateY(-1px);
           box-shadow: 0 4px 12px #{rgba($primary-color, 0.3)};
         }
@@ -276,7 +278,8 @@
         cursor: default;
         
         &:hover {
-          background: #{darken($primary-color, 8%)};
+          background: color.adjust($primary-color, $lightness: -8%);
+          // background: #{darken($primary-color, 8%)};
           transform: translateY(-1px);
           box-shadow: 0 2px 8px #{rgba($primary-color, 0.3)};
         }
@@ -338,7 +341,8 @@
         color: white;
         
         &:hover:not(:disabled) {
-          background: #{darken($primary-color, 8%)};
+          background: color.adjust($primary-color, $lightness: -8%);
+          // background: #{darken($primary-color, 8%)};
           transform: translateY(-1px);
           box-shadow: 0 4px 12px #{rgba($primary-color, 0.3)};
         }
@@ -419,7 +423,8 @@
       position: relative;
       
       &:hover:not(:disabled) {
-        background: #{darken($primary-color, 8%)};
+        background: color.adjust($primary-color, $lightness: -8%);
+        // background: #{darken($primary-color, 8%)};
         transform: translateY(-1px);
         box-shadow: 0 4px 12px #{rgba($primary-color, 0.3)};
       }

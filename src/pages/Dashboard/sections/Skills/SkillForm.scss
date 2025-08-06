@@ -1,7 +1,7 @@
 // ====================================
 // 📝 SKILL FORM - FORMULAIRE COMPLET
 // ====================================
-@import '../../../../styles/globals/variables';
+@use '../../../../styles/globals/variables' as *;
 
 .skill-form {
   display: flex;

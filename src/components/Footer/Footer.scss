@@ -1,5 +1,5 @@
-@import "../../styles/globals/variables";
-@import "../../styles/globals/animations";
+@use "../../styles/globals/variables" as *;
+@use "../../styles/globals/animations" as *;
 
 // ====================================
 // 🎨 FOOTER - STYLE MODERNE & COHÉRENT
@@ -10,6 +10,7 @@
   color: var(--color-white);
   margin-top: auto;
   position: relative;
+  animation: fadeInUp 0.8s ease-out 0.5s both;
 
   // ====================================
   // 🏗️ STRUCTURE GÉNÉRALE
@@ -298,12 +299,6 @@
       color: #ff3742 !important;
     }
   }
-
-
-  // ====================================
-  // 🎨 ANIMATIONS
-  // ====================================
-  animation: fadeInUp 0.8s ease-out 0.5s both;
 }
 
 // ====================================
@@ -352,7 +347,6 @@
     transform: translateY(0);
   }
 }
-
 
 // ====================================
 // 📱 RESPONSIVE DESIGN

@@ -1,4 +1,4 @@
-@import '../../../../styles/globals/variables';
+@use '../../../../styles/globals/variables' as *;
 
 .projects-section {
   background: var(--color-white);

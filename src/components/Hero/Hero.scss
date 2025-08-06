@@ -1,5 +1,5 @@
-@import "../../styles/globals/variables";
-@import "../../styles/globals/mixins";
+@use "../../styles/globals/variables" as *;
+@use "../../styles/globals/mixins" as *;
 
 .hero {
   &__section {
@@ -35,10 +35,10 @@
     }
 
     &--title {
-      @include heading-1;
       color: var(--color-text-primary);
       margin-bottom: var(--spacing-md);
       margin-top: 0;
+      @include heading-1;
 
       @media (min-width: #{$desktop}) {
         font-size: 3.9rem;
@@ -266,17 +266,20 @@
         gap: 0.8rem;
       }
 
-      .hero__image img {
-        top: -75px;
-        width: 150px;
-        height: 150px;
-        border-radius: var(--border-radius-lg);
-        border: 4px solid var(--color-white);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-        
-        [data-theme="dark"] & {
-          border: 4px solid var(--color-hero-image-border);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      .hero__image {
+        img {
+          position: absolute;
+          top: -75px;
+          width: 150px;
+          height: 150px;
+          border-radius: var(--border-radius-lg);
+          border: 4px solid var(--color-white);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+          
+          [data-theme="dark"] & {
+            border: 4px solid var(--color-hero-image-border);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+          }
         }
       }
     }

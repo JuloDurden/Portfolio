@@ -1,3 +1,8 @@
+// ====================================
+// 🔧 IMPORTS MODERNES SASS
+// ====================================
+@use 'variables' as *;
+
 // Mixins pour les poids de police Inter
 @mixin font-thin {
   font-weight: $font-weight-thin;

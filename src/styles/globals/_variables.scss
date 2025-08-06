@@ -1,4 +1,10 @@
 // ====================================
+// 🔧 IMPORTS MODERNES SASS
+// ====================================
+@use "sass:color";
+@use "sass:list";
+
+// ====================================
 // 🎨 VARIABLES SCSS (pour calculs)
 // ====================================
 $primary-color: #006D77;
@@ -90,7 +96,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 :root {
   // Couleurs principales
   --color-primary: #{$primary-color};
-  --color-primary-dark: #{darken($primary-color, 10%)};
+  --color-primary-dark: #{color.adjust($primary-color, $lightness: -10%)};
   --color-secondary: #{$secondary-color};
   --color-accent: #{$accent-color};
   
@@ -117,24 +123,24 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   
-  // 🌈 GRADIENT LAYERS
+  // 🌈 GRADIENT LAYERS - ✅ CORRIGÉ
   // Layer 1
-  --gradient-layer1-color1: #{nth($layer1-colors, 1)};
-  --gradient-layer1-color2: #{nth($layer1-colors, 2)};
-  --gradient-layer1-color3: #{nth($layer1-colors, 3)};
-  --gradient-layer1-color4: #{nth($layer1-colors, 4)};
+  --gradient-layer1-color1: #{list.nth($layer1-colors, 1)};
+  --gradient-layer1-color2: #{list.nth($layer1-colors, 2)};
+  --gradient-layer1-color3: #{list.nth($layer1-colors, 3)};
+  --gradient-layer1-color4: #{list.nth($layer1-colors, 4)};
   
   // Layer 2
-  --gradient-layer2-color1: #{nth($layer2-colors, 1)};
-  --gradient-layer2-color2: #{nth($layer2-colors, 2)};
-  --gradient-layer2-color3: #{nth($layer2-colors, 3)};
-  --gradient-layer2-color4: #{nth($layer2-colors, 4)};
+  --gradient-layer2-color1: #{list.nth($layer2-colors, 1)};
+  --gradient-layer2-color2: #{list.nth($layer2-colors, 2)};
+  --gradient-layer2-color3: #{list.nth($layer2-colors, 3)};
+  --gradient-layer2-color4: #{list.nth($layer2-colors, 4)};
   
   // Layer 3
-  --gradient-layer3-color1: #{nth($layer3-colors, 1)};
-  --gradient-layer3-color2: #{nth($layer3-colors, 2)};
-  --gradient-layer3-color3: #{nth($layer3-colors, 3)};
-  --gradient-layer3-color4: #{nth($layer3-colors, 4)};
+  --gradient-layer3-color1: #{list.nth($layer3-colors, 1)};
+  --gradient-layer3-color2: #{list.nth($layer3-colors, 2)};
+  --gradient-layer3-color3: #{list.nth($layer3-colors, 3)};
+  --gradient-layer3-color4: #{list.nth($layer3-colors, 4)};
   
   // Background color pour le masque
   --color-background: #{$bg-color};

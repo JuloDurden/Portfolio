@@ -1,12 +1,12 @@
 // Import Google Fonts Inter et Pacifico
-@import './globals/fonts';
+@use './globals/fonts';
 
 // Globals
-@import './globals/variables';
-@import './globals/mixins';
-@import './globals/reset';
-@import './globals/utilities';
-@import './globals/animations';
+@use './globals/variables';
+@use './globals/mixins';
+@use './globals/reset';
+@use './globals/utilities';
+@use './globals/animations';
 
 // Styles globaux de l'app
 body {

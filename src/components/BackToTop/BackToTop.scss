@@ -1,6 +1,6 @@
 // 🔧 Import du mixin
-@import "../../styles/globals/variables";
-@import '../../styles/globals/mixins';
+@use "../../styles/globals/variables" as *;
+@use '../../styles/globals/mixins' as *;
 
 .back-to-top {
   position: fixed;
