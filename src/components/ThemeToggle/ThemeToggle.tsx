@@ -1,26 +1,73 @@
 import { useTheme } from '../../contexts/ThemeContext';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './ThemeToggle.scss';
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
   const [isChanging, setIsChanging] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const handleToggle = () => {
-    setIsChanging(true);
-    toggleTheme();
+  const handleToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (isChanging) return; // Empêcher les clics multiples
     
-    // Reset animation state
+    const button = buttonRef.current;
+    if (!button) return;
+
+    setIsChanging(true);
+    
+    // 🎯 CALCULER LA POSITION DU RIPPLE
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    
+    // 🌊 CRÉER L'EFFET RIPPLE
+    createRippleEffect(x, y);
+    
+    // 🔄 CHANGER LE THÈME APRÈS UN DÉLAI
+    setTimeout(() => {
+      toggleTheme();
+    }, 300); // Délai pour voir l'animation commencer
+    
+    // ✅ RESET STATE
     setTimeout(() => {
       setIsChanging(false);
-    }, 800);
+    }, 480);
+  };
+
+  const createRippleEffect = (x: number, y: number) => {
+    // 🌊 CRÉER L'OVERLAY RIPPLE
+    const ripple = document.createElement('div');
+    ripple.className = 'theme-ripple';
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    
+    // 📱 CALCULER LA TAILLE DU RIPPLE (couvrir tout l'écran)
+    const maxDistance = Math.max(
+      Math.sqrt(x * x + y * y), // Top-left
+      Math.sqrt((window.innerWidth - x) * (window.innerWidth - x) + y * y), // Top-right
+      Math.sqrt(x * x + (window.innerHeight - y) * (window.innerHeight - y)), // Bottom-left
+      Math.sqrt((window.innerWidth - x) * (window.innerWidth - x) + (window.innerHeight - y) * (window.innerHeight - y)) // Bottom-right
+    );
+    
+    ripple.style.setProperty('--ripple-size', `${maxDistance * 2}px`);
+    
+    document.body.appendChild(ripple);
+    
+    // 🗑️ NETTOYER APRÈS L'ANIMATION
+    setTimeout(() => {
+      if (document.body.contains(ripple)) {
+        document.body.removeChild(ripple);
+      }
+    }, 480);
   };
 
   return (
     <button 
+      ref={buttonRef}
       onClick={handleToggle}
       className="theme-toggle"
       data-changing={isChanging}
+      disabled={isChanging}
       title={`Basculer vers le thème ${theme === 'light' ? 'sombre' : 'clair'}`}
       aria-label={`Basculer vers le thème ${theme === 'light' ? 'sombre' : 'clair'}`}
     >
