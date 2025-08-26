@@ -1,6 +1,6 @@
 // ✅ Force Railway si localhost pas dispo
 const isDev = import.meta.env.DEV;
-const railwayURL = 'https://backend-portfolio-production-39a1.up.railway.app';
+const railwayURL = 'https://backend-portfolio-1-nh0s.onrender.com';
 const localURL = 'http://localhost:5000'; // 🎯 Port 5000 OK
 
 export const API_BASE_URL = isDev 
