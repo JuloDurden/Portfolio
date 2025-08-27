@@ -1,26 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { useSkills } from '../../hooks/useSkills';
+import { SkillData } from '../../pages/Dashboard/sections/Skills/types';
 import './Skills.scss';
 
 interface TooltipData {
   skill: SkillData;
   x: number;
   y: number;
-}
-
-interface SkillData {
-  _id: string;
-  id: string;
-  name: string;
-  description: string;
-  level: string;
-  icon: string;
-  categories: string[];
-  isVisible: boolean;
-  order: number;
-  featured: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 const Skills: React.FC = () => {
